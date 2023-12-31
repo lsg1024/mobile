@@ -3,7 +3,6 @@ package khan.mobile.entity;
 import jakarta.persistence.*;
 import khan.mobile.entity.auditing.BaseEntity;
 
-import java.util.List;
 
 @Entity
 public class Product_registration extends BaseEntity {
