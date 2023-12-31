@@ -12,15 +12,16 @@ import java.util.List;
 @Getter
 public class Users {
 
-    @GeneratedValue @Id
+    @Id @GeneratedValue
     @Column(name = "user_id")
     private Long user_id;
     private String id;
     private String password;
-    private Boolean role;
 
-    @OneToMany
-    @JoinColumn(name = "user")
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @OneToMany(mappedBy = "users")
     private List<Product_order>  orders;
 
 

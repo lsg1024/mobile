@@ -1,14 +1,17 @@
 package khan.mobile.entity;
 
 import jakarta.persistence.*;
+import khan.mobile.entity.auditing.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Products {
+public class Products extends BaseTimeEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
     private Long product_id;
     private String product_name;
@@ -17,5 +20,9 @@ public class Products {
     private Float product_weight;
     private String product_other;
     private String product_image;
+
+    @OneToMany(mappedBy = "products")
+    private List<Product_registration> product_registration;
+
 
 }
