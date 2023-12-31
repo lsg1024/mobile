@@ -21,8 +21,8 @@ public class Users {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "users")
-    private List<Product_order>  orders;
+    @OneToMany(mappedBy = "user")
+    private List<Product_order>  productOrders;
 
 
 }
