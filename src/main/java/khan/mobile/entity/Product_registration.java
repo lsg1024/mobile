@@ -2,9 +2,14 @@ package khan.mobile.entity;
 
 import jakarta.persistence.*;
 import khan.mobile.entity.auditing.BaseEntity;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Product_registration extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
