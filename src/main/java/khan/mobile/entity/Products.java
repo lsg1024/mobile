@@ -28,6 +28,4 @@ public class Products extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "products")
     private List<Product_order> productOrders;
-
-
 }
