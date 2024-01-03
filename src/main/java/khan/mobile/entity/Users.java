@@ -23,8 +23,7 @@ public class Users {
     private List<Product_order>  productOrders;
 
     @Builder
-    public Users(Long user_id, String id, String password, Role role, List<Product_order> productOrders) {
-        this.user_id = user_id;
+    public Users(String id, String password, Role role, List<Product_order> productOrders) {
         this.id = id;
         this.password = password;
         this.role = role;

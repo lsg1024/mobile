@@ -22,8 +22,7 @@ public class Stores {
     private List<Product_order> productOrders;
 
     @Builder
-    public Stores(Long store_id, String store_name, List<Product_order> productOrders) {
-        this.store_id = store_id;
+    public Stores(String store_name, List<Product_order> productOrders) {
         this.store_name = store_name;
         this.productOrders = productOrders;
     }

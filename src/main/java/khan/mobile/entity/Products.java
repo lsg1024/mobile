@@ -31,8 +31,7 @@ public class Products extends BaseTimeEntity {
     private List<Product_order> productOrders;
 
     @Builder
-    public Products(Long product_id, String product_name, String product_color, Float product_size, Float product_weight, String product_other, String product_image, List<Product_registration> product_registration, List<Product_order> productOrders) {
-        this.product_id = product_id;
+    public Products(String product_name, String product_color, Float product_size, Float product_weight, String product_other, String product_image, List<Product_registration> product_registration, List<Product_order> productOrders) {
         this.product_name = product_name;
         this.product_color = product_color;
         this.product_size = product_size;

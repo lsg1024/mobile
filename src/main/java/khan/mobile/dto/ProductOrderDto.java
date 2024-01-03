@@ -5,7 +5,9 @@ import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
 
 @Getter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class ProductOrderDto {
 
     private int quantity;
