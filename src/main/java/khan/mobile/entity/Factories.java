@@ -2,6 +2,7 @@ package khan.mobile.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,4 +21,10 @@ public class Factories {
     @OneToMany(mappedBy = "factories")
     private List<Product_registration> product_registrations;
 
+    @Builder
+    public Factories(Long factory_id, String factory_name, List<Product_registration> product_registrations) {
+        this.factory_id = factory_id;
+        this.factory_name = factory_name;
+        this.product_registrations = product_registrations;
+    }
 }

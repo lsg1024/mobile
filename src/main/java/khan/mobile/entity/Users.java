@@ -1,16 +1,12 @@
 package khan.mobile.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Getter
 public class Users {
 
@@ -26,4 +22,12 @@ public class Users {
     @OneToMany(mappedBy = "user")
     private List<Product_order>  productOrders;
 
+    @Builder
+    public Users(Long user_id, String id, String password, Role role, List<Product_order> productOrders) {
+        this.user_id = user_id;
+        this.id = id;
+        this.password = password;
+        this.role = role;
+        this.productOrders = productOrders;
+    }
 }
