@@ -1,17 +1,12 @@
 package khan.mobile.controller;
 
 import khan.mobile.dto.ProductOrderDto;
-import khan.mobile.entity.Product_order;
 import khan.mobile.service.ProductOrderService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Collections;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,25 +19,26 @@ public class ProductOrderController {
         return "Hello";
     }
 
+    // 상품 주문
     @PostMapping("/order")
     public ResponseEntity<ResponseDto> createOrder(@RequestBody ProductOrderDto productOrderDto) {
         productOrderService.createOrder(productOrderDto);
-        return ResponseEntity.ok(new ResponseDto("success"));
+        return ResponseEntity.ok(new ResponseDto("Order createOrder successfully"));
+    }
+
+    // 상품 수정
+    @PutMapping("/order/{orderId}")
+    public ResponseEntity<ProductOrderDto> updateOrder(@PathVariable("orderId") Long orderId, @RequestBody ProductOrderDto productOrderDto) {
+        productOrderService.updateOrder(orderId, productOrderDto);
+        return ResponseEntity.ok(productOrderDto);
     }
 
 
+    @Getter @Setter
     static class ResponseDto {
         private String response;
 
         public ResponseDto(String response) {
-            this.response = response;
-        }
-
-        public String getResponse() {
-            return response;
-        }
-
-        public void setResponse(String response) {
             this.response = response;
         }
     }

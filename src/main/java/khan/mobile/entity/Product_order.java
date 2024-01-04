@@ -27,6 +27,15 @@ public class Product_order extends BaseEntity {
     @JoinColumn(name = "product_id")
     private Products products;
 
+    @Builder
+    public Product_order(int product_order_quantity, String product_order_text, Users user, Stores stores, Products products) {
+        this.product_order_quantity = product_order_quantity;
+        this.product_order_text = product_order_text;
+        this.user = user;
+        this.stores = stores;
+        this.products = products;
+    }
+
     public static Product_order createOrder(int product_order_quantity, String product_order_text,
                                             Users user, Stores stores, Products products) {
         Product_order order = new Product_order();
