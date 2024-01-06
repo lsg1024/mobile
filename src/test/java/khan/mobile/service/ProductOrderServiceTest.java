@@ -24,58 +24,6 @@ class ProductOrderServiceTest {
     @Autowired ProductOrderService productOrderService;
 
     @Test
-    void createUser() {
-        Users newUser = Users.builder()
-                .id("테스트를 위한 아이디")
-                .password("테스트를 위한 비밀번호")
-                .role(Role.USER)
-                .build();
-
-        em.persist(newUser);
-
-        assertNotNull(newUser);
-        assertThat(newUser.getUser_id()).isEqualTo(7L);
-        assertThat(newUser.getId()).isEqualTo("테스트를 위한 아이디");
-        assertThat(newUser.getPassword()).isEqualTo("테스트를 위한 비밀번호");
-        assertThat(newUser.getRole()).isEqualTo(Role.USER);
-    }
-
-    @Test
-    void createProduct() {
-        Products newProduct = Products.builder()
-                .product_name("테스트 상품")
-                .product_color("금색")
-                .product_weight(10.4f)
-                .product_size(15f)
-                .product_other("테스트 내용")
-                .product_image("img/")
-                .build();
-
-        em.persist(newProduct);
-
-        assertNotNull(newProduct);
-        assertThat(newProduct.getProduct_id()).isEqualTo(7L);
-        assertThat(newProduct.getProduct_name()).isEqualTo("테스트 상품");
-        assertThat(newProduct.getProduct_weight()).isEqualTo(10.4f);
-        assertThat(newProduct.getProduct_size()).isEqualTo(15f);
-        assertThat(newProduct.getProduct_other()).isEqualTo("테스트 내용");
-        assertThat(newProduct.getProduct_image()).isEqualTo("img/");
-    }
-
-    @Test
-    void createStore() {
-        Stores newStore = Stores.builder()
-                .store_name("테스트 스토어")
-                .build();
-
-        em.persist(newStore);
-
-        assertNotNull(newStore);
-        assertThat(newStore.getStore_id()).isEqualTo(7L);
-        assertThat(newStore.getStore_name()).isEqualTo("테스트 스토어");
-    }
-
-    @Test
     void ProductOrder() {
         //given
         Users newUser = Users.builder().id("테스트를 위한 아이디").password("테스트를 위한 비밀번호").role(Role.USER).build();
