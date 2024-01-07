@@ -23,7 +23,7 @@ public class ProductOrderController {
     @PostMapping("/order")
     public ResponseEntity<ResponseDto> createOrder(@RequestBody ProductOrderDto productOrderDto) {
         productOrderService.createOrder(productOrderDto);
-        return ResponseEntity.ok(new ResponseDto("Order createOrder successfully"));
+        return ResponseEntity.ok(new ResponseDto("주문 완료"));
     }
 
     // 상품 수정

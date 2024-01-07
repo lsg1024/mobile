@@ -28,24 +28,29 @@ public class ProductOrderService {
 
     // 상품 주문
     @Transactional
-    public Product_order createOrder(ProductOrderDto productOrderDto) {
+    public ProductOrderDto createOrder(ProductOrderDto productOrderDTO) {
+        // 관련 엔티티 조회
+        Users user = userRepository.findById(productOrderDTO.getUser_id())
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        Products product = productRepository.findById(productOrderDTO.getProduct_id())
+                .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
+        Stores store = storeRepository.findById(productOrderDTO.getStore_id())
+                .orElseThrow(() -> new IllegalArgumentException("상점을 찾을 수 없습니다."));
 
-        Users user = userRepository.findById(productOrderDto.getUser_id())
-                .orElseThrow(() -> new RuntimeException("유저 값이 비어있습니다."));
-        Stores store = storeRepository.findById(productOrderDto.getStore_id())
-                .orElseThrow(() -> new RuntimeException("가게 정보가 없습니다."));
-        Products product = productRepository.findById(productOrderDto.getProduct_id())
-                .orElseThrow(() -> new RuntimeException("상품 정보가 없습니다"));
-
-        Product_order order = Product_order.createOrder(
-                productOrderDto.getQuantity(),
-                productOrderDto.getText(),
+        // 주문 엔티티 생성
+        Product_order productOrder = new Product_order(
+                productOrderDTO.getQuantity(),
+                productOrderDTO.getText(),
                 user,
                 store,
                 product
         );
 
-        return productOrderRepository.save(order);
+        // 주문 엔티티 저장
+        Product_order createdOrder = productOrderRepository.save(productOrder);
+
+        // DTO로 변환하여 반환
+        return ProductOrderDto.fromEntity(createdOrder);
     }
 
     // 상품 수정
