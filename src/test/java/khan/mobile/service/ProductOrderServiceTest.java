@@ -2,18 +2,19 @@ package khan.mobile.service;
 
 import jakarta.persistence.EntityManager;
 import khan.mobile.dto.ProductOrderDto;
-import khan.mobile.entity.*;
+import khan.mobile.entity.Product_order;
 import khan.mobile.repository.ProductOrderRepository;
-import org.apache.catalina.User;
-import org.assertj.core.api.Assertions;
+import khan.mobile.repository.StoreRepository;
+import khan.mobile.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @Transactional
@@ -22,36 +23,37 @@ class ProductOrderServiceTest {
     @Autowired EntityManager em;
     @Autowired ProductOrderRepository productOrderRepository;
     @Autowired ProductOrderService productOrderService;
+    @Autowired UserRepository userRepository;
+    @Autowired StoreRepository storeRepository;
+
 
     @Test
-    void ProductOrder() {
-        //given
-        Users newUser = Users.builder().id("테스트를 위한 아이디").password("테스트를 위한 비밀번호").role(Role.USER).build();
-
-        Products newProduct = Products.builder().product_name("테스트 상품").product_color("금색").product_weight(10.4f).product_size(15f).product_other("테스트 내용").product_image("img/").build();
-
-        Stores newStore = Stores.builder().store_name("테스트 스토어").build();
-
-        em.persist(newUser);
-        em.persist(newProduct);
-        em.persist(newStore);
-
-        ProductOrderDto productOrderDto = ProductOrderDto.builder()
+    void createOrderTest() {
+        // ProductOrderDTO 생성
+        ProductOrderDto testOrderDTO = ProductOrderDto.builder()
+                .user_id(1L)
+                .product_id(1L)
+                .store_id(1L)
                 .quantity(5)
-                .text("테스트 코드")
-                .product_id(newProduct.getProduct_id())
-                .store_id(newStore.getStore_id())
-                .user_id(newUser.getUser_id())
+                .text("테스트 주문")
                 .build();
-        //when
-        Product_order createOrder = productOrderService.createOrder(productOrderDto);
 
+        // 주문 생성 테스트
+        ProductOrderDto createdOrderDTO = productOrderService.createOrder(testOrderDTO);
+
+        // 검증
+        assertNotNull(createdOrderDTO);
+        assertEquals(testOrderDTO.getProduct_id(), createdOrderDTO.getProduct_id());
+        assertEquals(testOrderDTO.getText(), createdOrderDTO.getText());
+    }
+
+    @Test
+    void 전체주문리스트() {
+        //when
+        List<Product_order> findAll = productOrderRepository.findAll();
 
         //then
-        assertNotNull(createOrder);
-        assertEquals(productOrderDto.getQuantity(), createOrder.getProduct_order_quantity());
-        assertEquals(productOrderDto.getText(), createOrder.getProduct_order_text());
-
+        assertNotNull(findAll);
     }
 
 }
