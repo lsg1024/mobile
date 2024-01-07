@@ -2,7 +2,10 @@ package khan.mobile.entity;
 
 import jakarta.persistence.*;
 import khan.mobile.entity.auditing.BaseEntity;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -34,17 +37,6 @@ public class Product_order extends BaseEntity {
         this.user = user;
         this.stores = stores;
         this.products = products;
-    }
-
-    public static Product_order createOrder(int product_order_quantity, String product_order_text,
-                                            Users user, Stores stores, Products products) {
-        Product_order order = new Product_order();
-        order.product_order_quantity = product_order_quantity;
-        order.product_order_text = product_order_text;
-        order.user = user;
-        order.stores = stores;
-        order.products = products;
-        return order;
     }
 
 }
