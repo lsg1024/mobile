@@ -22,9 +22,8 @@ public class Factories {
     private List<Product_registration> product_registrations;
 
     @Builder
-    public Factories(Long factory_id, String factory_name, List<Product_registration> product_registrations) {
+    public Factories(Long factory_id, String factory_name) {
         this.factory_id = factory_id;
         this.factory_name = factory_name;
-        this.product_registrations = product_registrations;
     }
 }
