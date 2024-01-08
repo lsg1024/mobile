@@ -22,13 +22,13 @@ import java.util.List;
 public class StoreExcelController {
 
     @GetMapping("/excel")
-    public String main() {
+    public String upload() {
         return "excel";
     }
 
     @PostMapping("/excel/read")
     public String readExcel(@RequestParam("file") MultipartFile file, Model model)
-            throws IOException { // 2
+            throws IOException {
 
         List<StoreExcelDto> dataList = new ArrayList<>();
 
@@ -39,7 +39,7 @@ public class StoreExcelController {
             throw new IOException("엑셀파일만 업로드 해주세요.");
         }
 
-        Workbook workbook = null;
+        Workbook workbook;
 
         if (extension.equals("xlsx")) {
             workbook = new XSSFWorkbook(file.getInputStream());
@@ -49,7 +49,7 @@ public class StoreExcelController {
 
         Sheet worksheet = workbook.getSheetAt(0);
 
-        for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) { // 4
+        for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) {
 
             Row row = worksheet.getRow(i);
 
@@ -61,7 +61,7 @@ public class StoreExcelController {
             dataList.add(data);
         }
 
-        model.addAttribute("datas", dataList); // 5
+        model.addAttribute("datas", dataList);
 
         return "excelList";
 
