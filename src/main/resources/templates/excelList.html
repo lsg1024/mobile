@@ -1,22 +1,23 @@
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
-
+  <title>엑셀 데이터 목록</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 </head>
 <body>
 <table class="table table-striped">
   <thead>
   <tr>
-    <th scope="col">no</th>
+    <th scope="col">번호</th>
     <th scope="col">이름</th>
+    <th scope="col"><form action="/path-to-add-data" method="post"><button type="submit" class="btn btn-primary">데이터 저장</button></form></th>
   </tr>
   </thead>
   <tbody>
-  <tr th:each="data : ${datas}" >
-    <td scope="row" th:text="${data.store_id}"></td>
+  <tr th:each="data : ${datas}">
+    <td th:text="${data.store_id}"></td>
     <td th:text="${data.store_name}"></td>
   </tr>
   </tbody>
