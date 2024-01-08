@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
@@ -30,9 +27,6 @@ class StoresTest {
                 .build();
 
         storeRepository.save(newStore);
-
-        em.flush();
-        em.clear();
 
         Stores findStore = storeRepository.findById(newStore.getStore_id()).orElse(null);
         assertNotNull(findStore);

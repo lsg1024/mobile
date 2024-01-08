@@ -30,9 +30,6 @@ class FactoriesTest {
 
         factoryRepository.save(factories);
 
-        em.flush();
-        em.clear();
-
         Optional<Factories> findFactory = factoryRepository.findById(factories.getFactory_id());
 
         assertTrue(findFactory.isPresent(), "공장 아이디를 찾을 수 없음 : " + factories.getFactory_id());
