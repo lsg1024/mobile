@@ -11,5 +11,10 @@
     <input th:type="submit" value="제출" />
 </form>
 </body>
-
+<script th:inline="javascript">
+    let msg = [[${successMessage}]];
+    if (msg) {
+        alert(msg);
+    }
+</script>
 </html>
