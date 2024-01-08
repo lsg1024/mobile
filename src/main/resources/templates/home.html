@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments/header::header" >
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+  <div class="container">
+    <div th:replace="fragments/bodyHeader::bodyHeader"></div>
+    <div class="jumbotron">
+
+      <h1>통합 정보 시스템</h1>
+      <p>
+        <a class="btn btn-lg btn-secondary" href="">상품 관리</a>
+        <a class="btn btn-lg btn-secondary" href="">공장 관리</a>
+      </p>
+
+      <p>
+        <a class="btn btn-lg btn-secondary" href="">제품 등록</a>
+        <a class="btn btn-lg btn-secondary" href="">공장 등록</a>
+      </p>
+
+      <p>
+        <a class="btn btn-lg btn-secondary" href="">사용자 관리</a>
+      </p>
+    </div>
+
+    <div th:replace="fragments/footer::footer"></div>
+
+  </div>
+</body>
+</html>
