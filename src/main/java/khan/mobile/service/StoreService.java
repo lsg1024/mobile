@@ -6,6 +6,9 @@ import khan.mobile.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class StoreService {
@@ -20,18 +23,17 @@ public class StoreService {
 
         Stores save = storeRepository.save(stores);
 
-        StoreDto.storeName(save);
+        StoreDto.storeDto(save);
 
     }
 
     // 상점 리스트
-//    public List<StoreDto> StoresList(StoreDto storeDto) {
-//
-//        Stores stores = Stores.builder()
-//                .store_id(storeDto.getStore_id())
-//                .store_name(storeDto.getStore_name())
-//                .build();
-//
-//        List<Stores> storeList = storeRepository.findAll(stores);
-//    }
+    public List<StoreDto> StoresList() {
+
+        return storeRepository.findAll()
+                .stream()
+                .map(StoreDto::storeDto)
+                .collect(Collectors.toList());
+
+    }
 }

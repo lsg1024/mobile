@@ -50,7 +50,7 @@ public class ProductOrderService {
         Product_order createdOrder = productOrderRepository.save(productOrder);
 
         // DTO로 변환하여 반환
-        return ProductOrderDto.fromEntity(createdOrder);
+        return ProductOrderDto.productOrderDto(createdOrder);
     }
 
     // 상품 수정

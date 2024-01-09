@@ -20,7 +20,7 @@ public class ProductOrderDto {
     private Long user_id;
 
     @Builder
-    public static ProductOrderDto fromEntity(Product_order product_order) {
+    public static ProductOrderDto productOrderDto(Product_order product_order) {
         return ProductOrderDto.builder()
                 .product_order_id(product_order.getProduct_order_id())
                 .user_id(product_order.getUser().getUser_id())

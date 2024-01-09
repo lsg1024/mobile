@@ -13,7 +13,7 @@ public class StoreDto {
     private String store_name;
 
     @Builder
-    public static StoreDto storeName(Stores stores) {
+    public static StoreDto storeDto(Stores stores) {
         return StoreDto.builder()
                 .store_id(stores.getStore_id())
                 .store_name(stores.getStore_name())
