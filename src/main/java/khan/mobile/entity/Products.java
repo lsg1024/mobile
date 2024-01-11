@@ -24,21 +24,25 @@ public class Products extends BaseTimeEntity {
     private String product_other;
     private String product_image;
 
-    @OneToMany(mappedBy = "products")
-    private List<Product_registration> product_registration;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private Users user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "factory_id")
+    private Factories factory;
 
     @OneToMany(mappedBy = "products")
-    private List<Product_order> productOrders;
+    private List<Product_orderItem> product_orderItem;
 
     @Builder
-    public Products(String product_name, String product_color, Float product_size, Float product_weight, String product_other, String product_image, List<Product_registration> product_registration, List<Product_order> productOrders) {
+    public Products(String product_name, String product_color, Float product_size, Float product_weight, String product_other, String product_image, List<Product_orderItem> product_orderItem) {
         this.product_name = product_name;
         this.product_color = product_color;
         this.product_size = product_size;
         this.product_weight = product_weight;
         this.product_other = product_other;
         this.product_image = product_image;
-        this.product_registration = product_registration;
-        this.productOrders = productOrders;
+        this.product_orderItem = product_orderItem;
     }
 }

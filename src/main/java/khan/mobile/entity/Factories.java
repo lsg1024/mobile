@@ -18,8 +18,8 @@ public class Factories {
     private Long factory_id;
     private String factory_name;
 
-    @OneToMany(mappedBy = "factories")
-    private List<Product_registration> product_registrations;
+    @OneToMany(mappedBy = "factory")
+    private List<Products> product;
 
     @Builder
     public Factories(Long factory_id, String factory_name) {
