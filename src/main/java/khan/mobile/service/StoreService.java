@@ -47,7 +47,7 @@ public class StoreService {
     }
 
     // 상점 수정
-    public void updateStores(Long store_id, String storeName) {
+    public String updateStores(Long store_id, String storeName) {
 
         Optional<Stores> store = storeRepository.findById(store_id);
 
@@ -57,5 +57,7 @@ public class StoreService {
                 .build();
 
         storeRepository.save(stores);
+
+        return "update";
     }
 }

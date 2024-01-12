@@ -29,6 +29,12 @@ public class StoreController {
         return "storeList";
     }
 
+//    @PostMapping("/stores/update")
+//    public ResponseEntity<StoreDto> StoreUpdate() {
+//        storeService.updateStores(Store_id, storeName);
+//
+//    }
+
 
 
 }
