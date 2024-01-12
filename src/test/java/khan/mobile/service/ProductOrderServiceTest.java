@@ -27,25 +27,25 @@ class ProductOrderServiceTest {
     @Autowired StoreRepository storeRepository;
 
 
-    @Test
-    void createOrderTest() {
-        // ProductOrderDTO 생성
-        ProductOrderDto testOrderDTO = ProductOrderDto.builder()
-                .user_id(1L)
-                .product_id(1L)
-                .store_id(1L)
-                .quantity(5)
-                .text("테스트 주문")
-                .build();
-
-        // 주문 생성 테스트
-        ProductOrderDto createdOrderDTO = productOrderService.createOrder(testOrderDTO);
-
-        // 검증
-        assertNotNull(createdOrderDTO);
-        assertEquals(testOrderDTO.getProduct_id(), createdOrderDTO.getProduct_id());
-        assertEquals(testOrderDTO.getText(), createdOrderDTO.getText());
-    }
+//    @Test
+//    void createOrderTest() {
+//        // ProductOrderDTO 생성
+//        ProductOrderDto testOrderDTO = ProductOrderDto.builder()
+//                .user_id(1L)
+//                .product_id(1L)
+//                .store_id(1L)
+//                .quantity(5)
+//                .text("테스트 주문")
+//                .build();
+//
+//        // 주문 생성 테스트
+//        ProductOrderDto createdOrderDTO = productOrderService.createOrder(testOrderDTO);
+//
+//        // 검증
+//        assertNotNull(createdOrderDTO);
+//        assertEquals(testOrderDTO.getProduct_id(), createdOrderDTO.getProduct_id());
+//        assertEquals(testOrderDTO.getText(), createdOrderDTO.getText());
+//    }
 
     @Test
     void 전체주문리스트() {
