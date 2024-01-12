@@ -17,9 +17,6 @@ public class Product_order extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_order_id")
     private Long product_order_id;
-    private int product_order_quantity;
-    private String product_order_text;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private Users user;
@@ -32,9 +29,7 @@ public class Product_order extends BaseEntity {
     private List<Product_orderItem> orderItems;
 
     @Builder
-    public Product_order(int product_order_quantity, String product_order_text, Users user, Stores stores) {
-        this.product_order_quantity = product_order_quantity;
-        this.product_order_text = product_order_text;
+    public Product_order(Users user, Stores stores) {
         this.user = user;
         this.stores = stores;
     }
