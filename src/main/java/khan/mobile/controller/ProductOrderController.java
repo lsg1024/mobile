@@ -1,7 +1,7 @@
 package khan.mobile.controller;
 
 import khan.mobile.dto.ProductOrderDto;
-import khan.mobile.entity.Product_order;
+import khan.mobile.dto.ProductOrderItemDto;
 import khan.mobile.service.ProductOrderService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -31,11 +31,13 @@ public class ProductOrderController {
     }
 
     // 상품 수정
-//    @PostMapping("/order/{orderId}")
-//    public ResponseEntity<ProductOrderDto> updateOrder(@PathVariable("orderId") Long orderId, @RequestBody ProductOrderDto productOrderDto) {
-//        productOrderService.updateOrder(orderId, productOrderDto);
-//        return ResponseEntity.ok(productOrderDto);
-//    }
+    @PostMapping("/order/update")
+    public ResponseEntity<ResponseDto> updateOrder(@RequestHeader("user_id") Long user_id,
+                                                   @RequestHeader("orderItems_id") Long orderItems_id,
+                                                   @RequestBody ProductOrderItemDto productOrderItemDto) {
+        productOrderService.updateOrder(user_id, orderItems_id, productOrderItemDto);
+        return ResponseEntity.ok(new ResponseDto("주문 수정 완료"));
+    }
 
 
     @Getter @Setter

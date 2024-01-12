@@ -38,4 +38,11 @@ public class Product_orderItem {
         this.product_order = product_order;
         this.products = products;
     }
+
+    public void updateOrderItem(String color, Float size, String other, int quantity) {
+        this.product_orderItem_color = color;
+        this.product_orderItem_size = size;
+        this.product_orderItem_other = other;
+        this.product_orderItem_quantity = quantity;
+    }
 }
