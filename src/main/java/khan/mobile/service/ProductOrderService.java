@@ -1,6 +1,7 @@
 package khan.mobile.service;
 
 import khan.mobile.dto.ProductOrderDto;
+import khan.mobile.dto.ProductOrderItemDetailDto;
 import khan.mobile.dto.ProductOrderItemDto;
 import khan.mobile.entity.*;
 import khan.mobile.repository.*;
@@ -84,18 +85,18 @@ public class ProductOrderService {
         EditByAdmin(user, "admin 권한으로 주문 정보를 삭제했습니다. 주문 ID: {}, 사용자 ID: {}", orderItems_id, user_id);
     }
 
-    // 주문 상품 목록
-    public List<Product_orderItem> getUserOrderItems(Long userId) {
+    // 주문 항목 상세 조회
+    public List<ProductOrderItemDetailDto> getOrderItemListDetails(Long user_id) {
         // 사용자가 한 모든 주문 조회
-        List<Product_order> orders = productOrderRepository.findByUserId(userId);
+        List<Product_order> orders = productOrderRepository.findByUserId(user_id);
 
         // 주문 ID 목록 추출
         List<Long> orderIds = orders.stream()
                 .map(Product_order::getProduct_order_id)
                 .collect(Collectors.toList());
 
-        // 주문 ID 목록에 해당하는 모든 주문 항목 조회
-        return productOrderItemRepository.findByProductOrderIdIn(orderIds);
+        // 주문 항목 상세 조회
+        return productOrderItemRepository.findOrderItemDetail(orderIds);
     }
 
     private void EditByAdmin(Users user, String format, Long orderItems_id, Long user_id) {

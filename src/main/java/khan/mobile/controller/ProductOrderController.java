@@ -1,16 +1,15 @@
 package khan.mobile.controller;
 
 import khan.mobile.dto.ProductOrderDto;
+import khan.mobile.dto.ProductOrderItemDetailDto;
 import khan.mobile.dto.ProductOrderItemDto;
 import khan.mobile.dto.ResponseDto;
-import khan.mobile.entity.Product_orderItem;
 import khan.mobile.service.ProductOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,20 +44,10 @@ public class ProductOrderController {
     }
 
     // 상품 리스트
-    @GetMapping("orderItem/list")
-    public ResponseEntity<List<ProductOrderItemDto>> itemList(@RequestParam("user_id") Long user_id) {
-        List<Product_orderItem> orderItems = productOrderService.getUserOrderItems(user_id);
-
-        List<ProductOrderItemDto> orderItemDtos = orderItems.stream()
-                .map(item -> new ProductOrderItemDto(
-                        item.getProduct_orderItem_id(),
-                        item.getProduct_orderItem_color(),
-                        item.getProduct_orderItem_size(),
-                        item.getProduct_orderItem_other(),
-                        item.getProduct_orderItem_quantity()))
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(orderItemDtos);
+    @GetMapping("orderItem/orderList")
+    public ResponseEntity<List<ProductOrderItemDetailDto>> getOrderItemDetails(@RequestHeader("user_id") Long user_id) {
+        List<ProductOrderItemDetailDto> details = productOrderService.getOrderItemListDetails(user_id);
+        return ResponseEntity.ok(details);
     }
 
 }
