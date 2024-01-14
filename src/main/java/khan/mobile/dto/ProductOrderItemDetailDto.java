@@ -12,11 +12,11 @@ import lombok.Setter;
 public class ProductOrderItemDetailDto {
 
     private Long productOrderItemId;
-    private String productOrderItemColor;
-    private Float productOrderItemSize;
-    private String productOrderItemOther;
-    private Integer productOrderItemQuantity;
-    private Float productWeight;
+    private String color;
+    private Float size;
+    private String other;
+    private Integer quantity;
+    private Float weight;
     private String productName;
     private String productImage;
 
