@@ -14,13 +14,12 @@ public class Product_orderItem {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_orderItem_id")
     private Long product_orderItem_id;
-
     private String product_orderItem_color;
     private Float product_orderItem_size;
     private String product_orderItem_other;
     private int product_orderItem_quantity;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_order_id")
     private Product_order product_order;
 
