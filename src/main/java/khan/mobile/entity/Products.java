@@ -36,13 +36,15 @@ public class Products extends BaseTimeEntity {
     private List<Product_orderItem> product_orderItem;
 
     @Builder
-    public Products(String product_name, String product_color, Float product_size, Float product_weight, String product_other, String product_image, List<Product_orderItem> product_orderItem) {
+    public Products(Long product_id, String product_name, String product_color, Float product_size, Float product_weight, String product_other, String product_image, Users user, Factories factory) {
+        this.product_id = product_id;
         this.product_name = product_name;
         this.product_color = product_color;
         this.product_size = product_size;
         this.product_weight = product_weight;
         this.product_other = product_other;
         this.product_image = product_image;
-        this.product_orderItem = product_orderItem;
+        this.user = user;
+        this.factory = factory;
     }
 }
