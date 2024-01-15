@@ -47,4 +47,10 @@ public class Products extends BaseTimeEntity {
         this.user = user;
         this.factory = factory;
     }
+
+    public void updateProduct(String product_color, Float product_size, String product_other) {
+        this.product_color = product_color;
+        this.product_size = product_size;
+        this.product_other = product_other;
+    }
 }

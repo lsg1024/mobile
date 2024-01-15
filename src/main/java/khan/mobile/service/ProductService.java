@@ -20,10 +20,11 @@ public class ProductService {
     private final UserRepository userRepository;
     private final FactoryRepository factoryRepository;
 
-    public void createProduct(Long user_id, Long factory_id, ProductDto productDto) {
+    //상품 생성
+    @Transactional
+    public void createProduct(Long user_id, ProductDto productDto) {
         //엔티티 조회
         validateUser(user_id);
-        validateFactory(factory_id);
 
         //상품 생성
         Products product = Products.builder()
@@ -34,15 +35,38 @@ public class ProductService {
                 .product_other(productDto.getOther())
                 .product_image(productDto.getImage())
                 .user(Users.builder().user_id(user_id).build())
-                .factory(Factories.builder().factory_id(factory_id).build())
                 .build();
 
         //상품 저장
         productRepository.save(product);
     }
 
-    private void validateFactory(Long factory_id) {
-        Factories factory = factoryRepository.findById(factory_id).orElseThrow(() -> new IllegalArgumentException("일치하는 공장 정보가 없습니다"));
+    //상품 수정
+    @Transactional
+    public void updateProduct(Long user_id, Long product_id, ProductDto productDto) {
+        //엔티티 조회
+        validateUser(user_id);
+        Products findProduct = validateProduct(product_id);
+
+        //상품 수정
+        findProduct.updateProduct(
+                productDto.getColor(),
+                productDto.getSize(),
+                productDto.getOther()
+        );
+    }
+
+    //상품 삭제
+    public void deleteProduct(Long user_id, Long product_id, ProductDto productDto) {
+
+    }
+
+    private Products validateProduct(Long product_id) {
+        return productRepository.findById(product_id).orElseThrow(() -> new IllegalArgumentException("일치하는 상품 정보가 없습니다"));
+    }
+
+    private Factories validateFactory(Long factory_id) {
+        return factoryRepository.findById(factory_id).orElseThrow(() -> new IllegalArgumentException("일치하는 공장 정보가 없습니다"));
     }
 
     private Users validateUser(Long user_id) {

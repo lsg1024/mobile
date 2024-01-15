@@ -18,10 +18,16 @@ public class ProductController {
 
     @PostMapping("/product/create")
     public ResponseEntity<ResponseDto> createProduct(@RequestHeader("user_id") Long user_id,
-                                                     @RequestHeader("factory_id") Long factory_id,
                                                      @RequestBody ProductDto productDto) {
-        productService.createProduct(user_id, factory_id, productDto);
+        productService.createProduct(user_id, productDto);
         return ResponseEntity.ok(new ResponseDto("생성 완료"));
     }
 
+    @PostMapping("/product/update")
+    public ResponseEntity<ResponseDto> updateProduct(@RequestHeader("user_id") Long user_id,
+                                                     @RequestHeader("product_id") Long product_id,
+                                                     @RequestBody ProductDto productDto) {
+        productService.updateProduct(user_id, product_id, productDto);
+        return ResponseEntity.ok(new ResponseDto("수정 완료"));
+    }
 }
