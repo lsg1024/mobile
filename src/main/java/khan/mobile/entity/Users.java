@@ -15,7 +15,6 @@ public class Users {
     private Long user_id;
     private String id;
     private String password;
-    private String email;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -27,11 +26,10 @@ public class Users {
     private List<Product_order>  productOrders;
 
     @Builder
-    public Users(Long user_id, String id, String password, String email, Role role) {
+    public Users(Long user_id, String id, String password, Role role) {
         this.user_id = user_id;
         this.id = id;
         this.password = password;
-        this.email = email;
         this.role = role;
     }
 }
