@@ -6,6 +6,11 @@ a.btn {
     padding: 0;
     box-sizing: border-box;
 }
+.container {
+    width: 60%; /* 전체 화면 너비 사용 */
+    max-width: 80%; /* 최대 너비 제한 없음 */
+    margin: 0 auto;
+}
 
 .article {
     max-width: 960px;
