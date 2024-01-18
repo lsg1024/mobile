@@ -31,9 +31,9 @@ body {
 }
 
 /* Customize container */
-@media (min-width: 768px) {
+@media (min-width: 900px) {
     .container {
-        max-width: 730px;
+        max-width: 80vw;
     }
 }
 .container-narrow > hr {
@@ -42,12 +42,14 @@ body {
 
 /* Main marketing message and sign up button */
 .jumbotron {
+    min-height: 80vw;
     text-align: center;
     border-bottom: 1px solid #e5e5e5;
 }
 .jumbotron .btn {
     font-size: 21px;
     padding: 14px 24px;
+    text-align: center;
 }
 
 /* Supporting marketing content */
@@ -59,7 +61,7 @@ body {
 }
 
 /* Responsive: Portrait tablets and up */
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 1080px) {
     /* Remove the padding we set earlier */
     .header,
     .marketing,
@@ -73,6 +75,6 @@ body {
     }
     /* Remove the bottom border on the jumbotron for visual effect */
     .jumbotron {
-        border-bottom: 0;
+        min-height: 70vh; /* 화면 높이의 50% */
     }
 }
