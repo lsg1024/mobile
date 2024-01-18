@@ -8,6 +8,8 @@ import khan.mobile.repository.FactoryRepository;
 import khan.mobile.repository.ProductRepository;
 import khan.mobile.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,6 +56,12 @@ public class ProductService {
                 productDto.getSize(),
                 productDto.getOther()
         );
+    }
+
+    //상품 출력
+    public Page<ProductDto> getProductList(Pageable pageable) {
+        return productRepository.findAll(pageable)
+                .map(ProductDto::productDto);
     }
 
     //상품 삭제

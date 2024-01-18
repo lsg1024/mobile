@@ -13,4 +13,10 @@ public class htmlController {
         log.info("home Controller");
         return "home";
     }
+
+    @RequestMapping("/product")
+    public String product() {
+        log.info("product Controller");
+        return "htmlpages/product";
+    }
 }
