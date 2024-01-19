@@ -17,7 +17,7 @@ public class KakaoTokenJsonData {
     private static final String GRANT_TYPE = "authorization_code";
 
     @Value("${Kakao_Client_ID}")
-    private static String CLIENT_ID;
+    private String CLIENT_ID;
 
     public KakaoTokenResponse getToken(String code) {
         String uri = TOKEN_URI + "?grant_type=" + GRANT_TYPE + "&client_id=" + CLIENT_ID + "&redirect_uri=" + REDIRECT_URI + "&code=" + code;

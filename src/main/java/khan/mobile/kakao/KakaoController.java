@@ -23,7 +23,7 @@ public class KakaoController {
 
     @GetMapping("/index")
     public String index() {
-        return "loginForm";
+        return "htmlpages/loginForm";
     }
 
     @GetMapping("/oauth")
