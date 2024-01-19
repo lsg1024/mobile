@@ -2,6 +2,7 @@ package khan.mobile.kakao.util;
 
 import khan.mobile.kakao.response.KakaoTokenResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -14,7 +15,9 @@ public class KakaoTokenJsonData {
     private static final String TOKEN_URI = "https://kauth.kakao.com/oauth/token";
     private static final String REDIRECT_URI = "http://localhost:8080/oauth";
     private static final String GRANT_TYPE = "authorization_code";
-    private static final String CLIENT_ID = "5491a6e9994ae64c2a5d4a132059656c";
+
+    @Value("${Kakao_Client_ID}")
+    private static String CLIENT_ID;
 
     public KakaoTokenResponse getToken(String code) {
         String uri = TOKEN_URI + "?grant_type=" + GRANT_TYPE + "&client_id=" + CLIENT_ID + "&redirect_uri=" + REDIRECT_URI + "&code=" + code;
