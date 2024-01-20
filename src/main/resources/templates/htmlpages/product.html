@@ -8,13 +8,21 @@
 </head>
 <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
   <div class="container">
-    <div th:replace="~{fragments/bodyHeader::bodyHeader}"></div>
+      <div th:replace="~{fragments/bodyHeader::bodyHeader}"></div>
+
+      <div class="header-container">
+        <div></div>
+        <div class="search">
+          <form th:action="@{/search}" method="get">
+            <input type="text" name="query" placeholder="검색..." class="search-box">
+            <img src="/images/search.png">
+          </form>
+        </div>
+      </div>
 
     <div class="product-list">
 
       <div th:each="product : ${products}" class="product-item">
-
-        <img th:src="@{${product.image}}" class="product-image" />
 
         <div class="product-info">
 

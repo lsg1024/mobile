@@ -4,24 +4,11 @@ a.btn {
 .center-content {
     text-align: center;
 }
-.flex-center {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-}
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-.container {
-    width: 60%; /* 전체 화면 너비 사용 */
-    max-width: 80%; /* 최대 너비 제한 없음 */
-    min-height: 80vh; /* 전체 뷰포트 높이의 80% */
-    margin: 0 auto;
-    align-content: center;
 }
 
 .article {
@@ -50,13 +37,6 @@ a.btn {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-}
-
-.buttons {
-    position: relative;
-    padding: 1rem 0;
-    display: inline-flex;
-    justify-content: center;
 }
 
 .button {
@@ -90,14 +70,23 @@ ion-icon {
     padding-top: 0.05rem;
 }
 
+/* product 아이템 리스트 */
+.container {
+    width: 60%; /* 전체 화면 너비 사용 */
+    max-width: 80%; /* 최대 너비 제한 없음 */
+    min-height: 80vh; /* 전체 뷰포트 높이의 80% */
+    margin: 0 auto;
+    align-content: center;
+ }
 .product-list {
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
     gap: 20px;
     margin-top: 30px;
     margin-bottom: 30px;
 }
-
 .product-item {
     flex-basis: calc(33.333% - 20px);
     border: 1px solid #ddd;
@@ -129,3 +118,32 @@ ion-icon {
         flex-basis: 100%;
     }
 }
+
+/* 검색 창 */
+.header-container {
+    display: flex;
+    justify-content: space-between; /* 양쪽 끝에 요소 정렬 *!*/
+    align-items: center;
+}
+
+.search {
+    position: relative;
+    width: 300px;
+}
+
+input {
+    width: 100%;
+    border: 1px solid #bbb;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 14px;
+}
+
+img {
+    position : absolute;
+    width: 17px;
+    top: 12px;
+    right: 12px;
+    margin: 0;
+}
+
