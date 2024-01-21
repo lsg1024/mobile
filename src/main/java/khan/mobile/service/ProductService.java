@@ -29,6 +29,9 @@ public class ProductService {
         validateUser(user_id);
 
         //상품 생성
+        /*
+          TODO : 공장 값을 파라미터로 받아 저장하는 코드 필요
+         */
         Products product = Products.builder()
                 .product_name(productDto.getName())
                 .product_color(productDto.getColor())
@@ -45,17 +48,22 @@ public class ProductService {
 
     //상품 수정
     @Transactional
-    public void updateProduct(Long user_id, Long product_id, ProductDto productDto) {
+    public ProductDto updateProduct(Long user_id, Long product_id, ProductDto productDto) {
         //엔티티 조회
         validateUser(user_id);
         Products findProduct = validateProduct(product_id);
 
         //상품 수정
         findProduct.updateProduct(
+                productDto.getName(),
                 productDto.getColor(),
                 productDto.getSize(),
+                productDto.getWeight(),
                 productDto.getOther()
         );
+
+        return ProductDto.productDto(findProduct);
+
     }
 
     //상품 출력
@@ -66,6 +74,23 @@ public class ProductService {
 
     //상품 삭제
     public void deleteProduct(Long user_id, Long product_id, ProductDto productDto) {
+
+    }
+
+    //상품 상세
+    public ProductDto getProductDetail(Long product_id) {
+//        validateUser(user_id);
+        Products findProduct = validateProduct(product_id);
+
+        return ProductDto.builder()
+                .id(findProduct.getProduct_id())
+                .name(findProduct.getProduct_name())
+                .color(findProduct.getProduct_color())
+                .size(findProduct.getProduct_size())
+                .weight(findProduct.getProduct_weight())
+                .other(findProduct.getProduct_other())
+                .image(findProduct.getProduct_image())
+                .build();
 
     }
 

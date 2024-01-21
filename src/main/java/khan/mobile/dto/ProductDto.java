@@ -10,6 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class ProductDto {
+    private Long id;
     private String name;
     private String color;
     private Float size;
@@ -22,6 +23,7 @@ public class ProductDto {
     @Builder
     public static ProductDto productDto(Products products) {
         return ProductDto.builder()
+                .id(products.getProduct_id())
                 .name(products.getProduct_name())
                 .color(products.getProduct_color())
                 .size(products.getProduct_size())

@@ -4,19 +4,19 @@ import khan.mobile.dto.ProductDto;
 import khan.mobile.dto.ResponseDto;
 import khan.mobile.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class ProductController {
 
     private final ProductService productService;
@@ -29,11 +29,12 @@ public class ProductController {
     }
 
     @PostMapping("/product/update")
-    public ResponseEntity<ResponseDto> updateProduct(@RequestHeader("user_id") Long user_id,
+    public ResponseEntity<ProductDto> updateProduct(@RequestHeader("user_id") Long user_id,
                                                      @RequestHeader("product_id") Long product_id,
-                                                     @RequestBody ProductDto productDto) {
-        productService.updateProduct(user_id, product_id, productDto);
-        return ResponseEntity.ok(new ResponseDto("수정 완료"));
+                                                     @Validated @RequestBody ProductDto productDto) {
+
+        ProductDto result = productService.updateProduct(user_id, product_id, productDto);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/product")
@@ -42,5 +43,13 @@ public class ProductController {
         model.addAttribute("products", productPage.getContent());
         model.addAttribute("page", productPage);
         return "htmlpages/product";
+    }
+
+    @GetMapping("/product/detail/{id}")
+    public String getProductDetail(@PathVariable("id") Long id, Model model) {
+        log.info("Product Detail request for ID: " + id);
+        ProductDto product = productService.getProductDetail(id);
+        model.addAttribute("product", product);
+        return "htmlpages/productDetail";
     }
 }
