@@ -4,8 +4,8 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <meta charset="UTF-8">
   <title>상품 목록</title>
-<body>
 </head>
+<body>
 <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
   <div class="container">
       <div th:replace="~{fragments/bodyHeader::bodyHeader}"></div>
@@ -15,7 +15,7 @@
         <div class="search">
           <form th:action="@{/search}" method="get">
             <input type="text" name="query" placeholder="검색..." class="search-box">
-            <img src="/images/search.png">
+            <img class="search-img" src="/images/search.png">
           </form>
         </div>
       </div>
@@ -24,17 +24,21 @@
 
       <div th:each="product : ${products}" class="product-item">
 
-        <div class="product-info">
+        <a th:href="@{/product/detail/{id}(id=${product.id})}" class="product-link">
 
-          <h2 th:text="${product.name}">Product Name</h2>
-          <p>Color: <span th:text="${product.color}">Color</span></p>
-          <p>Size: <span th:text="${product.size}">Size</span></p>
-          <p>Weight: <span th:text="${product.weight}">Weight</span></p>
-          <p>Other: <span th:text="${product.other}">Other Details</span></p>
+          <div class="product-info">
 
-        </div>
+            <h2 th:text="${product.name}">Product Name</h2>
+            <p>Color: <span th:text="${product.color}">Color</span></p>
+            <p>Size: <span th:text="${product.size}">Size</span></p>
+            <p>Weight: <span th:text="${product.weight}">Weight</span></p>
+            <p>Other: <span th:text="${product.other}">Other Details</span></p>
+
+          </div>
+        </a>
 
       </div>
+
 
     </div>
 
