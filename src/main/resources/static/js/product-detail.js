@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
         input.disabled = true;
     });
 
+    // 데이터 수정 버튼
     editButton.addEventListener('click', function() {
         // 필드를 활성화
         inputs.forEach(function(input) {
@@ -20,37 +21,13 @@ document.addEventListener('DOMContentLoaded', function() {
         saveButton.classList.remove('hidden');
     });
 
-    // 필드 유효성 검사 함수
-    const fieldLabels = {
-        'name': '상품명',
-        'color': '색상',
-        'size': '크기',
-        'weight': '무게',
-        'other': '기타 정보'
-    };
-
-    function validateFields() {
-        let emptyFields = [];
-
-        for (let input of inputs) {
-            if (!input.value.trim()) {
-                emptyFields.push(fieldLabels[input.name] || input.name);
-            }
-        }
-
-        if (emptyFields.length > 0) {
-            alert("다음 필드가 비어 있습니다: " + emptyFields.join(", "));
-            return false;
-        }
-        return true;
-    }
-
+    // 데이터 수정 완료 버튼
     saveButton.addEventListener('click', function(event) {
         event.preventDefault()
-
-        if (!validateFields()) {
-            return; // 유효성 검사 실패 시 함수 종료
-        }
+        //
+        // if (!validateFields()) {
+        //     return; // 유효성 검사 실패 시 함수 종료
+        // }
 
         const formData = new FormData(form);
         for (let [key, value] of formData.entries()) {
@@ -79,30 +56,32 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             body: JSON.stringify(productDto)
         })
-            .then(response => {
-                // 성공 메시지 처리 또는 페이지 새로고침 토스트 메시지를 보여준 후 사라지게 함
-                if (response.ok) {
-                    alert("데이터 수정이 완료되었습니다")
+        .then(response => response.json().then(data => ({ status: response.status, body: data })))
+        .then(({ status, body }) => {
+            if (status === 200) {
+                // 성공 메시지 처리
+                alert("데이터 수정이 완료되었습니다");
 
-                    // 필드를 다시 비활성화
-                    inputs.forEach(function(input) {
-                        input.disabled = true;
-                    });
+                // 필드를 다시 비활성화
+                inputs.forEach(function(input) {
+                    input.disabled = true;
+                });
 
-                    editButton.classList.remove('hidden');
-                    saveButton.classList.add('hidden');
-
-                    return response.json();
-                } else {
-                    throw new Error("데이터 수정 실패")
+                editButton.classList.remove('hidden');
+                saveButton.classList.add('hidden');
+            } else {
+                // 오류 메시지 생성
+                let errorMessage = body.message + ": ";
+                for (const [field, message] of Object.entries(body.errors)) {
+                    errorMessage += `${message}, `;
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert("업데이트 실패: " + error.message); // 실패 메시지 표시
-            });
-
-
+                // 오류 메시지 표시
+                alert(errorMessage);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert("업데이트 실패: " + error.message); // 실패 메시지 표시
+        });
     });
-
 });
