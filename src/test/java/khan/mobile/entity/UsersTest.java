@@ -25,7 +25,6 @@ class UsersTest {
     @Test
     void createUser() {
         Users newUser = Users.builder()
-                .id("테스트를 위한 아이디")
                 .password("테스트를 위한 비밀번호")
                 .role(Role.USER)
                 .build();
