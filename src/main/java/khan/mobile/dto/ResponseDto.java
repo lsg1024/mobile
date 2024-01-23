@@ -12,6 +12,5 @@ public class ResponseDto {
     public ResponseDto(String response) {
         this.response = response;
     }
-    public ResponseDto(Map<String, String> errors) {
-        this.errors = errors;}
 }
+
