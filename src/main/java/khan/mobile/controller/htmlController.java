@@ -19,4 +19,16 @@ public class htmlController {
         log.info("product Controller");
         return "productPages/product";
     }
+
+    @RequestMapping("/user/login")
+    public String login() {
+        log.info("login Controller");
+        return "loginPages/loginForm";
+    }
+
+    @RequestMapping("/user/signup")
+    public String signup() {
+        log.info("login Controller");
+        return "loginPages/signup";
+    }
 }
