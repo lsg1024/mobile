@@ -21,7 +21,7 @@ public class AuthController {
     public ResponseEntity<?> authenticate(@RequestBody Users user) {
         Optional<Users> existingUser = userRepository.findByEmail(user.getEmail());
         if (existingUser != null) {
-            String token = JwtUtil.generateToken(user.getUser_id(), String.valueOf(user.getRole()));
+            String token = JwtUtil.createJwt(user.getUser_id(), String.valueOf(user.getRole()));
             return ResponseEntity.ok(token);
         } else {
             return ResponseEntity.status(401).body("Unauthorized");

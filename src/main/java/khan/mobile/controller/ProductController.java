@@ -58,7 +58,7 @@ public class ProductController {
         Page<ProductDto> productPage = productService.getProductList(pageable);
         model.addAttribute("products", productPage.getContent());
         model.addAttribute("page", productPage);
-        return "htmlpages/product";
+        return "productPages/product";
     }
 
     @GetMapping("/product/detail/{id}")
@@ -66,6 +66,6 @@ public class ProductController {
         log.info("Product Detail request for ID: " + id);
         ProductDto product = productService.getProductDetail(id);
         model.addAttribute("product", product);
-        return "htmlpages/productDetail";
+        return "productPages/productDetail";
     }
 }

@@ -30,7 +30,7 @@ public class StoreExcelController {
 
     @GetMapping("/excel")
     public String upload() {
-        return "excel";
+        return "productPages/excel";
     }
 
     @PostMapping("/excel/read")
@@ -75,7 +75,7 @@ public class StoreExcelController {
 
         model.addAttribute("datas", dataList);
 
-        return "excelList";
+        return "storePages/excelList";
 
     }
 
@@ -95,7 +95,7 @@ public class StoreExcelController {
 
         redirectAttributes.addFlashAttribute("successMessage", "데이터 저장 성공");
 
-        return "redirect:/excel";
+        return "redirect:storePages/excel";
 
     }
 }

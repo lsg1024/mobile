@@ -20,7 +20,7 @@ public class StoreController {
         Page<StoreDto> storePage = storeService.getStoreList(pageable);
         model.addAttribute("stores", storePage.getContent());
         model.addAttribute("page", storePage);
-        return "htmlpages/storeList";
+        return "storePages/storeList";
     }
 
 //    @PostMapping("/stores/update")

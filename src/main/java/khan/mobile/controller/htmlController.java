@@ -17,6 +17,6 @@ public class htmlController {
     @RequestMapping("/product")
     public String product() {
         log.info("product Controller");
-        return "htmlpages/product";
+        return "productPages/product";
     }
 }

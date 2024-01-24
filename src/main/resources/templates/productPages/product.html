@@ -24,7 +24,7 @@
 
       <div th:each="product : ${products}" class="product-item">
 
-        <a th:href="@{/product/detail/{id}(id=${product.id})}" class="product-link">
+        <a th:href="@{/templates/productPages/detail/{id}(id=${product.id})}" class="product-link">
 
           <div class="product-info">
 
