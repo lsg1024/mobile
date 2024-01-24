@@ -1,4 +1,8 @@
 spring:
+  security:
+     user:
+       name: user
+       password: 1234
   sql:
     init:
       mode: always
@@ -22,7 +26,6 @@ spring:
         use_sql_comments: true
   thymeleaf:
     cache: false
-
 
   h2:
     console:

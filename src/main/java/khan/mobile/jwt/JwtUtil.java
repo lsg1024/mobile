@@ -22,13 +22,17 @@ public class JwtUtil {
     }
 
     // jwt 토큰 생성
-    public static String generateToken(Long user_id, String role) {
+    public static String createJwt(Long user_id, String role) {
+        Claims claims = Jwts.claims();
+        claims.put("user_id", user_id);
+        claims.put("role", role);
         long now = System.currentTimeMillis();
+
         return Jwts.builder()
-                .setSubject(String.valueOf(user_id))
+                .setClaims(claims)
                 .claim("role", role)
-                .setIssuedAt(new Date(now))
-                .setExpiration(new Date(now + 3600000))
+                .setIssuedAt(new Date(now)) // 현재 시간
+                .setExpiration(new Date(now + 3600000)) // 만료 시간
                 .signWith(SignatureAlgorithm.ES512, secretKey)
                 .compact();
     }

@@ -5,7 +5,6 @@ import khan.mobile.entity.Users;
 import khan.mobile.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +17,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+//    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public Long createUser(UserSignUpDto userSignUpDto) throws Exception {
@@ -32,7 +31,7 @@ public class UserService {
         }
 
         Users user = userRepository.save(userSignUpDto.toEntity());
-        user.encodePassword(passwordEncoder);
+//        user.encodePassword(passwordEncoder);
 
         return user.getUser_id();
     }

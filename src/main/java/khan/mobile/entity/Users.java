@@ -3,7 +3,6 @@ package khan.mobile.entity;
 import jakarta.persistence.*;
 import khan.mobile.entity.auditing.BaseTimeEntity;
 import lombok.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -35,9 +34,9 @@ public class Users extends BaseTimeEntity {
     @OneToMany(mappedBy = "user")
     private List<Product_order>  productOrders;
 
-    public void encodePassword(PasswordEncoder passwordEncoder) {
-        this.password = passwordEncoder.encode(password);
-    }
+//    public void encodePassword(PasswordEncoder passwordEncoder) {
+//        this.password = passwordEncoder.encode(password);
+//    }
 
     @Builder
     public Users(Long id, String name, String email, String password, Role role) {
