@@ -23,7 +23,6 @@ public class Users extends BaseTimeEntity {
 
     @Column(length = 100)
     private String password;
-    private String nickname;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -37,14 +36,5 @@ public class Users extends BaseTimeEntity {
 //    public void encodePassword(PasswordEncoder passwordEncoder) {
 //        this.password = passwordEncoder.encode(password);
 //    }
-
-    @Builder
-    public Users(Long id, String name, String email, String password, Role role) {
-        this.user_id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
 
 }
