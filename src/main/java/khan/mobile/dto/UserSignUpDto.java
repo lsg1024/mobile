@@ -34,7 +34,7 @@ public class UserSignUpDto {
     public Users toEntity() {
         return Users.builder()
                 .email(email)
-                .nickname(nickname)
+                .name(nickname)
                 .password(password)
                 .role(Role.USER)
                 .build();
