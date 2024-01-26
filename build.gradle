@@ -34,7 +34,7 @@ dependencies {
 	//security
 //	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 //	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 
 	//Excel
 	implementation group: 'org.apache.poi', name: 'poi', version: '5.2.5'
