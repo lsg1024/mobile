@@ -17,12 +17,13 @@ public class Users extends BaseTimeEntity {
     @Column(name = "user_id")
     private Long user_id;
 
-    private String name;
     @Column(length = 45)
     private String email;
 
     @Column(length = 100)
     private String password;
+
+    private String name;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -32,9 +33,5 @@ public class Users extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user")
     private List<Product_order>  productOrders;
-
-//    public void encodePassword(PasswordEncoder passwordEncoder) {
-//        this.password = passwordEncoder.encode(password);
-//    }
 
 }

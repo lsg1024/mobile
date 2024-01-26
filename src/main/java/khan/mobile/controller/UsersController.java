@@ -1,6 +1,7 @@
 package khan.mobile.controller;
 
-import khan.mobile.dto.UserSignUpDto;
+import khan.mobile.dto.ResponseDto;
+import khan.mobile.dto.UserJoinRequest;
 import khan.mobile.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +18,9 @@ public class UsersController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody UserSignUpDto userSignUpDto) {
-
-
-        return ResponseEntity.ok().body("회원가입 성공");
+    public ResponseEntity<ResponseDto> signup(@RequestBody UserJoinRequest userSignUpDto) {
+        userService.createUser(userSignUpDto.getEmail(), userSignUpDto.getName(), userSignUpDto.getPassword());
+        return ResponseEntity.ok(new ResponseDto("회원가입 완료"));
     }
 
 

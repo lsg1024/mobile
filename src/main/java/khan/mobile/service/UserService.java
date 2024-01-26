@@ -1,10 +1,16 @@
 package khan.mobile.service;
 
+import khan.mobile.dto.ResponseDto;
 import khan.mobile.dto.UserSignUpDto;
+import khan.mobile.entity.Role;
 import khan.mobile.entity.Users;
+import khan.mobile.exception.AppException;
+import khan.mobile.exception.ErrorCode;
 import khan.mobile.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,23 +23,25 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-//    private final PasswordEncoder passwordEncoder;
+
+    private final BCryptPasswordEncoder encoder;
 
     @Transactional
-    public Long createUser(UserSignUpDto userSignUpDto) throws Exception {
+    public void createUser(String email, String password, String username) {
 
-        if (userRepository.findByEmail(userSignUpDto.getEmail()).isPresent()) {
-            throw new Exception("이미 존재하는 이메일 입니다.");
-        }
+        userRepository.findByEmail(email).ifPresent(user -> {
+            throw new AppException(ErrorCode.USERNAME_DUPLICATED, email + "는 이미 존재하는 이메일 입니다");
+        });
 
-        if (!userSignUpDto.getPassword().equals(userSignUpDto.getCheckPassword())) {
-            throw new Exception("비밀번호가 일치하지 않습니다.");
-        }
+        Users users = Users.builder()
+                .email(email)
+                .name(username)
+                .password(encoder.encode(password))
+                .role(Role.USER)
+                .build();
 
-        Users user = userRepository.save(userSignUpDto.toEntity());
-//        user.encodePassword(passwordEncoder);
+        userRepository.save(users);
 
-        return user.getUser_id();
     }
 
     @Transactional
