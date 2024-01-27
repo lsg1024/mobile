@@ -4,9 +4,11 @@ import khan.mobile.entity.Role;
 import khan.mobile.entity.Users;
 import khan.mobile.exception.AppException;
 import khan.mobile.exception.ErrorCode;
+import khan.mobile.jwt.JwtUtil;
 import khan.mobile.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,10 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final BCryptPasswordEncoder encoder;
+    private Long expireTimeMs = 1000 * 60 * 60l;
+
+    @Value("${SECRET_KEY}")
+    private String secretKey;
 
     @Transactional
     public void createUser(String email, String password, String username) {
@@ -60,10 +66,14 @@ public class UserService {
         Users selectedUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND, email + "이 없습니다."));
 
-        if (!encoder.matches(selectedUser.getPassword(), password)) {
+
+        // 비밀번호 틀림
+        if (encoder.matches(password, selectedUser.getPassword())) {
             throw new AppException(ErrorCode.INVALID_PASSWORD, "비밀번호를 잘못 입력 했습니다");
         }
 
-        return "token : ";
+        String token = JwtUtil.createJwt(String.valueOf(selectedUser.getUser_id()), String.valueOf(selectedUser.getRole()), secretKey, expireTimeMs);
+
+        return token;
     }
 }
