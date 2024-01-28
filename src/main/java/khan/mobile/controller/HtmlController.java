@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @Slf4j
-public class htmlController {
+public class HtmlController {
 
     @RequestMapping("/")
     public String home() {
@@ -29,6 +29,18 @@ public class htmlController {
     @RequestMapping("/user/signup")
     public String signup() {
         log.info("login Controller");
-        return "loginPages/signup";
+        return "loginPages/signupForm";
+    }
+
+    @RequestMapping("user/find_email")
+    public String findEmail() {
+        log.info("find_email Controller");
+        return "loginPages/findEmailForm";
+    }
+
+    @RequestMapping("user/find_password")
+    public String findPassword() {
+        log.info("find_password Controller");
+        return "loginPages/findPasswordForm";
     }
 }
