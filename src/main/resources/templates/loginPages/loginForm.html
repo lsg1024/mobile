@@ -1,3 +1,9 @@
+<style>
+    a{
+        line-height: 1.38; letter-spacing: -.3px; font-size: 13px; font-weight: 400; color: #616568;
+    }
+</style>
+
 <!DOCTYPE html>
 <html lang="en" xmlns="">
 <head>
@@ -5,29 +11,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>로그인 페이지</title>
 </head>
-<body>
-<link rel="stylesheet" type="text/css" th:href="@{/css/login.css}">
-<div class="wrap">
-    <div class="login">
-        <h2>로그인</h2>
-        <div class="login_id">
-            <input type="email" name="" id="1" placeholder="이메일">
-        </div>
-        <div class="login_pw">
-            <input type="password" name="" id="2" placeholder="비밀번호">
-        </div>
-        <div class="submit">
-            <input type="submit" value="로그인">
-        </div>
-        <div class="sign-in-modal__social-sign-in" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
-            <hr class="social-sign-in__line" style="position: relative; bottom: -8px; display: block; margin: 0; width: 80%; height: 1px; background-color: #f1f3f5; border: none;">
-            <span class="social-sign-in__title" style="padding: 0 8px; margin-bottom: 16px; font-size: 12px; line-height: 14px; letter-spacing: -.3px; color: #abb0b5; z-index: 1; background-color: #fff;">간편로그인</span>
-            <div class="login_sns">
-                <li><a style="background: #FAE100" href="https://kauth.kakao.com/oauth/authorize?response_type=code&prompt=login&client_id=5491a6e9994ae64c2a5d4a132059656c&redirect_uri=http://localhost:8080/oauth"><img class="login_img" src="/images/kakao.webp"></a></li>
+<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <body>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}">
+    <div class="wrap">
+        <div class="login">
+            <h2>로그인</h2>
+            <div class="login_id">
+                <input type="email" name="" id="1" placeholder="이메일">
+            </div>
+            <div class="login_pw">
+                <input type="password" name="" id="2" placeholder="비밀번호">
+            </div>
+            <div class="submit">
+                <input type="submit" value="로그인">
+            </div>
+            <!--아이디 비번 회원가입-->
+            <p style="display: flex; justify-content: center; align-items: center; margin-bottom: 24px;">
+                <a href="/user/find_email">아이디(이메일) 찾기</a>
+                <span style="margin: 0 8px; width: 1px; height: 10px; background-color: #858a8d; pointer-events: none;"></span>
+                <a href="/user/find_password">비밀번호 찾기</a>
+                <span style="margin: 0 8px; width: 1px; height: 10px; background-color: #858a8d; pointer-events: none;"></span>
+                <a href="/user/signup">회원가입</a>
+            </p>
+
+            <div class="sign-in-modal__social-sign-in" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                <hr class="social-sign-in__line" style="position: relative; bottom: -8px; display: block; margin: 0; width: 80%; height: 1px; background-color: #f1f3f5; border: none;">
+                <span class="social-sign-in__title" style="padding: 0 8px; margin-bottom: 16px; font-size: 12px; line-height: 14px; letter-spacing: -.3px; color: #abb0b5; z-index: 1; background-color: #fff;">간편로그인</span>
+                <div class="login_sns">
+                    <li><a style="background: #FAE100" href="https://kauth.kakao.com/oauth/authorize?response_type=code&prompt=login&client_id=5491a6e9994ae64c2a5d4a132059656c&redirect_uri=http://localhost:8080/oauth"><img class="login_img" src="/images/kakao_logo.png"></a></li>
+                </div>
             </div>
         </div>
-
     </div>
-</div>
-</body>
+    </body>
 </html>
