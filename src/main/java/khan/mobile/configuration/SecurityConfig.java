@@ -28,8 +28,9 @@ public class SecurityConfig   {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         authorize -> authorize
-                                .requestMatchers("user/signup", "user/login").permitAll() //join, login은 언제나 가능
-                                .requestMatchers(HttpMethod.POST, "/**").authenticated()
+                                .requestMatchers("user/**", "/oauth").permitAll() // user 관련 접속 제한 없음
+                                .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                                .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // jwt 사용할 때 사용

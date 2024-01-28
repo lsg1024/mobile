@@ -34,6 +34,14 @@ public class JwtFilter extends OncePerRequestFilter {
         final String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
         log.info("authorization = {}", authorization);
 
+        log.info(request.getRequestURI());
+
+        if (isSkippAblePath(request.getRequestURI())) {
+            log.info("검증이 필요없는 페이지 입니다 = {}", request.getRequestURI());
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         // 토큰 여부 확인
         if (authorization == null || !authorization.startsWith("Bearer ")) {
             log.error("authentication 잘못되었습니다");
@@ -44,7 +52,7 @@ public class JwtFilter extends OncePerRequestFilter {
         // 토큰 꺼내기
         String token = authorization.split(" ")[1];
 
-        // 토큰 Expired 여부 확인
+        // 토큰 만료 여부 확인
         if (JwtUtil.isExpired(token, secretKey)) {
             log.error("authentication 만료");
             filterChain.doFilter(request, response);
@@ -61,7 +69,19 @@ public class JwtFilter extends OncePerRequestFilter {
 
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
         filterChain.doFilter(request, response);
 
+    }
+
+    private boolean isSkippAblePath(String requestURI) {
+        // 로그인, 회원가입, 정적 리소스 경로를 확인
+        return requestURI.startsWith("/user/login")
+                || requestURI.startsWith("/user/signup")
+                || requestURI.startsWith("/user/find_email")
+                || requestURI.startsWith("/user/find_password")
+                || requestURI.startsWith("/css/")
+                || requestURI.startsWith("/js/")
+                || requestURI.startsWith("/images/");
     }
 }
