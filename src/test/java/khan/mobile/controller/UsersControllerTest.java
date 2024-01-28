@@ -1,8 +1,8 @@
 package khan.mobile.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import khan.mobile.dto.UserJoinRequest;
-import khan.mobile.dto.UserLoginRequest;
+import khan.mobile.dto.UserSingUpDto;
+import khan.mobile.dto.UserLoginDto;
 import khan.mobile.exception.AppException;
 import khan.mobile.exception.ErrorCode;
 import khan.mobile.service.UserService;
@@ -44,7 +44,7 @@ class UsersControllerTest {
 
         mockMvc.perform(post("/user/signup")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(new UserJoinRequest(email, username, password))))
+                .content(objectMapper.writeValueAsBytes(new UserSingUpDto(email, username, password))))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -59,7 +59,7 @@ class UsersControllerTest {
 
         mockMvc.perform(post("/user/signup")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(new UserJoinRequest(email, username, password))))
+                        .content(objectMapper.writeValueAsBytes(new UserSingUpDto(email, username, password))))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -71,13 +71,15 @@ class UsersControllerTest {
         String email = "123@naver.com";
         String password = "1234";
 
-        when(userService.login(any(), any()))
+        UserLoginDto userLoginDto = new UserLoginDto(email, password);
+
+        when(userService.login(userLoginDto))
                 .thenThrow(new AppException(ErrorCode.USERNAME_NOT_FOUND, ""));
 
         mockMvc.perform(post("user/login")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(new UserLoginRequest(email, password))))
+                .content(objectMapper.writeValueAsBytes(new UserLoginDto(email, password))))
                 .andDo(print())
                 .andExpect(status().isOk());
 

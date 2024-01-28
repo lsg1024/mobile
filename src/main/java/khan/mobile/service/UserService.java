@@ -1,5 +1,7 @@
 package khan.mobile.service;
 
+import khan.mobile.dto.UserLoginDto;
+import khan.mobile.dto.UserSingUpDto;
 import khan.mobile.entity.Role;
 import khan.mobile.entity.Users;
 import khan.mobile.exception.AppException;
@@ -30,16 +32,16 @@ public class UserService {
     private String secretKey;
 
     @Transactional
-    public void createUser(String email, String password, String username) {
+    public void createUser(UserSingUpDto userSingUpDto) {
 
-        userRepository.findByEmail(email).ifPresent(user -> {
-            throw new AppException(ErrorCode.USERNAME_DUPLICATED, email + "는 이미 존재하는 이메일 입니다");
+        userRepository.findByEmail(userSingUpDto.getEmail()).ifPresent(user -> {
+            throw new AppException(ErrorCode.USERNAME_DUPLICATED, userSingUpDto.getEmail() + "는 이미 존재하는 이메일 입니다");
         });
 
         Users users = Users.builder()
-                .email(email)
-                .name(username)
-                .password(encoder.encode(password))
+                .email(userSingUpDto.getEmail())
+                .name(userSingUpDto.getName())
+                .password(encoder.encode(userSingUpDto.getPassword()))
                 .role(Role.USER)
                 .build();
 
@@ -62,18 +64,16 @@ public class UserService {
     }
 
     @Transactional
-    public String login(String email, String password) {
-        Users selectedUser = userRepository.findByEmail(email)
-                .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND, email + "이 없습니다."));
+    public String login(UserLoginDto userLoginDto) {
+        Users selectedUser = userRepository.findByEmail(userLoginDto.getEmail())
+                .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND, userLoginDto.getEmail() + "이 없습니다."));
 
 
-        // 비밀번호 틀림
-        if (encoder.matches(password, selectedUser.getPassword())) {
+        // 비밀번호 디코딩 후 틀림 여부 확인
+        if (encoder.matches(userLoginDto.getPassword(), selectedUser.getPassword())) {
             throw new AppException(ErrorCode.INVALID_PASSWORD, "비밀번호를 잘못 입력 했습니다");
         }
 
-        String token = JwtUtil.createJwt(String.valueOf(selectedUser.getUser_id()), String.valueOf(selectedUser.getRole()), secretKey, expireTimeMs);
-
-        return token;
+        return JwtUtil.createJwt(String.valueOf(selectedUser.getUser_id()), String.valueOf(selectedUser.getRole()), secretKey, expireTimeMs);
     }
 }

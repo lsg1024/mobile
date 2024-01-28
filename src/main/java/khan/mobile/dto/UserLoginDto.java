@@ -1,7 +1,5 @@
 package khan.mobile.dto;
 
-
-import khan.mobile.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,8 +7,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class UserJoinRequest {
+public class UserLoginDto {
+
     private String email;
     private String password;
-    private String name;
+
 }

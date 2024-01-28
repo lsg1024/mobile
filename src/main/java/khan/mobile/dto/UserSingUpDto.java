@@ -1,5 +1,6 @@
 package khan.mobile.dto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,9 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class UserLoginRequest {
-
+public class UserSingUpDto {
     private String email;
     private String password;
-
+    private String name;
 }
