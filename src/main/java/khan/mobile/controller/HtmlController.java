@@ -8,7 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 public class HtmlController {
 
+    // base url
     @RequestMapping("/")
+    public String defaultHome() {
+        return "redirect:/user/login";
+    }
+
+    @RequestMapping("/home")
     public String home() {
         log.info("home Controller");
         return "home";
