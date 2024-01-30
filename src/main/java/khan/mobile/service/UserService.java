@@ -15,8 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -50,30 +48,18 @@ public class UserService {
     }
 
     @Transactional
-    public String double_checkUserinfo(String email) {
-        log.info("인증 이메일 = {}", email);
-        Optional<Users> existingUser = userRepository.findByEmail(email);
-
-        if (existingUser == null) {
-            // 새로운 사용자 등록 페이지로 이동
-            return "htmlpages/~~";
-
-        } else {
-            return "이미 가입된 사용자 입니다";
-        }
-    }
-
-    @Transactional
     public String login(UserLoginDto userLoginDto) {
         Users selectedUser = userRepository.findByEmail(userLoginDto.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND, userLoginDto.getEmail() + "이 없습니다."));
 
 
         // 비밀번호 디코딩 후 틀림 여부 확인
-        if (encoder.matches(userLoginDto.getPassword(), selectedUser.getPassword())) {
+        if (encoder.matches(selectedUser.getPassword(), userLoginDto.getPassword())) {
             throw new AppException(ErrorCode.INVALID_PASSWORD, "비밀번호를 잘못 입력 했습니다");
         }
 
         return JwtUtil.createJwt(String.valueOf(selectedUser.getUser_id()), String.valueOf(selectedUser.getRole()), secretKey, expireTimeMs);
     }
+
+
 }

@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -28,7 +27,7 @@ public class SecurityConfig   {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         authorize -> authorize
-                                .requestMatchers("user/**", "/oauth").permitAll() // user 관련 접속 제한 없음
+                                .requestMatchers("/","user/signup", "user/login", "product/**" ,"/oauth/kakao").permitAll() // user 관련 접속 제한 없음
                                 .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                                 .anyRequest().authenticated()
                 )
