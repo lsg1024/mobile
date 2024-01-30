@@ -24,10 +24,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // 데이터 수정 완료 버튼
     saveButton.addEventListener('click', function(event) {
         event.preventDefault()
-        //
-        // if (!validateFields()) {
-        //     return; // 유효성 검사 실패 시 함수 종료
-        // }
 
         const formData = new FormData(form);
         for (let [key, value] of formData.entries()) {
