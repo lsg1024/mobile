@@ -15,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -37,8 +36,8 @@ public class ProductController {
 
     @PostMapping("/product/update")
     public ResponseEntity<?> updateProduct(@RequestHeader("user_id") Long user_id,
-                                                    @RequestHeader("product_id") Long product_id,
-                                                    @Valid @RequestBody ProductDto productDto, BindingResult bindingResult) {
+                                           @RequestHeader("product_id") Long product_id,
+                                           @Valid @RequestBody ProductDto productDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
