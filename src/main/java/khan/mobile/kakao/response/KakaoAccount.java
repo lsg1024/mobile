@@ -1,8 +1,10 @@
 package khan.mobile.kakao.response;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@Data
+@Getter
+@AllArgsConstructor
 public class KakaoAccount {
     private Boolean has_email;
     private Boolean email_needs_agreement;

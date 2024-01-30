@@ -13,7 +13,7 @@ import reactor.core.publisher.Flux;
 public class KakaoTokenJsonData {
     private final WebClient webClient;
     private static final String TOKEN_URI = "https://kauth.kakao.com/oauth/token";
-    private static final String REDIRECT_URI = "http://localhost:8080/oauth";
+    private static final String REDIRECT_URI = "http://localhost:8080/oauth/kakao";
     private static final String GRANT_TYPE = "authorization_code";
 
     @Value("${Kakao_Client_ID}")
