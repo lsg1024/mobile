@@ -17,5 +17,7 @@ public class UserSingUpDto {
     @NotEmpty
     private String password;
     @NotEmpty
+    private String password_confirm;
+    @NotEmpty
     private String name;
 }

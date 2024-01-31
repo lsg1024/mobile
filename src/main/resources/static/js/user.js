@@ -1,4 +1,3 @@
-// 문서 로드 완료 시 이벤트 리스너 등록
 document.addEventListener('DOMContentLoaded', function() {
     const join_button = document.getElementById('join_button');
     const form = document.querySelector("form");
@@ -13,7 +12,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const fieldNames = {
             email: "이메일",
             name: "이름",
-            password: "비밀번호"
+            password: "비밀번호",
+            password_Confirm: "비밀번호 중복 체크"
         };
 
         const formData = new FormData(form);
@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let signupData = {
             email: formData.get('email'),
             password: formData.get('password'),
+            password_confirm: formData.get('passwordConfirm'),
             name: formData.get('nickname')
         };
 
@@ -40,7 +41,11 @@ document.addEventListener('DOMContentLoaded', function() {
             if (status === 200) {
                 alert("회원가입이 완료되었습니다");
                 window.location.href = '/user/login';
-            } else {
+            }
+            else if (status === 409) {
+                alert(body.response)
+            }
+            else  {
                 let errorMessage = body.message + ": ";
                 for (const [field, message] of Object.entries(body.errors)) {
                     errorMessage += `${fieldNames[field] || field}: ${message}, `;
@@ -51,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
         console.error('Error:', error);
-        alert("업데이트 실패: " + error.message); // 실패 메시지 표시
+        alert(error);
         });
     });
 });
