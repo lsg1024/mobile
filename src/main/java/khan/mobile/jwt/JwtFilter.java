@@ -1,7 +1,8 @@
-package khan.mobile.configuration;
+package khan.mobile.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import khan.mobile.jwt.JwtUtil;
@@ -11,12 +12,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -31,7 +35,8 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        final String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
+        final String authorization = extractToken(request);
+
         log.info("authorization = {}", authorization);
 
         log.info(request.getRequestURI());
@@ -43,14 +48,14 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         // 토큰 여부 확인
-        if (authorization == null || !authorization.startsWith("Bearer ")) {
+        if (authorization == null) {
             log.error("authentication 잘못되었습니다");
             filterChain.doFilter(request, response);
             return;
         }
 
         // 토큰 꺼내기
-        String token = authorization.split(" ")[1];
+        String token = authorization;
 
         // 토큰 만료 여부 확인
         if (JwtUtil.isExpired(token, secretKey)) {
@@ -64,10 +69,13 @@ public class JwtFilter extends OncePerRequestFilter {
         String role = JwtUtil.getRole(token, secretKey);
         log.info("user id = {} role = {}", user_id, role);
 
+        // 스프링 시큐리티 인증 auth 토큰 생성
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(user_id, null, List.of(new SimpleGrantedAuthority(role)));
 
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+        //세션에 사용자 등록
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
         filterChain.doFilter(request, response);
@@ -83,5 +91,17 @@ public class JwtFilter extends OncePerRequestFilter {
                 || requestURI.startsWith("/css/")
                 || requestURI.startsWith("/js/")
                 || requestURI.startsWith("/images/");
+    }
+
+    private String extractToken(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("Authorization".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 }

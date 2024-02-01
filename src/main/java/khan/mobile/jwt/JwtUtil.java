@@ -41,11 +41,6 @@ public class JwtUtil {
                 .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
     }
-//    public static Claims validateTokenAndGetClaims(String token) {
-//        return Jwts.parser()
-//                .setSigningKey(secretKey)
-//                .parseClaimsJws(token)
-//                .getBody();
-//    }
+
 
 }
