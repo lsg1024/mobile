@@ -1,5 +1,7 @@
 package khan.mobile.configuration;
 
+import jakarta.servlet.http.HttpServletRequest;
+import khan.mobile.jwt.JwtFilter;
 import khan.mobile.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +13,10 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import java.util.Collections;
 
 
 @Configuration
@@ -27,8 +33,8 @@ public class SecurityConfig   {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         authorize -> authorize
-                                .requestMatchers("/","user/signup", "user/login", "product/**" ,"/oauth/kakao").permitAll() // user 관련 접속 제한 없음
-                                .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                                .requestMatchers("/","user/signup", "user/login", "product/**" ,"/oauth/kakao",
+                                        "/css/**", "/js/**", "/images/**").permitAll() // user 관련 접속 제한 없음
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
