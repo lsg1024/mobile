@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const signup_button = document.getElementById('join_button');
+    const signup_button = document.getElementById('signup_button');
     const form = document.querySelector("form");
 
     signup_button.addEventListener('click', function (event) {
@@ -29,18 +29,15 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json().then(data => ({ status: response.status, body: data })))
         .then(({ status, body }) => {
             if (status === 200) {
-                alert("회원가입이 완료되었습니다");
+                alert(body.response);
                 window.location.href = '/user/login';
             }
-            else if (status === 409) {
-                alert(body.response)
-            }
-            else  {
+            else{
+                // 오류 메시지 표시
                 let errorMessage = body.message + ": ";
                 for (const [field, message] of Object.entries(body.errors)) {
-                    errorMessage += `${message}, `;
+                    errorMessage += `${message} `;
                 }
-                // 오류 메시지 표시
                 alert(errorMessage);
             }
         })

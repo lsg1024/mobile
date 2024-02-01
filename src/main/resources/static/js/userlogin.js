@@ -30,7 +30,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert(body.response);
                 window.location.href = '/home';
             } else {
-                alert(body.response);
+                // 오류 메시지 표시
+                let errorMessage = body.message + ": ";
+                for (const [field, message] of Object.entries(body.errors)) {
+                    errorMessage += `${message} `;
+                }
+                alert(errorMessage);
             }
         })
         .catch(error => {
