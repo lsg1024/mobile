@@ -11,15 +11,18 @@
     <div class="wrap">
         <div class="login">
             <h2>로그인</h2>
-            <div class="login_id">
-                <input type="email" name="" id="1" placeholder="이메일">
-            </div>
-            <div class="login_pw">
-                <input type="password" name="" id="2" placeholder="비밀번호">
-            </div>
-            <div class="submit">
-                <input type="submit" value="로그인">
-            </div>
+            <form id="loginForm" style="margin-top: 20px; width: 90%;" method="post">
+                <div class="signup_login_id">
+                    <input type="email" name="login_email" id="login_email" placeholder="이메일">
+                </div>
+                <div class="signup_login_pw">
+                    <input type="password" name="login_password" id="login_password" placeholder="비밀번호">
+                </div>
+                <div class="signup_submit">
+                    <button id="login_button" type="button">로그인</button>
+                </div>
+            </form>
+
             <!--아이디 비번 회원가입-->
             <p style="display: flex; justify-content: center; align-items: center; margin-bottom: 24px;">
                 <a href="/user/find_email" class="login_a">아이디(이메일) 찾기</a>
@@ -38,5 +41,6 @@
             </div>
         </div>
     </div>
+    <script th:src="@{/js/userlogin.js}"></script>
     </body>
 </html>
