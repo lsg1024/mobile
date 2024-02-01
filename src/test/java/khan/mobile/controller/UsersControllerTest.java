@@ -1,8 +1,8 @@
 package khan.mobile.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import khan.mobile.dto.UserSingUpDto;
 import khan.mobile.dto.UserLoginDto;
+import khan.mobile.dto.UserSignUpDto;
 import khan.mobile.exception.AppException;
 import khan.mobile.exception.ErrorCode;
 import khan.mobile.service.UserService;
@@ -15,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -44,7 +43,7 @@ class UsersControllerTest {
 
         mockMvc.perform(post("/user/signup")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(new UserSingUpDto(email, username, password))))
+                .content(objectMapper.writeValueAsBytes(new UserSignUpDto(email, username, password, password))))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -59,7 +58,7 @@ class UsersControllerTest {
 
         mockMvc.perform(post("/user/signup")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(new UserSingUpDto(email, username, password))))
+                        .content(objectMapper.writeValueAsBytes(new UserSignUpDto(email, username, password, password))))
                 .andDo(print())
                 .andExpect(status().isOk());
     }

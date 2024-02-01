@@ -1,7 +1,7 @@
 package khan.mobile.service;
 
 import khan.mobile.dto.UserLoginDto;
-import khan.mobile.dto.UserSingUpDto;
+import khan.mobile.dto.UserSignUpDto;
 import khan.mobile.entity.Role;
 import khan.mobile.entity.Users;
 import khan.mobile.exception.AppException;
@@ -30,16 +30,22 @@ public class UserService {
     private String secretKey;
 
     @Transactional
-    public void createUser(UserSingUpDto userSingUpDto) {
+    public void createUser(UserSignUpDto userSignUpDto) {
 
-        userRepository.findByEmail(userSingUpDto.getEmail()).ifPresent(user -> {
-            throw new AppException(ErrorCode.USERNAME_DUPLICATED, userSingUpDto.getEmail() + "는 이미 존재하는 이메일 입니다");
+        String email_Lower = userSignUpDto.getEmail().toLowerCase();
+
+        userRepository.findByEmail(email_Lower).ifPresent(user -> {
+            throw new AppException(ErrorCode.USERNAME_DUPLICATED, email_Lower + "는 이미 존재하는 이메일 입니다");
         });
 
+        if (!userSignUpDto.getPassword().equals(userSignUpDto.getPassword_confirm())) {
+            throw new AppException(ErrorCode.PASSWORD_CONFIRMATION_FAILED, "동일한 비밀번호로 작성해주세요");
+        }
+
         Users users = Users.builder()
-                .email(userSingUpDto.getEmail())
-                .name(userSingUpDto.getName())
-                .password(encoder.encode(userSingUpDto.getPassword()))
+                .email(email_Lower)
+                .name(userSignUpDto.getName())
+                .password(encoder.encode(userSignUpDto.getPassword()))
                 .role(Role.USER)
                 .build();
 
@@ -49,8 +55,11 @@ public class UserService {
 
     @Transactional
     public String login(UserLoginDto userLoginDto) {
-        Users selectedUser = userRepository.findByEmail(userLoginDto.getEmail())
-                .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND, userLoginDto.getEmail() + "이 없습니다."));
+
+        String email_Lower = userLoginDto.getEmail().toLowerCase();
+
+        Users selectedUser = userRepository.findByEmail(email_Lower)
+                .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND, email_Lower + "이 없습니다."));
 
 
         // 비밀번호 디코딩 후 틀림 여부 확인
