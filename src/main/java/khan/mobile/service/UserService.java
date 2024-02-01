@@ -54,7 +54,7 @@ public class UserService {
 
 
         // 비밀번호 디코딩 후 틀림 여부 확인
-        if (encoder.matches(selectedUser.getPassword(), userLoginDto.getPassword())) {
+        if (!encoder.matches(userLoginDto.getPassword(), selectedUser.getPassword())) {
             throw new AppException(ErrorCode.INVALID_PASSWORD, "비밀번호를 잘못 입력 했습니다");
         }
 

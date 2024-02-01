@@ -1,5 +1,7 @@
 package khan.mobile.controller;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import khan.mobile.dto.ErrorResponse;
 import khan.mobile.dto.ResponseDto;
@@ -15,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,9 +47,17 @@ public class UsersController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody UserLoginDto userLoginDto) {
+    public ResponseEntity<ResponseDto> login(@Valid @RequestBody UserLoginDto userLoginDto, HttpServletResponse response) throws UnsupportedEncodingException {
         String token = userService.login(userLoginDto);
-        return ResponseEntity.ok().body(token);
+
+        // 쿠키 생성 및 응답에 추가
+        Cookie jwtCookie = new Cookie("Authorization", token);
+
+        jwtCookie.setHttpOnly(true);
+        jwtCookie.setPath("/");
+        response.addCookie(jwtCookie);
+
+        return ResponseEntity.ok(new ResponseDto("로그인 성공"));
     }
 
 }
