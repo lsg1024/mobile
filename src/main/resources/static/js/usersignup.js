@@ -1,20 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const join_button = document.getElementById('join_button');
+    const signup_button = document.getElementById('join_button');
     const form = document.querySelector("form");
-    const nickname = document.getElementById("nickname");
-    const password = document.getElementById("password");
-    const password_Confirm = document.getElementById("passwordConfirm");
 
-    join_button.addEventListener('click', function (event) {
+    signup_button.addEventListener('click', function (event) {
 
         event.preventDefault()
-
-        const fieldNames = {
-            email: "이메일",
-            name: "이름",
-            password: "비밀번호",
-            password_Confirm: "비밀번호 중복 체크"
-        };
 
         const formData = new FormData(form);
 
@@ -48,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
             else  {
                 let errorMessage = body.message + ": ";
                 for (const [field, message] of Object.entries(body.errors)) {
-                    errorMessage += `${fieldNames[field] || field}: ${message}, `;
+                    errorMessage += `${message}, `;
                 }
                 // 오류 메시지 표시
                 alert(errorMessage);
@@ -59,4 +49,4 @@ document.addEventListener('DOMContentLoaded', function() {
         alert(error);
         });
     });
-});
+})
