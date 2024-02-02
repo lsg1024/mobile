@@ -3,6 +3,8 @@ spring:
      user:
        name: user
        password: 1234
+  main:
+    allow-bean-definition-overriding: true
   sql:
     init:
       mode: always

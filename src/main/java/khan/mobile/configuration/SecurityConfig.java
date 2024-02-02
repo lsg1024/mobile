@@ -33,7 +33,7 @@ public class SecurityConfig   {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         authorize -> authorize
-                                .requestMatchers("/","user/signup", "user/login", "product/**" ,"/oauth/kakao",
+                                .requestMatchers("/","user/signup", "user/login","/oauth/kakao",
                                         "/css/**", "/js/**", "/images/**").permitAll() // user 관련 접속 제한 없음
                                 .anyRequest().authenticated()
                 )
