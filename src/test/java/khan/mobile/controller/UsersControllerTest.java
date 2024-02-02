@@ -23,6 +23,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * TODO
+ * 현재 테스트 파일은 실행만 가능할 뿐 코드 수정이 필요함
+ */
 @WebMvcTest(UsersController.class)
 @EnableJpaAuditing
 @MockBean(JpaMetamodelMappingContext.class)
