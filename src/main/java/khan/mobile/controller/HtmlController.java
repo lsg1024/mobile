@@ -20,12 +20,6 @@ public class HtmlController {
         return "home";
     }
 
-    @RequestMapping("/product")
-    public String product() {
-        log.info("product Controller");
-        return "productPages/product";
-    }
-
     @RequestMapping("/user/login")
     public String login() {
         log.info("login Controller");
@@ -48,5 +42,17 @@ public class HtmlController {
     public String findPassword() {
         log.info("find_password Controller");
         return "loginPages/findPasswordForm";
+    }
+
+    @RequestMapping("/product")
+    public String product() {
+        log.info("product Controller");
+        return "productPages/product";
+    }
+
+    @RequestMapping("/product/detail")
+    public String productDetail() {
+        log.info("productDetail Controller");
+        return "productPages/productDetail";
     }
 }
