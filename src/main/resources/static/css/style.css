@@ -69,24 +69,23 @@ a.btn {
 
 /* product 아이템 리스트 */
 .container {
-    width: 60%; /* 전체 화면 너비 사용 */
-    max-width: 80%; /* 최대 너비 제한 없음 */
+    max-width: 50%; /* 최대 너비 제한 없음 */
     min-height: 80vh; /* 전체 뷰포트 높이의 80% */
     align-content: center;
  }
 .product-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-around ;
     align-items: center;
-    gap: 20px;
-    margin-top: 30px;
-    margin-bottom: 30px;
+    gap: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 .product-item {
     flex-basis: calc(33.333% - 20px);
     border: 1px solid #ddd;
-    padding: 4px;
+    padding: 2px;
     border-radius: 8px;
 }
 
@@ -147,7 +146,7 @@ input {
 
 .product-image, .product-info {
     flex-basis: 50%;
-    max-width: 50%;
+    max-width: 100%;
 }
 
 /* 상품 이미지 크기 */
@@ -159,7 +158,7 @@ input {
 
 .product-info {
     display: flex;
-    margin: 20px;
+    margin: 10px;
     flex-direction: column; /* 아이템들을 세로 방향으로 정렬 */
     align-items: flex-start; /* 세로 방향의 시작점에 정렬 */
 }
@@ -168,6 +167,15 @@ input {
     border: 1px solid #ccc;
     padding: 5px;
     display: inline-block;
+}
+.product_a {
+    color: black; /* 글씨 색상을 검정색으로 설정 */
+    text-decoration: none; /* 밑줄 제거 */
+}
+
+.product_a:hover {
+    text-decoration: underline; /* 마우스 호버 시 밑줄 추가 */
+    color: black; /* 마우스 호버 시 글씨 색상을 검정색으로 유지 */
 }
 
 .hidden {

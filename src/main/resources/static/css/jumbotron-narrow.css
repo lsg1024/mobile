@@ -17,10 +17,10 @@ body {
 }
 /* Make the masthead heading the same height as the navigation */
 .header h3 {
-    margin-top: 10px;
+    margin-top: 5px;
     margin-bottom: 0;
     line-height: 40px;
-    padding-bottom: 19px;
+    padding-bottom: 5px;
 }
 
 /* Custom page footer */
@@ -42,7 +42,7 @@ body {
 
 /* Main marketing message and sign up button */
 .jumbotron {
-    min-height: 80vw;
+    min-height: 60vw;
     text-align: center;
     border-bottom: 1px solid #e5e5e5;
 }
@@ -71,7 +71,7 @@ body {
     }
     /* Space out the masthead */
     .header {
-        margin-bottom: 30px;
+        margin-bottom: 15px;
     }
     /* Remove the bottom border on the jumbotron for visual effect */
     .jumbotron {

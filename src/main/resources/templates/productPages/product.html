@@ -13,35 +13,31 @@
       <div class="header-container">
         <div></div>
         <div class="search">
-          <form th:action="@{/search}" method="get">
-            <input type="text" name="query" placeholder="검색..." class="search-box">
+          <form th:action="@{/product/search}" method="get">
+            <input type="text" name="search_product" placeholder="상품 이름 검색" class="search-box">
             <img class="search-img" src="/images/search.png">
           </form>
         </div>
       </div>
 
-    <div class="product-list">
+      <div class="product-list">
 
-      <div th:each="product : ${products}" class="product-item">
+        <div th:each="product : ${products}" class="product-item">
 
-        <a th:href="@{/templates/productPages/detail/{id}(id=${product.id})}" class="product-link">
+            <div class="product-info">
 
-          <div class="product-info">
+              <a th:href="@{/product/detail/{id}(id=${product.id})}" class="product_a">
+                <h4 th:text="${product.name}">Product Name</h4>
+              </a>
+              <p>Color: <span th:text="${product.color}">Color</span></p>
+              <p>Size: <span th:text="${product.size}">Size</span></p>
+              <p>Weight: <span th:text="${product.weight}">Weight</span></p>
+              <p>Other: <span th:text="${product.other}">Other Details</span></p>
 
-            <h2 th:text="${product.name}">Product Name</h2>
-            <p>Color: <span th:text="${product.color}">Color</span></p>
-            <p>Size: <span th:text="${product.size}">Size</span></p>
-            <p>Weight: <span th:text="${product.weight}">Weight</span></p>
-            <p>Other: <span th:text="${product.other}">Other Details</span></p>
+            </div>
 
-          </div>
-        </a>
-
+        </div>
       </div>
-
-
-    </div>
-
     </div>
 
   <!-- Pagination -->
