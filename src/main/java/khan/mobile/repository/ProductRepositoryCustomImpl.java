@@ -31,7 +31,7 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
                         poi.product_orderItem_other,
                         poi.product_orderItem_quantity,
                         p.product_weight,
-                        p.product_name,
+                        p.productName,
                         p.product_image))
                 .from(poi)
                 .leftJoin(poi.products, p)

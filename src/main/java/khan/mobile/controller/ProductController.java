@@ -67,4 +67,13 @@ public class ProductController {
         model.addAttribute("product", product);
         return "productPages/productDetail";
     }
+
+//    @GetMapping("/product/search?{product}")
+//    public String getProductSearchList(@PathVariable("product") String productName, Model model, @PageableDefault(size = 9) Pageable pageable) {
+//        Page<ProductDto> productPage = productService.getProductList(pageable);
+//        model.addAttribute("products", productPage.getContent());
+//        model.addAttribute("page", productPage);
+//
+//        return "productPages/product";
+//    }
 }

@@ -33,7 +33,7 @@ public class ProductService {
           TODO : 공장 값을 파라미터로 받아 저장하는 코드 필요
          */
         Products product = Products.builder()
-                .product_name(productDto.getName())
+                .productName(productDto.getName())
                 .product_color(productDto.getColor())
                 .product_weight(productDto.getWeight())
                 .product_size(productDto.getSize())
@@ -77,6 +77,11 @@ public class ProductService {
 
     }
 
+    // 상품 검색
+//    public Page<ProductDto> getSearchProductList(Pageable pageable) {
+//        productRepository
+//    }
+
     //상품 상세
     public ProductDto getProductDetail(Long product_id) {
 //        validateUser(user_id);
@@ -84,7 +89,7 @@ public class ProductService {
 
         return ProductDto.builder()
                 .id(findProduct.getProduct_id())
-                .name(findProduct.getProduct_name())
+                .name(findProduct.getProductName())
                 .color(findProduct.getProduct_color())
                 .size(findProduct.getProduct_size())
                 .weight(findProduct.getProduct_weight())

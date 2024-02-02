@@ -34,7 +34,7 @@ public class ProductDto {
     public static ProductDto productDto(Products products) {
         return ProductDto.builder()
                 .id(products.getProduct_id())
-                .name(products.getProduct_name())
+                .name(products.getProductName())
                 .color(products.getProduct_color())
                 .size(products.getProduct_size())
                 .weight(products.getProduct_weight())

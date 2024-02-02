@@ -23,7 +23,7 @@ class ProductsTest {
     @Test
     void createProduct() {
         Products newProduct = Products.builder()
-                .product_name("테스트 상품2")
+                .productName("테스트 상품2")
                 .product_color("금색")
                 .product_weight(10.4f)
                 .product_size(15f)

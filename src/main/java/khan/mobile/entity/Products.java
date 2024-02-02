@@ -17,7 +17,7 @@ public class Products extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
     private Long product_id;
-    private String product_name;
+    private String productName;
     private String product_color;
     private Float product_size;
     private Float product_weight;
@@ -36,9 +36,9 @@ public class Products extends BaseTimeEntity {
     private List<Product_orderItem> product_orderItem;
 
     @Builder
-    public Products(Long product_id, String product_name, String product_color, Float product_size, Float product_weight, String product_other, String product_image, Users user, Factories factory) {
+    public Products(Long product_id, String productName, String product_color, Float product_size, Float product_weight, String product_other, String product_image, Users user, Factories factory) {
         this.product_id = product_id;
-        this.product_name = product_name;
+        this.productName = productName;
         this.product_color = product_color;
         this.product_size = product_size;
         this.product_weight = product_weight;
@@ -49,7 +49,7 @@ public class Products extends BaseTimeEntity {
     }
 
     public void updateProduct(String product_name, String product_color, Float product_size, Float product_weight, String product_other) {
-        this.product_name = product_name;
+        this.productName = product_name;
         this.product_color = product_color;
         this.product_size = product_size;
         this.product_weight = product_weight;
