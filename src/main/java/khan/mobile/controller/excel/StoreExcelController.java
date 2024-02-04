@@ -28,11 +28,13 @@ public class StoreExcelController {
 
     private final StoreService storeService;
 
-    @GetMapping("/excel")
+    //엑셀 등록 폼 호출
+    @GetMapping("/storeCreate/excel")
     public String upload() {
-        return "productPages/excel";
+        return "storePages/excel";
     }
 
+    //엑셀 값 읽기
     @PostMapping("/excel/read")
     public String readExcel(@RequestParam("file") MultipartFile file, HttpSession session,  Model model)
             throws IOException {
@@ -79,6 +81,7 @@ public class StoreExcelController {
 
     }
 
+    //엑셀 등록
     @PostMapping("/stores/save")
     public String saveStores(HttpSession session, RedirectAttributes redirectAttributes) {
 

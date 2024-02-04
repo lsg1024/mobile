@@ -47,17 +47,15 @@ public class StoreService {
     }
 
     // 상점 수정
-    public String updateStores(Long store_id, String storeName) {
+    public void updateStores(String store_id, StoreDto storeDto) {
 
-        Optional<Stores> store = storeRepository.findById(store_id);
+        Optional<Stores> store = storeRepository.findById(Long.parseLong(store_id));
 
         Stores stores = Stores.builder()
-                .store_id(store.get().getStore_id())
-                .store_name(storeName)
+                .store_id(store.orElseThrow().getStore_id())
+                .store_name(storeDto.getStore_name())
                 .build();
 
         storeRepository.save(stores);
-
-        return "update";
     }
 }
