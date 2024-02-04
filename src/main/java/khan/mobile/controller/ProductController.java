@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import khan.mobile.dto.ErrorResponse;
 import khan.mobile.dto.ProductDto;
 import khan.mobile.dto.ResponseDto;
+import khan.mobile.entity.Products;
 import khan.mobile.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -68,12 +70,12 @@ public class ProductController {
         return "productPages/productDetail";
     }
 
-//    @GetMapping("/product/search?{product}")
-//    public String getProductSearchList(@PathVariable("product") String productName, Model model, @PageableDefault(size = 9) Pageable pageable) {
-//        Page<ProductDto> productPage = productService.getProductList(pageable);
-//        model.addAttribute("products", productPage.getContent());
-//        model.addAttribute("page", productPage);
-//
-//        return "productPages/product";
-//    }
+    @GetMapping("/product/search")
+    public String getProductSearchList(@RequestParam("productSearch") String productName, Model model, @PageableDefault(size = 9) Pageable pageable) {
+        Page<ProductDto> searchResults = productService.getSearchProductList(productName, pageable);
+        model.addAttribute("products", searchResults.getContent());
+        model.addAttribute("productSearch", productName);
+        model.addAttribute("page", searchResults);
+        return "productPages/productSearch";
+    }
 }

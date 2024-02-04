@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -78,9 +80,12 @@ public class ProductService {
     }
 
     // 상품 검색
-//    public Page<ProductDto> getSearchProductList(Pageable pageable) {
-//        productRepository
-//    }
+    public Page<ProductDto> getSearchProductList(String productName, Pageable pageable) {
+
+        Page<Products> result = productRepository.findByProductNameContaining(productName, pageable);
+
+        return result.map(ProductDto::productDto);
+    }
 
     //상품 상세
     public ProductDto getProductDetail(Long product_id) {
