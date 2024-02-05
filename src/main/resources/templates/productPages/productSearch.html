@@ -14,7 +14,7 @@
     <div></div>
     <div class="search">
       <form th:action="@{/product/search}" method="get">
-        <input type="text" name="productSearch" placeholder="상품 이름 검색" class="search-box">
+        <input type="text" name="productSearch" placeholder="상품 이름 검색" th:value="${productSearch}" class="search-box">
         <img class="search-img" src="/images/search.png">
       </form>
     </div>
@@ -45,7 +45,7 @@
   <ul class="pagination justify-content-center">
     <!-- Previous Button -->
     <li class="page-item" th:classappend="${page.number <= 10 ? 'disabled' : ''}">
-      <a class="page-link" href="#"  th:href="@{/product(page=${(page.number - 9) <= 0 ? 1 : (page.number - 9)})}" aria-label="이전 페이지">
+      <a class="page-link" href="#"  th:href="@{/product/search(productSearch=${productSearch}, page=${(page.number - 9) <= 0 ? 1 : (page.number - 9)})}" aria-label="이전 페이지">
         <span aria-hidden="true">&laquo;</span>
       </a>
     </li>
@@ -54,12 +54,12 @@
     <li th:each="i : ${#numbers.sequence(1, 10)}"
         th:if="${page.totalPages >= (page.number / 10 * 10 + i)}"
         th:classappend="${page.number % 10 + 1 == i ? 'active' : ''}" class="page-item">
-      <a class="page-link" th:text="${(page.number / 10 * 10) + i}" th:href="@{/product(page=${(page.number / 10 * 10) + i})}"></a>
+      <a class="page-link" th:text="${(page.number / 10 * 10) + i}" th:href="@{/product/search(productSearch=${productSearch}, page=${(page.number / 10 * 10) + i})}"></a>
     </li>
 
     <!-- Next Button -->
     <li class="page-item" th:classappend="${(page.number + 11 > page.totalPages) ? 'disabled' : ''}">
-      <a class="page-link" href="#"  th:href="@{/product(page=${page.number + 1 > page.totalPages ? page.totalPages : page.number + 11})}" aria-label="다음 페이지">
+      <a class="page-link" href="#"  th:href="@{/product/search(productSearch=${productSearch}, page=${page.number + 1 > page.totalPages ? page.totalPages : page.number + 11})}" aria-label="다음 페이지">
         <span aria-hidden="true">&raquo;</span>
       </a>
     </li>
