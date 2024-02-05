@@ -59,6 +59,14 @@ public class ProductController {
         model.addAttribute("page", productPage);
         return "productPages/product";
     }
+    @GetMapping("/product/search")
+    public String getProductSearchList(@RequestParam("productSearch") String productName, Model model, @PageableDefault(size = 9) Pageable pageable) {
+        Page<ProductDto> searchResults = productService.getSearchProductList(productName, pageable);
+        model.addAttribute("products", searchResults.getContent());
+        model.addAttribute("productSearch", productName);
+        model.addAttribute("page", searchResults);
+        return "productPages/productSearch";
+    }
 
     @GetMapping("/product/detail/{id}")
     public String getProductDetail(@PathVariable("id") Long id, Model model) {
@@ -68,12 +76,4 @@ public class ProductController {
         return "productPages/productDetail";
     }
 
-//    @GetMapping("/product/search?{product}")
-//    public String getProductSearchList(@PathVariable("product") String productName, Model model, @PageableDefault(size = 9) Pageable pageable) {
-//        Page<ProductDto> productPage = productService.getProductList(pageable);
-//        model.addAttribute("products", productPage.getContent());
-//        model.addAttribute("page", productPage);
-//
-//        return "productPages/product";
-//    }
 }

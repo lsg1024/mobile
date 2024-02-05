@@ -7,7 +7,6 @@ import khan.mobile.dto.ResponseDto;
 import khan.mobile.service.ProductOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,12 +19,11 @@ public class ProductOrderController {
 
     // 상품 주문
     @PostMapping("/order")
-    public ResponseEntity<ResponseDto> createOrder(Authentication authentication,
-                                                    @RequestHeader("user_id") Long user_id,
+    public ResponseEntity<ResponseDto> createOrder(@RequestHeader("user_id") Long user_id,
                                                    @RequestHeader("store_id") Long store_id,
                                                    @RequestBody ProductOrderDto productOrderDto) {
         productOrderService.createOrder(user_id, store_id, productOrderDto);
-        return ResponseEntity.ok(new ResponseDto(authentication.getName() + "제품 주문 완료"));
+        return ResponseEntity.ok(new ResponseDto("제품 주문 완료"));
     }
 
     // 상품 수정
