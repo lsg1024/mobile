@@ -21,8 +21,7 @@
 .col-action {
     width: 20%; /* 2의 비율 */
 }
-
-.container {
+.store-container {
     max-width: 50%; /* 최대 너비 제한 없음 */
     min-height: 80vh; /* 전체 뷰포트 높이의 80% */
     align-content: center;
@@ -48,25 +47,27 @@
     flex-direction: column; /* 아이템들을 세로 방향으로 정렬 */
     align-items: flex-start; /* 세로 방향의 시작점에 정렬 */
 }
-
 /* 검색 창 */
-.header-container {
+.header-store-container {
     display: flex;
-    justify-content: space-between; /* 양쪽 끝에 요소 정렬 *!*/
+    justify-content: end; /* 양쪽 끝에 요소 정렬 *!*/
     align-items: center;
 }
-.search {
+
+.store-search {
     position: relative;
     width: 300px;
 }
 
-.search-img {
+.store-search-img {
     position : absolute;
     width: 17px;
     top: 12px;
     right: 12px;
     margin: 0;
 }
+
+
 input {
     width: 100%;
     border: 1px solid #bbb;
@@ -74,4 +75,20 @@ input {
     padding: 10px 12px;
     font-size: 14px;
 }
+.btn {
+    width: 80%;
+    height: 50px;
+    border: 0;
+    outline: none;
+    border-radius: 5px;
+    justify-content: center;
+    background: linear-gradient(to left, rgb(21, 131, 255), rgb(0, 100, 255));
+    color: white;
+    font-size: 1.2em;
+    letter-spacing: 2px;
+}
 
+.btn_div {
+    margin-top: 30px;
+    margin-bottom: 24px;
+}
