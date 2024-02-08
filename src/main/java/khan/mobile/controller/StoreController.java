@@ -6,6 +6,7 @@ import khan.mobile.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +22,7 @@ public class StoreController {
 
     private final StoreService storeService;
 
-    @GetMapping("/store")
+    @GetMapping("/stores")
     public String StoreList(Model model, Pageable pageable) {
         Page<StoreDto> storePage = storeService.getStoreList(pageable);
         model.addAttribute("stores", storePage.getContent());
@@ -35,6 +36,16 @@ public class StoreController {
         return ResponseEntity.ok(new ResponseDto("수정 완료"));
     }
 
+    @GetMapping("/stores/search")
+    public String getSearchStoresList(@RequestParam("storeSearch") String storeName, Model model, Pageable pageable) {
+        Page<StoreDto> searchResults = storeService.getSearchResult(storeName, pageable);
+        model.addAttribute("stores", searchResults.getContent());
+        model.addAttribute("storeSearch", storeName);
+        model.addAttribute("page", searchResults);
+
+        return "storePages/storeSearch";
+
+    }
 
 
 }

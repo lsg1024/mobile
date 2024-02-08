@@ -16,15 +16,15 @@ public class Stores {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "store_id")
     private Long store_id;
-    private String store_name;
+    private String storeName;
 
     @OneToMany(mappedBy = "stores")
     private List<Product_order> productOrders;
 
     @Builder
-    public Stores(Long store_id, String store_name, List<Product_order> productOrders) {
+    public Stores(Long store_id, String storeName, List<Product_order> productOrders) {
         this.store_id = store_id;
-        this.store_name = store_name;
+        this.storeName = storeName;
         this.productOrders = productOrders;
     }
 }

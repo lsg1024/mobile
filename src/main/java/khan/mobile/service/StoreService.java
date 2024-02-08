@@ -7,7 +7,11 @@ import khan.mobile.entity.Stores;
 import khan.mobile.repository.StoreRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
@@ -25,7 +29,7 @@ public class StoreService {
     public void saveStores(StoreDto storeDto) {
 
         Stores stores = Stores.builder()
-                .store_name(storeDto.getStore_name())
+                .storeName(storeDto.getStore_name())
                 .build();
 
         Stores save = storeRepository.save(stores);
@@ -47,9 +51,20 @@ public class StoreService {
 
         Stores stores = Stores.builder()
                 .store_id(store.orElseThrow().getStore_id())
-                .store_name(storeDto.getStore_name())
+                .storeName(storeDto.getStore_name())
                 .build();
 
         storeRepository.save(stores);
     }
+
+    // 상점 검색
+    public Page<StoreDto> getSearchResult(String storeName, Pageable pageable) {
+        Page<Stores> result = storeRepository.findStoresByStoreNameContaining(storeName, pageable);
+
+        return result.map(StoreDto::storeDto);
+    }
+
+
+
+
 }

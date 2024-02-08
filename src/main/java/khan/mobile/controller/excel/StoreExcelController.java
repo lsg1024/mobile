@@ -98,7 +98,7 @@ public class StoreExcelController {
 
         redirectAttributes.addFlashAttribute("successMessage", "데이터 저장 성공");
 
-        return "redirect:storePages/excel";
+        return "redirect:/storeCreate/excel";
 
     }
 }

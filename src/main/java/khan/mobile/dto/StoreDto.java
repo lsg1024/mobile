@@ -16,7 +16,7 @@ public class StoreDto {
     public static StoreDto storeDto(Stores stores) {
         return StoreDto.builder()
                 .store_id(stores.getStore_id())
-                .store_name(stores.getStore_name())
+                .store_name(stores.getStoreName())
                 .build();
     }
 
