@@ -1,26 +1,23 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:replace="~{fragments/header::header}">
   <meta charset="UTF-8">
   <title>엑셀 데이터 목록</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 </head>
 <body>
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+<div class="container">
+  <div th:replace="~{fragments/bodyHeader::bodyHeader}"></div>
+  <form action="/stores/save" method="post">
+    <button type="submit" class="btn btn-primary">데이터 저장</button>
+  </form>
 <table class="table table-striped">
   <thead>
   <tr>
     <th scope="col">번호</th>
     <th scope="col">이름</th>
-    <th scope="col">
-      <form
-            action="/stores/save"
-            method="post">
-      <button type="submit" class="btn btn-primary">
-        데이터 저장
-      </button>
-      </form>
-    </th>
   </tr>
   </thead>
   <tbody>
@@ -30,5 +27,7 @@
   </tr>
   </tbody>
 </table>
+</div>
+<link rel="stylesheet" type="text/css" th:href="@{/css/store.css}">
 </body>
 </html>
