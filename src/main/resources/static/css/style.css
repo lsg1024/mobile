@@ -183,12 +183,9 @@ input {
 }
 
 /* 버튼 css */
-button {
+.custom-btn {
     margin: 20px;
     outline: none;
-}
-
-.custom-btn {
     width: 130px;
     height: 40px;
     padding: 10px 25px;
