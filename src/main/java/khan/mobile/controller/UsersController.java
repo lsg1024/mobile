@@ -62,6 +62,7 @@ public class UsersController {
 
         jwtCookie.setHttpOnly(true);
         jwtCookie.setPath("/");
+        jwtCookie.setMaxAge(1000 * 60 * 60);
         response.addCookie(jwtCookie);
 
         return ResponseEntity.ok(new ResponseDto("로그인 성공"));

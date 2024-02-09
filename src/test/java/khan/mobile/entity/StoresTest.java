@@ -23,7 +23,7 @@ class StoresTest {
     @Test
     void createStore() {
         Stores newStore = Stores.builder()
-                .store_name("테스트 스토어")
+                .storeName("테스트 스토어")
                 .build();
 
         storeRepository.save(newStore);

@@ -19,34 +19,34 @@ public class ProductOrderController {
 
     // 상품 주문
     @PostMapping("/order")
-    public ResponseEntity<ResponseDto> createOrder(@RequestHeader("user_id") Long user_id,
-                                                   @RequestHeader("store_id") Long store_id,
+    public ResponseEntity<ResponseDto> createOrder(@RequestHeader("userId") Long userId,
+                                                   @RequestHeader("storeId") Long storeId,
                                                    @RequestBody ProductOrderDto productOrderDto) {
-        productOrderService.createOrder(user_id, store_id, productOrderDto);
+        productOrderService.createOrder(userId, storeId, productOrderDto);
         return ResponseEntity.ok(new ResponseDto("제품 주문 완료"));
     }
 
     // 상품 수정
     @PostMapping("/order/update")
-    public ResponseEntity<ResponseDto> updateOrder(@RequestHeader("user_id") Long user_id,
-                                                   @RequestHeader("orderItems_id") Long orderItems_id,
+    public ResponseEntity<ResponseDto> updateOrder(@RequestHeader("userId") Long userId,
+                                                   @RequestHeader("orderItemsId") Long orderItemsId,
                                                    @RequestBody ProductOrderItemDto productOrderItemDto) {
-        productOrderService.updateOrder(user_id, orderItems_id, productOrderItemDto);
+        productOrderService.updateOrder(userId, orderItemsId, productOrderItemDto);
         return ResponseEntity.ok(new ResponseDto("주문 수정 완료"));
     }
 
     // 상품 삭제
     @PostMapping("/order/delete")
-    public ResponseEntity<ResponseDto> deleteOrder(@RequestHeader("user_id") Long user_id,
-                                                   @RequestHeader("orderItems_id") Long orderItems_id) {
-        productOrderService.deleteOrder(user_id, orderItems_id);
+    public ResponseEntity<ResponseDto> deleteOrder(@RequestHeader("userId") Long userId,
+                                                   @RequestHeader("orderItemsId") Long orderItemsId) {
+        productOrderService.deleteOrder(userId, orderItemsId);
         return ResponseEntity.ok(new ResponseDto("주문 삭제 완료"));
     }
 
     // 상품 리스트
     @GetMapping("orderItem/orderList")
-    public ResponseEntity<List<ProductOrderItemDetailDto>> getOrderItemDetails(@RequestHeader("user_id") Long user_id) {
-        List<ProductOrderItemDetailDto> details = productOrderService.getOrderItemListDetails(user_id);
+    public ResponseEntity<List<ProductOrderItemDetailDto>> getOrderItemDetails(@RequestHeader("userId") Long userId) {
+        List<ProductOrderItemDetailDto> details = productOrderService.getOrderItemListDetails(userId);
         return ResponseEntity.ok(details);
     }
 

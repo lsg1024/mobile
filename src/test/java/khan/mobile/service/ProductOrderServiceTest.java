@@ -1,8 +1,7 @@
 package khan.mobile.service;
 
 import jakarta.persistence.EntityManager;
-import khan.mobile.dto.ProductOrderDto;
-import khan.mobile.entity.Product_order;
+import khan.mobile.entity.ProductOrder;
 import khan.mobile.repository.ProductOrderRepository;
 import khan.mobile.repository.StoreRepository;
 import khan.mobile.repository.UserRepository;
@@ -50,7 +49,7 @@ class ProductOrderServiceTest {
     @Test
     void 전체주문리스트() {
         //when
-        List<Product_order> findAll = productOrderRepository.findAll();
+        List<ProductOrder> findAll = productOrderRepository.findAll();
 
         //then
         assertNotNull(findAll);

@@ -19,10 +19,10 @@ public class Stores {
     private String storeName;
 
     @OneToMany(mappedBy = "stores")
-    private List<Product_order> productOrders;
+    private List<ProductOrder> productOrders;
 
     @Builder
-    public Stores(Long store_id, String storeName, List<Product_order> productOrders) {
+    public Stores(Long store_id, String storeName, List<ProductOrder> productOrders) {
         this.store_id = store_id;
         this.storeName = storeName;
         this.productOrders = productOrders;

@@ -1,14 +1,14 @@
 package khan.mobile.repository;
 
-import khan.mobile.entity.Product_order;
+import khan.mobile.entity.ProductOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface ProductOrderRepository extends JpaRepository<Product_order, Long> {
+public interface ProductOrderRepository extends JpaRepository<ProductOrder, Long> {
 
-    @Query("select po from Product_order po where po.user.user_id = :user_id")
-    List<Product_order> findByUserId(@Param("user_id") Long user_id);
+    @Query("select po from ProductOrder po where po.user.userId = :user_id")
+    List<ProductOrder> findByUserId(@Param("user_id") Long user_id);
 }

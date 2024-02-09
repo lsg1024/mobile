@@ -33,13 +33,13 @@ public class ProductDto {
     @Builder
     public static ProductDto productDto(Products products) {
         return ProductDto.builder()
-                .id(products.getProduct_id())
+                .id(products.getProductId())
                 .name(products.getProductName())
-                .color(products.getProduct_color())
-                .size(products.getProduct_size())
-                .weight(products.getProduct_weight())
-                .other(products.getProduct_other())
-                .image(products.getProduct_image())
+                .color(products.getProductColor())
+                .size(products.getProductSize())
+                .weight(products.getProductWeight())
+                .other(products.getProductOther())
+                .image(products.getProductImage())
                 .build();
     }
 }

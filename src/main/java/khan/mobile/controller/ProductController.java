@@ -28,15 +28,15 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/product/create")
-    public ResponseEntity<ResponseDto> createProduct(@RequestHeader("user_id") Long user_id,
+    public ResponseEntity<ResponseDto> createProduct(@RequestHeader("userId") Long userId,
                                                      @RequestBody ProductDto productDto) {
-        productService.createProduct(user_id, productDto);
+        productService.createProduct(userId, productDto);
         return ResponseEntity.ok(new ResponseDto("생성 완료"));
     }
 
     @PostMapping("/product/update")
-    public ResponseEntity<?> updateProduct(@RequestHeader("user_id") Long user_id,
-                                           @RequestHeader("product_id") Long product_id,
+    public ResponseEntity<?> updateProduct(@RequestHeader("userId") Long userId,
+                                           @RequestHeader("productId") Long productId,
                                            @Valid @RequestBody ProductDto productDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
@@ -48,7 +48,7 @@ public class ProductController {
             return ResponseEntity.badRequest().body(new ErrorResponse("상품 업데이트 실패", errors));
         }
 
-        ProductDto result = productService.updateProduct(user_id, product_id, productDto);
+        ProductDto result = productService.updateProduct(userId, productId, productDto);
         return ResponseEntity.ok(result);
     }
 

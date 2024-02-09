@@ -15,44 +15,44 @@ import java.util.List;
 public class Products extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id")
-    private Long product_id;
+    @Column(name = "productId")
+    private Long productId;
     private String productName;
-    private String product_color;
-    private Float product_size;
-    private Float product_weight;
-    private String product_other;
-    private String product_image;
+    private String productColor;
+    private Float productSize;
+    private Float productWeight;
+    private String productOther;
+    private String productImage;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "userId")
     private Users user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "factory_id")
+    @JoinColumn(name = "factoryId")
     private Factories factory;
 
     @OneToMany(mappedBy = "products")
-    private List<Product_orderItem> product_orderItem;
+    private List<ProductOrderItem> productOrderItem;
 
     @Builder
-    public Products(Long product_id, String productName, String product_color, Float product_size, Float product_weight, String product_other, String product_image, Users user, Factories factory) {
-        this.product_id = product_id;
+    public Products(Long productId, String productName, String productColor, Float productSize, Float productWeight, String productOther, String productImage, Users user, Factories factory) {
+        this.productId = productId;
         this.productName = productName;
-        this.product_color = product_color;
-        this.product_size = product_size;
-        this.product_weight = product_weight;
-        this.product_other = product_other;
-        this.product_image = product_image;
+        this.productColor = productColor;
+        this.productSize = productSize;
+        this.productWeight = productWeight;
+        this.productOther = productOther;
+        this.productImage = productImage;
         this.user = user;
         this.factory = factory;
     }
 
     public void updateProduct(String product_name, String product_color, Float product_size, Float product_weight, String product_other) {
         this.productName = product_name;
-        this.product_color = product_color;
-        this.product_size = product_size;
-        this.product_weight = product_weight;
-        this.product_other = product_other;
+        this.productColor = product_color;
+        this.productSize = product_size;
+        this.productWeight = product_weight;
+        this.productOther = product_other;
     }
 }

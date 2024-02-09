@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,11 +29,11 @@ class UsersTest {
 
         userRepository.save(newUser);
 
-        Users findUser = userRepository.findById(newUser.getUser_id()).orElse(null);
+        Users findUser = userRepository.findById(newUser.getUserId()).orElse(null);
 
         assertNotNull(findUser);
-        assertNotNull(findUser.getUser_id());
-        assertEquals(newUser.getUser_id(), findUser.getUser_id());
+        assertNotNull(findUser.getUserId());
+        assertEquals(newUser.getUserId(), findUser.getUserId());
 
     }
 }

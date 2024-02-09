@@ -30,11 +30,11 @@ class FactoriesTest {
 
         factoryRepository.save(factories);
 
-        Optional<Factories> findFactory = factoryRepository.findById(factories.getFactory_id());
+        Optional<Factories> findFactory = factoryRepository.findById(factories.getFactoryId());
 
-        assertTrue(findFactory.isPresent(), "공장 아이디를 찾을 수 없음 : " + factories.getFactory_id());
+        assertTrue(findFactory.isPresent(), "공장 아이디를 찾을 수 없음 : " + factories.getFactoryId());
 
-        assertEquals(factories.getFactory_id(), findFactory.get().getFactory_id(), "공장 아이디가 존재합니다.");
+        assertEquals(factories.getFactoryId(), findFactory.get().getFactoryId(), "공장 아이디가 존재합니다.");
 
     }
 }

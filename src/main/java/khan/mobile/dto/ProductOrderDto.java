@@ -1,6 +1,5 @@
 package khan.mobile.dto;
 
-import khan.mobile.entity.Product_order;
 import lombok.*;
 
 import java.util.List;

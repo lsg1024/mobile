@@ -12,24 +12,24 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Product_order extends BaseEntity {
+public class ProductOrder extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_order_id")
-    private Long product_order_id;
+    @Column(name = "productOrderId")
+    private Long productOrderId;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "userId")
     private Users user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_id")
+    @JoinColumn(name = "storeId")
     private Stores stores;
 
-    @OneToMany(mappedBy = "product_order")
-    private List<Product_orderItem> orderItems;
+    @OneToMany(mappedBy = "productOrder")
+    private List<ProductOrderItem> orderItems;
 
     @Builder
-    public Product_order(Users user, Stores stores) {
+    public ProductOrder(Users user, Stores stores) {
         this.user = user;
         this.stores = stores;
     }

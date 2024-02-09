@@ -28,13 +28,13 @@ public class ProductOrderService {
 
     // 제품 주문
     @Transactional
-    public void createOrder(Long user_id, Long store_id, ProductOrderDto productOrderDto) {
+    public void createOrder(Long userId, Long storeId, ProductOrderDto productOrderDto) {
         //관련 엔티티 조회
-        Users user = validateUser(user_id);
-        Stores store = validateStore(store_id);
+        Users user = validateUser(userId);
+        Stores store = validateStore(storeId);
 
         // 주문 엔티티 생성
-        Product_order order = Product_order.builder()
+        ProductOrder order = ProductOrder.builder()
                 .user(user)
                 .stores(store)
                 .build();
@@ -47,14 +47,14 @@ public class ProductOrderService {
 
     // 제품 주문 정보 수정
     @Transactional
-    public void updateOrder(Long user_id, Long orderItems_id, ProductOrderItemDto productOrderItemDto) {
+    public void updateOrder(Long userId, Long orderItemsId, ProductOrderItemDto productOrderItemDto) {
         //엔티티 조회
-        Product_orderItem findItem = validateOrderItem(orderItems_id);
-        Users user = validateUser(user_id);
-        log.info("주문 ID 정보: {}", findItem.getProduct_orderItem_id());
+        ProductOrderItem findItem = validateOrderItem(orderItemsId);
+        Users user = validateUser(userId);
+        log.info("주문 ID 정보: {}", findItem.getProductOrderItemId());
 
         // 사용자 권한 확인 및 주문 수정 권한 검증
-        Check_permissions(user, findItem, user_id, "주문을 수정할 권한이 없습니다.");
+        Check_permissions(user, findItem, userId, "주문을 수정할 권한이 없습니다.");
 
         //주문 정보 수정
         findItem.updateOrderItem(
@@ -65,77 +65,77 @@ public class ProductOrderService {
         );
 
         // 관리자 권한으로 수정된 경우 로그 기록
-        EditByAdmin(user, "admin 권한으로 주문 정보를 수정했습니다. 주문 ID: {}, 사용자 ID: {}", orderItems_id, user_id);
+        EditByAdmin(user, "admin 권한으로 주문 정보를 수정했습니다. 주문 ID: {}, 사용자 ID: {}", orderItemsId, userId);
 
     }
 
 
     @Transactional
-    public void deleteOrder(Long user_id, Long orderItems_id) {
+    public void deleteOrder(Long userId, Long orderItemsId) {
         //엔티티 조회
-        Product_orderItem findItem = validateOrderItem(orderItems_id);
-        Users user = validateUser(user_id);
+        ProductOrderItem findItem = validateOrderItem(orderItemsId);
+        Users user = validateUser(userId);
 
         // 사용자 권한 확인 및 주문 수정 권한 검증
-        Check_permissions(user, findItem, user_id, "주문을 삭제할 권한이 없습니다.");
+        Check_permissions(user, findItem, userId, "주문을 삭제할 권한이 없습니다.");
 
         productOrderItemRepository.delete(findItem);
 
         // 관리자 권한으로 수정된 경우 로그 기록
-        EditByAdmin(user, "admin 권한으로 주문 정보를 삭제했습니다. 주문 ID: {}, 사용자 ID: {}", orderItems_id, user_id);
+        EditByAdmin(user, "admin 권한으로 주문 정보를 삭제했습니다. 주문 ID: {}, 사용자 ID: {}", orderItemsId, userId);
     }
 
     // 주문 항목 상세 조회
-    public List<ProductOrderItemDetailDto> getOrderItemListDetails(Long user_id) {
+    public List<ProductOrderItemDetailDto> getOrderItemListDetails(Long userId) {
         // 사용자가 한 모든 주문 조회
-        List<Product_order> orders = productOrderRepository.findByUserId(user_id);
+        List<ProductOrder> orders = productOrderRepository.findByUserId(userId);
 
         // 주문 ID 목록 추출
         List<Long> orderIds = orders.stream()
-                .map(Product_order::getProduct_order_id)
+                .map(ProductOrder::getProductOrderId)
                 .collect(Collectors.toList());
 
         // 주문 항목 상세 조회
         return productOrderItemRepository.findOrderItemDetail(orderIds);
     }
 
-    private void EditByAdmin(Users user, String format, Long orderItems_id, Long user_id) {
+    private void EditByAdmin(Users user, String format, Long orderItemsId, Long userId) {
         if (user.getRole() == Role.ADMIN) {
-            log.warn(format, orderItems_id, user_id);
+            log.warn(format, orderItemsId, userId);
         }
     }
 
-    private void Check_permissions(Users user, Product_orderItem findItem, Long user_id, String s) {
-        if (!(user.getRole() == Role.ADMIN) && !findItem.getProduct_order().getUser().getUser_id().equals(user_id)) {
+    private void Check_permissions(Users user, ProductOrderItem findItem, Long userId, String s) {
+        if (!(user.getRole() == Role.ADMIN) && !findItem.getProductOrder().getUser().getUserId().equals(userId)) {
             throw new IllegalArgumentException(s);
         }
     }
-    private Product_orderItem validateOrderItem(Long orderItems_id) {
-        return productOrderItemRepository.findById(orderItems_id).orElseThrow(() -> new IllegalArgumentException("주문 번호를 찾을 수 없습니다"));
+    private ProductOrderItem validateOrderItem(Long orderItemsId) {
+        return productOrderItemRepository.findById(orderItemsId).orElseThrow(() -> new IllegalArgumentException("주문 번호를 찾을 수 없습니다"));
     }
 
-    private Stores validateStore(Long store_id) {
-        return storeRepository.findById(store_id).orElseThrow(() -> new IllegalArgumentException("일치하는 상점 정보가 없습니다"));
+    private Stores validateStore(Long storeId) {
+        return storeRepository.findById(storeId).orElseThrow(() -> new IllegalArgumentException("일치하는 상점 정보가 없습니다"));
     }
 
-    private Users validateUser(Long user_id) {
-        return userRepository.findById(user_id).orElseThrow(() -> new IllegalArgumentException("일치하는 유저 정보가 없습니다"));
+    private Users validateUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("일치하는 유저 정보가 없습니다"));
     }
 
     
-    private void createOrderItems(ProductOrderDto productOrderDto, Product_order order) {
+    private void createOrderItems(ProductOrderDto productOrderDto, ProductOrder order) {
         for (ProductOrderItemDto itemDto : productOrderDto.getOrderItems()) {
-            log.info("제품 ID 정보: {}", itemDto.getProduct_id());
+            log.info("제품 ID 정보: {}", itemDto.getProductId());
 
-            Products product = productRepository.findById(itemDto.getProduct_id()).orElseThrow(() -> new IllegalArgumentException("일치하는 제품 정보가 없습니다"));
+            Products product = productRepository.findById(itemDto.getProductId()).orElseThrow(() -> new IllegalArgumentException("일치하는 제품 정보가 없습니다"));
 
-            Product_orderItem orderItem = Product_orderItem.builder()
-                    .product_orderItem_color(itemDto.getColor())
-                    .product_orderItem_size(itemDto.getSize())
-                    .product_orderItem_other(itemDto.getOther())
-                    .product_orderItem_quantity(itemDto.getQuantity())
+            ProductOrderItem orderItem = ProductOrderItem.builder()
+                    .productOrderItemColor(itemDto.getColor())
+                    .productOrderItemSize(itemDto.getSize())
+                    .productOrderItemOther(itemDto.getOther())
+                    .productOrderItemQuantity(itemDto.getQuantity())
                     .products(product)
-                    .product_order(order)
+                    .productOrder(order)
                     .build();
 
             productOrderItemRepository.save(orderItem);

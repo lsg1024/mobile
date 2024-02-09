@@ -34,10 +34,10 @@ class ProductsTest {
 
         productRepository.save(newProduct);
 
-        Products findProduct = productRepository.findById(newProduct.getProduct_id()).orElse(null);
+        Products findProduct = productRepository.findById(newProduct.getProductId()).orElse(null);
         assertNotNull(findProduct);
-        assertNotNull(findProduct.getProduct_id());
-        assertEquals(newProduct.getProduct_id(), findProduct.getProduct_id());
+        assertNotNull(findProduct.getProductId());
+        assertEquals(newProduct.getProductId(), findProduct.getProductId());
 
     }
 

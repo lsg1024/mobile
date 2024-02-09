@@ -14,16 +14,16 @@ import java.util.List;
 public class Factories {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "factory_id")
-    private Long factory_id;
-    private String factory_name;
+    @Column(name = "factoryId")
+    private Long factoryId;
+    private String factoryName;
 
     @OneToMany(mappedBy = "factory")
     private List<Products> product;
 
     @Builder
-    public Factories(Long factory_id, String factory_name) {
-        this.factory_id = factory_id;
-        this.factory_name = factory_name;
+    public Factories(Long factoryId, String factoryName) {
+        this.factoryId = factoryId;
+        this.factoryName = factoryName;
     }
 }

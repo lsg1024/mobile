@@ -67,8 +67,8 @@ public class StoreExcelController {
             double numericValue = row.getCell(0).getNumericCellValue();
             long longValue = (long) numericValue;
 
-            data.setStore_id(longValue);
-            data.setStore_name(row.getCell(5).getStringCellValue());
+            data.setStoreId(longValue);
+            data.setStoreName(row.getCell(5).getStringCellValue());
 
             dataList.add(data);
         }
@@ -89,7 +89,7 @@ public class StoreExcelController {
 
         for (StoreDto data : dataList) {
             StoreDto stores = StoreDto.builder()
-                    .store_name(data.getStore_name())
+                    .storeName(data.getStoreName())
                     .build();
             storeService.saveStores(stores);
         }

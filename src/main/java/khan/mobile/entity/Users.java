@@ -14,8 +14,8 @@ import java.util.List;
 public class Users extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private Long user_id;
+    @Column(name = "userId")
+    private Long userId;
 
     @Column(length = 45)
     private String email;
@@ -32,6 +32,6 @@ public class Users extends BaseTimeEntity {
     private List<Products> products;
 
     @OneToMany(mappedBy = "user")
-    private List<Product_order>  productOrders;
+    private List<ProductOrder>  productOrders;
 
 }

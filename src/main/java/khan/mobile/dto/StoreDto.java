@@ -9,14 +9,14 @@ import lombok.*;
 @NoArgsConstructor
 public class StoreDto {
 
-    private Long store_id;
-    private String store_name;
+    private Long storeId;
+    private String storeName;
 
     @Builder
     public static StoreDto storeDto(Stores stores) {
         return StoreDto.builder()
-                .store_id(stores.getStore_id())
-                .store_name(stores.getStoreName())
+                .storeId(stores.getStore_id())
+                .storeName(stores.getStoreName())
                 .build();
     }
 

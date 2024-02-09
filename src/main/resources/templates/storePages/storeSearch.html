@@ -32,9 +32,9 @@
       <tr th:each="store, iterStat : ${stores}">
 
         <td class="col-num" th:text="${iterStat.count + (page.number * 10)}"></td>
-        <td class="col-name" th:text="${store.store_name}"></td>
+        <td class="col-name" th:text="${store.getStoreName}"></td>
         <td class="col-action">
-          <button class="btn btn-primary edit_btn" id="edit_btn" th:data-store-id="${store.store_id}">수정</button>
+          <button class="btn btn-primary edit_btn" id="edit_btn" th:data-store-id="${store.getStoreId}">수정</button>
           <!--          <button class="btn btn-danger delete_btn" id="delete_btn" th:data-store-id="${store.store_id}">삭제</button>-->
         </td>
       </tr>

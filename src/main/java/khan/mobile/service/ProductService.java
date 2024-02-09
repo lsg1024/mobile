@@ -24,9 +24,9 @@ public class ProductService {
 
     //상품 생성
     @Transactional
-    public void createProduct(Long user_id, ProductDto productDto) {
+    public void createProduct(Long userId, ProductDto productDto) {
         //엔티티 조회
-        validateUser(user_id);
+        validateUser(userId);
 
         //상품 생성
         /*
@@ -34,12 +34,12 @@ public class ProductService {
          */
         Products product = Products.builder()
                 .productName(productDto.getName())
-                .product_color(productDto.getColor())
-                .product_weight(productDto.getWeight())
-                .product_size(productDto.getSize())
-                .product_other(productDto.getOther())
-                .product_image(productDto.getImage())
-                .user(Users.builder().user_id(user_id).build())
+                .productColor(productDto.getColor())
+                .productWeight(productDto.getWeight())
+                .productSize(productDto.getSize())
+                .productOther(productDto.getOther())
+                .productImage(productDto.getImage())
+                .user(Users.builder().userId(userId).build())
                 .build();
 
         //상품 저장
@@ -48,10 +48,10 @@ public class ProductService {
 
     //상품 수정
     @Transactional
-    public ProductDto updateProduct(Long user_id, Long product_id, ProductDto productDto) {
+    public ProductDto updateProduct(Long userId, Long productId, ProductDto productDto) {
         //엔티티 조회
-        validateUser(user_id);
-        Products findProduct = validateProduct(product_id);
+        validateUser(userId);
+        Products findProduct = validateProduct(productId);
 
         //상품 수정
         findProduct.updateProduct(
@@ -73,7 +73,7 @@ public class ProductService {
     }
 
     //상품 삭제
-    public void deleteProduct(Long user_id, Long product_id, ProductDto productDto) {
+    public void deleteProduct(Long userId, Long productId, ProductDto productDto) {
 
     }
 
@@ -91,13 +91,13 @@ public class ProductService {
         Products findProduct = validateProduct(product_id);
 
         return ProductDto.builder()
-                .id(findProduct.getProduct_id())
+                .id(findProduct.getProductId())
                 .name(findProduct.getProductName())
-                .color(findProduct.getProduct_color())
-                .size(findProduct.getProduct_size())
-                .weight(findProduct.getProduct_weight())
-                .other(findProduct.getProduct_other())
-                .image(findProduct.getProduct_image())
+                .color(findProduct.getProductColor())
+                .size(findProduct.getProductSize())
+                .weight(findProduct.getProductWeight())
+                .other(findProduct.getProductOther())
+                .image(findProduct.getProductImage())
                 .build();
 
     }

@@ -67,7 +67,7 @@ public class UserService {
             throw new AppException(ErrorCode.INVALID_PASSWORD, "비밀번호를 잘못 입력 했습니다");
         }
 
-        return JwtUtil.createJwt(String.valueOf(selectedUser.getUser_id()), String.valueOf(selectedUser.getRole()), secretKey, expireTimeMs);
+        return JwtUtil.createJwt(String.valueOf(selectedUser.getUserId()), String.valueOf(selectedUser.getRole()), secretKey, expireTimeMs);
     }
 
 
