@@ -22,7 +22,6 @@ public class Products extends BaseTimeEntity {
     private Float productSize;
     private Float productWeight;
     private String productOther;
-    private String productImage;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
@@ -35,8 +34,11 @@ public class Products extends BaseTimeEntity {
     @OneToMany(mappedBy = "products")
     private List<ProductOrderItem> productOrderItem;
 
+    @OneToMany(mappedBy = "products")
+    private List<ProductImage> productImage;
+
     @Builder
-    public Products(Long productId, String productName, String productColor, Float productSize, Float productWeight, String productOther, String productImage, Users user, Factories factory) {
+    public Products(Long productId, String productName, String productColor, Float productSize, Float productWeight, String productOther, List<ProductImage> productImage, Users user, Factories factory) {
         this.productId = productId;
         this.productName = productName;
         this.productColor = productColor;

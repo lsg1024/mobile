@@ -24,11 +24,11 @@ class ProductsTest {
     void createProduct() {
         Products newProduct = Products.builder()
                 .productName("테스트 상품2")
-                .product_color("금색")
-                .product_weight(10.4f)
-                .product_size(15f)
-                .product_other("테스트 내용")
-                .product_image("img/")
+                .productColor("금색")
+                .productWeight(10.4f)
+                .productSize(15f)
+                .productOther("테스트 내용")
+                .productImage("img/")
                 .build();
 
 

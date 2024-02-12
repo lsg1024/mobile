@@ -25,7 +25,7 @@ class FactoriesTest {
     @Test
     void createFactory() {
         Factories factories = Factories.builder()
-                .factory_name("테스트 공장")
+                .factoryName("테스트 공장")
                 .build();
 
         factoryRepository.save(factories);
