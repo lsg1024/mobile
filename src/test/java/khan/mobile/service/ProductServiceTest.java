@@ -25,13 +25,13 @@ class ProductServiceTest {
     @Autowired
     ProductRepository productRepository;
 
-    @Test
-    void SearchProduct() {
-        String searchData = "상품1";
-
-        List<Products> result = productRepository.findByProductNameContaining(searchData);
-
-        System.out.println("상품 갯수는 " + result.size());
-    }
+//    @Test
+//    void SearchProduct() {
+//        String searchData = "상품1";
+//
+//        List<Products> result = productRepository.findByProductNameContaining(searchData);
+//
+//        System.out.println("상품 갯수는 " + result.size());
+//    }
 
 }

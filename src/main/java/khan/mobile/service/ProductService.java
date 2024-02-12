@@ -38,7 +38,7 @@ public class ProductService {
                 .productWeight(productDto.getWeight())
                 .productSize(productDto.getSize())
                 .productOther(productDto.getOther())
-                .productImage(productDto.getImage())
+                .productImage(productDto.getImages())
                 .user(Users.builder().userId(userId).build())
                 .build();
 
@@ -97,7 +97,7 @@ public class ProductService {
                 .size(findProduct.getProductSize())
                 .weight(findProduct.getProductWeight())
                 .other(findProduct.getProductOther())
-                .image(findProduct.getProductImage())
+                .images(findProduct.getProductImage())
                 .build();
 
     }
