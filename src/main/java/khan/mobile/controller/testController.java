@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -76,6 +77,15 @@ public class testController {
 
         return ResponseEntity.ok(dataList);
     }
+    @GetMapping("/api/stores")
+    public Page<StoreDto> StoreList(Pageable pageable) {
+        return storeService.getStoreList(pageable);
+    }
+
+    @GetMapping("/api/stores/search")
+    public Page<StoreDto> getSearchStoresList(@RequestParam("storeSearch") String storeName, Pageable pageable) {
+        return storeService.getSearchResult(storeName, pageable);
+    }
 
     @PostMapping("/api/stores/save")
     public ResponseEntity<ResponseDto> saveStores(@RequestBody List<StoreDto> dataList) {
@@ -90,4 +100,11 @@ public class testController {
         return ResponseEntity.ok(new ResponseDto("데이터 저장 성공"));
 
     }
+
+    @PostMapping("/stores/update")
+    public ResponseEntity<ResponseDto> StoreUpdate(@RequestParam("storeId") String storeId, @Validated @RequestBody StoreDto storeDto) {
+        storeService.updateStores(storeId, storeDto);
+        return ResponseEntity.ok(new ResponseDto("수정 완료"));
+    }
+
 }
