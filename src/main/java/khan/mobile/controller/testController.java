@@ -101,7 +101,7 @@ public class testController {
 
     }
 
-    @PostMapping("/stores/update")
+    @PostMapping("api/stores/update")
     public ResponseEntity<ResponseDto> StoreUpdate(@RequestParam("storeId") String storeId, @Validated @RequestBody StoreDto storeDto) {
         storeService.updateStores(storeId, storeDto);
         return ResponseEntity.ok(new ResponseDto("수정 완료"));
