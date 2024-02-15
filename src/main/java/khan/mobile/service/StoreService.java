@@ -28,9 +28,7 @@ public class StoreService {
                 .storeName(storeDto.getStoreName())
                 .build();
 
-        Stores save = storeRepository.save(stores);
-
-        StoreDto.storeDto(save);
+        storeRepository.save(stores);
 
     }
 
