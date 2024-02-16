@@ -28,7 +28,7 @@ public class SecurityConfig   {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         authorize -> authorize
-                                .requestMatchers("/","user/signup", "user/login","/oauth/kakao","/product/**", "/api/**",
+                                .requestMatchers("/","user/signup", "user/login","/oauth/kakao","/product/**", "/api/**", "/factory/**",
                                         "/css/**", "/js/**", "/images/**").permitAll() // user 관련 접속 제한 없음
                                 .anyRequest().authenticated()
                 )

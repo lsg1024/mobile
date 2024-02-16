@@ -24,12 +24,12 @@ public class FactoryController {
 
     private final FactoryService factoryService;
 
-    @GetMapping("/factory")
+    @GetMapping("api/factory")
     public Page<FactoryDto> getFactoryList(Pageable pageable) {
         return factoryService.getFactoryList(pageable);
     }
 
-    @PostMapping("/factory")
+    @PostMapping("api/factory")
     public ResponseEntity<?> createFactory(@RequestHeader("userId") Long userId,
                                            @Valid @RequestBody FactoryDto factoryDto,
                                            BindingResult bindingResult) {
@@ -47,9 +47,8 @@ public class FactoryController {
         return ResponseEntity.ok(new ResponseDto("생성 완료"));
     }
 
-    @PostMapping("/factory/update")
-    public ResponseEntity<?> updateFactory(@RequestHeader("userId") Long userId,
-                                           @RequestParam("factoryId") String productId,
+    @PostMapping("/api/factory/update")
+    public ResponseEntity<?> updateFactory(@RequestParam("factoryId") String factoryId,
                                            @Valid @RequestBody FactoryDto factoryDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
@@ -61,11 +60,11 @@ public class FactoryController {
             return ResponseEntity.badRequest().body(new ErrorResponse("공장 수정 실패", errors));
         }
 
-        factoryService.updateFactories(userId, productId, factoryDto);
+        factoryService.updateFactories(factoryId, factoryDto);
         return ResponseEntity.ok(new ResponseDto("수정 완료"));
     }
 
-    @GetMapping("/factory/search")
+    @GetMapping("/api/factory/search")
     public Page<FactoryDto> getSearchFactoryList(@RequestParam("factorySearch") String factoryName, Pageable pageable) {
         return factoryService.getSearchFactoryList(factoryName, pageable);
     }

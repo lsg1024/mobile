@@ -41,10 +41,10 @@ public class FactoryService {
 
     //공장 수정
     @Transactional
-    public void updateFactories(Long userId, String factoryId, FactoryDto factoryDto) {
+    public void updateFactories(String factoryId, FactoryDto factoryDto) {
 
 
-        validateUser(userId);
+//        validateUser(userId);
 
         log.info("FactoryDto = {}, {}", factoryDto.getFactoryId(), factoryDto.getFactoryName());
         Factories findFactory = factoryRepository.findById(Long.parseLong(factoryId)).orElseThrow(() ->  new IllegalStateException("존재하지 않은 공장 정보 입니다."));
