@@ -28,7 +28,7 @@ public class Factories {
         this.factoryName = factoryName;
     }
 
-    public void updateFactoryName(FactoryDto factoryDto) {
+    public void updateFactoryName(FactoryDto.Update factoryDto) {
 
         if (factoryDto.getFactoryName() != null) {
             this.factoryName = factoryDto.getFactoryName();

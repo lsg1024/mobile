@@ -22,12 +22,12 @@ public class FactoryService {
 
     //공장 생성
     @Transactional
-    public void createFactory(Long userId, FactoryDto factoryDto) {
+    public void createFactory(Long userId, FactoryDto.Create createDto) {
 
         validateUser(userId);
 
         Factories factory = Factories.builder()
-                .factoryName(factoryDto.getFactoryName())
+                .factoryName(createDto.getFactoryName())
                 .build();
 
         factoryRepository.save(factory);
@@ -41,16 +41,14 @@ public class FactoryService {
 
     //공장 수정
     @Transactional
-    public void updateFactories(String factoryId, FactoryDto factoryDto) {
+    public void updateFactories(FactoryDto.Update updateDto) {
 
 
 //        validateUser(userId);
 
-        log.info("FactoryDto = {}, {}", factoryDto.getFactoryId(), factoryDto.getFactoryName());
-        Factories findFactory = factoryRepository.findById(Long.parseLong(factoryId)).orElseThrow(() ->  new IllegalStateException("존재하지 않은 공장 정보 입니다."));
+        Factories findFactory = factoryRepository.findById(updateDto.getFactoryId()).orElseThrow(() ->  new IllegalStateException("존재하지 않은 공장 정보 입니다."));
 
-        log.info("FindFactory = {}, {}", findFactory.getFactoryId(), findFactory.getFactoryName());
-        findFactory.updateFactoryName(factoryDto);
+        findFactory.updateFactoryName(updateDto);
 
         factoryRepository.save(findFactory);
 

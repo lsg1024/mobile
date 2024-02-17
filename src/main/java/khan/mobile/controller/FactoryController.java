@@ -31,7 +31,7 @@ public class FactoryController {
 
     @PostMapping("api/factory")
     public ResponseEntity<?> createFactory(@RequestHeader("userId") Long userId,
-                                           @Valid @RequestBody FactoryDto factoryDto,
+                                           @Valid @RequestBody FactoryDto.Create createDto,
                                            BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
@@ -43,13 +43,12 @@ public class FactoryController {
             return ResponseEntity.badRequest().body(new ErrorResponse("공장 생성 실패", errors));
         }
 
-        factoryService.createFactory(userId, factoryDto);
+        factoryService.createFactory(userId, createDto);
         return ResponseEntity.ok(new ResponseDto("생성 완료"));
     }
 
     @PostMapping("/api/factory/update")
-    public ResponseEntity<?> updateFactory(@RequestParam("factoryId") String factoryId,
-                                           @Valid @RequestBody FactoryDto factoryDto, BindingResult bindingResult) {
+    public ResponseEntity<?> updateFactory(@Valid @RequestBody FactoryDto.Update updateDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
@@ -60,7 +59,7 @@ public class FactoryController {
             return ResponseEntity.badRequest().body(new ErrorResponse("공장 수정 실패", errors));
         }
 
-        factoryService.updateFactories(factoryId, factoryDto);
+        factoryService.updateFactories(updateDto);
         return ResponseEntity.ok(new ResponseDto("수정 완료"));
     }
 
