@@ -52,28 +52,20 @@ public class ProductController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/product")
-    public String getProductList(Model model, @PageableDefault(size = 9) Pageable pageable) {
-        Page<ProductDto> productPage = productService.getProductList(pageable);
-        model.addAttribute("products", productPage.getContent());
-        model.addAttribute("page", productPage);
-        return "productPages/product";
-    }
-    @GetMapping("/product/search")
-    public String getProductSearchList(@RequestParam("productSearch") String productName, Model model, @PageableDefault(size = 9) Pageable pageable) {
-        Page<ProductDto> searchResults = productService.getSearchProductList(productName, pageable);
-        model.addAttribute("products", searchResults.getContent());
-        model.addAttribute("productSearch", productName);
-        model.addAttribute("page", searchResults);
-        return "productPages/productSearch";
+    @GetMapping("/api/product")
+    public Page<ProductDto> getAPIProductList(@PageableDefault(size = 9) Pageable pageable) {
+        return productService.getProductList(pageable);
     }
 
-    @GetMapping("/product/detail/{id}")
-    public String getProductDetail(@PathVariable("id") Long id, Model model) {
-        log.info("Product Detail request for ID: " + id);
-        ProductDto product = productService.getProductDetail(id);
-        model.addAttribute("product", product);
-        return "productPages/productDetail";
+    @GetMapping("/api/product/search")
+    public Page<ProductDto> getProductSearchList(@RequestParam("productSearch") String productName, @PageableDefault(size = 9) Pageable pageable) {
+        return productService.getSearchProductList(productName, pageable);
     }
+
+    @GetMapping("/api/product/detail/{id}")
+    public ProductDto getProductDetail(@PathVariable("id") Long id) {
+        return productService.getProductDetail(id);
+    }
+
 
 }
