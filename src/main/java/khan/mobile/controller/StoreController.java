@@ -1,15 +1,14 @@
 package khan.mobile.controller;
 
-import khan.mobile.dto.ResponseDto;
+import khan.mobile.dto.response.CommonResponse;
+import khan.mobile.dto.response.SuccessResponse;
 import khan.mobile.dto.StoreDto;
 import khan.mobile.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,7 +34,7 @@ public class StoreController {
     }
 
     @PostMapping("/api/stores/save")
-    public ResponseEntity<ResponseDto> saveStores(@RequestBody List<StoreDto> dataList) {
+    public ResponseEntity<CommonResponse> saveStores(@RequestBody List<StoreDto> dataList) {
 
         for (StoreDto data : dataList) {
             StoreDto stores = StoreDto.builder()
@@ -44,14 +43,14 @@ public class StoreController {
             storeService.saveStores(stores);
         }
 
-        return ResponseEntity.ok(new ResponseDto("데이터 저장 성공"));
+        return ResponseEntity.ok(new CommonResponse("데이터 저장 성공"));
 
     }
 
     @PostMapping("api/stores/update")
-    public ResponseEntity<ResponseDto> StoreUpdate(@RequestParam("storeId") String storeId, @Validated @RequestBody StoreDto storeDto) {
+    public ResponseEntity<CommonResponse> StoreUpdate(@RequestParam("storeId") String storeId, @Validated @RequestBody StoreDto storeDto) {
         storeService.updateStores(storeId, storeDto);
-        return ResponseEntity.ok(new ResponseDto("수정 완료"));
+        return ResponseEntity.ok(new CommonResponse("수정 완료"));
     }
 
 }

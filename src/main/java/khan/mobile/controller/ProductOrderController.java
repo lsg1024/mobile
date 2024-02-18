@@ -3,7 +3,8 @@ package khan.mobile.controller;
 import khan.mobile.dto.ProductOrderDto;
 import khan.mobile.dto.ProductOrderItemDetailDto;
 import khan.mobile.dto.ProductOrderItemDto;
-import khan.mobile.dto.ResponseDto;
+import khan.mobile.dto.response.CommonResponse;
+import khan.mobile.dto.response.SuccessResponse;
 import khan.mobile.service.ProductOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,28 +20,28 @@ public class ProductOrderController {
 
     // 상품 주문
     @PostMapping("/order")
-    public ResponseEntity<ResponseDto> createOrder(@RequestHeader("userId") Long userId,
-                                                   @RequestHeader("storeId") Long storeId,
-                                                   @RequestBody ProductOrderDto productOrderDto) {
+    public ResponseEntity<CommonResponse> createOrder(@RequestHeader("userId") Long userId,
+                                                      @RequestHeader("storeId") Long storeId,
+                                                      @RequestBody ProductOrderDto productOrderDto) {
         productOrderService.createOrder(userId, storeId, productOrderDto);
-        return ResponseEntity.ok(new ResponseDto("제품 주문 완료"));
+        return ResponseEntity.ok(new CommonResponse("제품 주문 완료"));
     }
 
     // 상품 수정
     @PostMapping("/order/update")
-    public ResponseEntity<ResponseDto> updateOrder(@RequestHeader("userId") Long userId,
-                                                   @RequestHeader("orderItemsId") Long orderItemsId,
-                                                   @RequestBody ProductOrderItemDto productOrderItemDto) {
+    public ResponseEntity<CommonResponse> updateOrder(@RequestHeader("userId") Long userId,
+                                                       @RequestHeader("orderItemsId") Long orderItemsId,
+                                                       @RequestBody ProductOrderItemDto productOrderItemDto) {
         productOrderService.updateOrder(userId, orderItemsId, productOrderItemDto);
-        return ResponseEntity.ok(new ResponseDto("주문 수정 완료"));
+        return ResponseEntity.ok(new CommonResponse("주문 수정 완료"));
     }
 
     // 상품 삭제
     @PostMapping("/order/delete")
-    public ResponseEntity<ResponseDto> deleteOrder(@RequestHeader("userId") Long userId,
-                                                   @RequestHeader("orderItemsId") Long orderItemsId) {
+    public ResponseEntity<CommonResponse> deleteOrder(@RequestHeader("userId") Long userId,
+                                                       @RequestHeader("orderItemsId") Long orderItemsId) {
         productOrderService.deleteOrder(userId, orderItemsId);
-        return ResponseEntity.ok(new ResponseDto("주문 삭제 완료"));
+        return ResponseEntity.ok(new CommonResponse("주문 삭제 완료"));
     }
 
     // 상품 리스트

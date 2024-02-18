@@ -4,9 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import khan.mobile.entity.Factories;
 import lombok.*;
 
-@Getter @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@Getter
 public class FactoryDto {
 
     private Long factoryId;

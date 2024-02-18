@@ -1,9 +1,10 @@
 package khan.mobile.controller;
 
 import jakarta.validation.Valid;
-import khan.mobile.dto.ErrorResponse;
+import khan.mobile.dto.response.CommonResponse;
+import khan.mobile.dto.response.ErrorResponse;
 import khan.mobile.dto.ProductDto;
-import khan.mobile.dto.ResponseDto;
+import khan.mobile.dto.response.SuccessResponse;
 import khan.mobile.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -28,10 +28,10 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/product/create")
-    public ResponseEntity<ResponseDto> createProduct(@RequestHeader("userId") Long userId,
-                                                     @RequestBody ProductDto productDto) {
+    public ResponseEntity<CommonResponse> createProduct(@RequestHeader("userId") Long userId,
+                                                        @RequestBody ProductDto productDto) {
         productService.createProduct(userId, productDto);
-        return ResponseEntity.ok(new ResponseDto("생성 완료"));
+        return ResponseEntity.ok(new CommonResponse("생성 완료"));
     }
 
     @PostMapping("/product/update")
