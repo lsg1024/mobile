@@ -1,7 +1,6 @@
 package khan.mobile.service;
 
-import khan.mobile.dto.UserLoginDto;
-import khan.mobile.dto.UserSignUpDto;
+import khan.mobile.dto.UserDto;
 import khan.mobile.entity.Role;
 import khan.mobile.entity.Users;
 import khan.mobile.exception.AppException;
@@ -11,6 +10,8 @@ import khan.mobile.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +31,7 @@ public class UserService {
     private String secretKey;
 
     @Transactional
-    public void createUser(UserSignUpDto userSignUpDto) {
+    public void createUser(UserDto.signUp userSignUpDto) {
 
         String email_Lower = userSignUpDto.getEmail().toLowerCase();
 
@@ -43,9 +44,9 @@ public class UserService {
         }
 
         Users users = Users.builder()
-                .email(email_Lower)
-                .name(userSignUpDto.getName())
-                .password(encoder.encode(userSignUpDto.getPassword()))
+                .userEmail(email_Lower)
+                .userName(userSignUpDto.getName())
+                .userPassword(encoder.encode(userSignUpDto.getPassword()))
                 .role(Role.USER)
                 .build();
 
@@ -54,7 +55,7 @@ public class UserService {
     }
 
     @Transactional
-    public String login(UserLoginDto userLoginDto) {
+    public String login(UserDto.Login userLoginDto) {
 
         String email_Lower = userLoginDto.getEmail().toLowerCase();
 
@@ -70,5 +71,9 @@ public class UserService {
         return JwtUtil.createJwt(String.valueOf(selectedUser.getUserId()), String.valueOf(selectedUser.getRole()), secretKey, expireTimeMs);
     }
 
+    public Page<UserDto.UserProfile> getUserList(Pageable pageable) {
+        return userRepository.findAll(pageable)
+                .map(UserDto.UserProfile::userProfile);
+    }
 
 }

@@ -9,8 +9,6 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Builder
-@AllArgsConstructor
 public class Users extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,5 +31,14 @@ public class Users extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user")
     private List<ProductOrder>  productOrders;
+
+    @Builder
+    public Users(Long userId, String userEmail, String userName, String userPassword, Role role) {
+        this.userId = userId;
+        this.email = userEmail;
+        this.name = userName;
+        this.password = userPassword;
+        this.role = role;
+    }
 
 }

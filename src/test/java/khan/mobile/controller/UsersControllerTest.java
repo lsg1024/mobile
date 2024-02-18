@@ -1,8 +1,7 @@
 package khan.mobile.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import khan.mobile.dto.UserLoginDto;
-import khan.mobile.dto.UserSignUpDto;
+import khan.mobile.dto.UserDto;
 import khan.mobile.exception.AppException;
 import khan.mobile.exception.ErrorCode;
 import khan.mobile.service.UserService;
@@ -53,7 +52,7 @@ class UsersControllerTest {
 
         mockMvc.perform(post("/user/signup")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(new UserSignUpDto(email, username, password, password))))
+                .content(objectMapper.writeValueAsBytes(new UserDto.signUp(email, username, password, password))))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -68,7 +67,7 @@ class UsersControllerTest {
 
         mockMvc.perform(post("/user/signup")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(new UserSignUpDto(email, username, password, password))))
+                        .content(objectMapper.writeValueAsBytes(new UserDto.signUp(email, username, password, password))))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -80,7 +79,7 @@ class UsersControllerTest {
         String email = "123@naver.com";
         String password = "1234";
 
-        UserLoginDto userLoginDto = new UserLoginDto(email, password);
+        UserDto.Login userLoginDto = new UserDto.Login(email, password);
 
         when(userService.login(userLoginDto))
                 .thenThrow(new AppException(ErrorCode.USERNAME_NOT_FOUND, ""));
@@ -88,7 +87,7 @@ class UsersControllerTest {
         mockMvc.perform(post("user/login")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(new UserLoginDto(email, password))))
+                .content(objectMapper.writeValueAsBytes(new UserDto.Login(email, password))))
                 .andDo(print())
                 .andExpect(status().isOk());
 
