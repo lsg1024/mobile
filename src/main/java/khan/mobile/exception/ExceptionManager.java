@@ -1,7 +1,7 @@
 package khan.mobile.exception;
 
-import khan.mobile.dto.ErrorResponse;
-import khan.mobile.dto.ResponseDto;
+import khan.mobile.dto.response.ErrorResponse;
+import khan.mobile.dto.response.SuccessResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,9 +13,9 @@ import java.util.Map;
 @RestControllerAdvice
 public class ExceptionManager {
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ResponseDto> runtimeExceptionHandler(RuntimeException e) {
+    public ResponseEntity<SuccessResponse> runtimeExceptionHandler(RuntimeException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(new ResponseDto(e.getMessage()));
+                .body(new SuccessResponse(e.getMessage()));
     }
 
     @ExceptionHandler(AppException.class)

@@ -1,4 +1,4 @@
-package khan.mobile.dto;
+package khan.mobile.dto.response;
 
 import lombok.*;
 
