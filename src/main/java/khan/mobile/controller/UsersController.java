@@ -47,29 +47,29 @@ public class UsersController {
         return ResponseEntity.ok(new CommonResponse("회원가입 완료"));
     }
 
-    @PostMapping("/user/login")
-    public ResponseEntity<CommonResponse> login(@Valid @RequestBody UserDto.Login userLoginDto, BindingResult bindingResult, HttpServletResponse response) {
-
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                errors.put(error.getField(), error.getDefaultMessage());
-            }
-
-            return ResponseEntity.badRequest().body(new CommonResponse("로그인 실패", errors));
-        }
-
-        String token = userService.login(userLoginDto);
-
-        // 쿠키 생성 및 응답에 추가
-        Cookie jwtCookie = new Cookie("Authorization", token);
-
-        jwtCookie.setHttpOnly(true);
-        jwtCookie.setPath("/");
-        jwtCookie.setMaxAge(1000 * 60 * 60);
-        response.addCookie(jwtCookie);
-
-        return ResponseEntity.ok(new CommonResponse("로그인 성공"));
-    }
+//    @PostMapping("/user/login")
+//    public ResponseEntity<CommonResponse> login(@Valid @RequestBody UserDto.Login userLoginDto, BindingResult bindingResult, HttpServletResponse response) {
+//
+//        if (bindingResult.hasErrors()) {
+//            Map<String, String> errors = new HashMap<>();
+//            for (FieldError error : bindingResult.getFieldErrors()) {
+//                errors.put(error.getField(), error.getDefaultMessage());
+//            }
+//
+//            return ResponseEntity.badRequest().body(new CommonResponse("로그인 실패", errors));
+//        }
+//
+//        String token = userService.login(userLoginDto);
+//
+//        // 쿠키 생성 및 응답에 추가
+//        Cookie jwtCookie = new Cookie("Authorization", token);
+//
+//        jwtCookie.setHttpOnly(true);
+//        jwtCookie.setPath("/");
+//        jwtCookie.setMaxAge(1000 * 60 * 60);
+//        response.addCookie(jwtCookie);
+//
+//        return ResponseEntity.ok(new CommonResponse("로그인 성공"));
+//    }
 
 }
