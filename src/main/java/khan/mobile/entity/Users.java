@@ -23,6 +23,8 @@ public class Users extends BaseTimeEntity {
 
     private String name;
 
+    private String username;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -33,12 +35,17 @@ public class Users extends BaseTimeEntity {
     private List<ProductOrder>  productOrders;
 
     @Builder
-    public Users(Long userId, String userEmail, String userName, String userPassword, Role role) {
+    public Users(Long userId, String userEmail, String name, String username ,String userPassword, Role role) {
         this.userId = userId;
         this.email = userEmail;
-        this.name = userName;
+        this.name = name;
+        this.username = username;
         this.password = userPassword;
         this.role = role;
     }
 
+    public void updateOAuth2(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
 }

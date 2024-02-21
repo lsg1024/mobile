@@ -45,7 +45,7 @@ public class UserService {
 
         Users users = Users.builder()
                 .userEmail(email_Lower)
-                .userName(userSignUpDto.getName())
+                .name(userSignUpDto.getName())
                 .userPassword(encoder.encode(userSignUpDto.getPassword()))
                 .role(Role.USER)
                 .build();
@@ -54,22 +54,22 @@ public class UserService {
 
     }
 
-    @Transactional
-    public String login(UserDto.Login userLoginDto) {
+//    @Transactional
+//    public String login(UserDto.Login userLoginDto) {
 
-        String email_Lower = userLoginDto.getEmail().toLowerCase();
-
-        Users selectedUser = userRepository.findByEmail(email_Lower)
-                .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND, email_Lower + "이 없습니다."));
-
-
-        // 비밀번호 디코딩 후 틀림 여부 확인
-        if (!encoder.matches(userLoginDto.getPassword(), selectedUser.getPassword())) {
-            throw new AppException(ErrorCode.INVALID_PASSWORD, "비밀번호를 잘못 입력 했습니다");
-        }
-
-        return JwtUtil.createJwt(String.valueOf(selectedUser.getUserId()), String.valueOf(selectedUser.getRole()), secretKey, expireTimeMs);
-    }
+//        String email_Lower = userLoginDto.getEmail().toLowerCase();
+//
+//        Users selectedUser = userRepository.findByEmail(email_Lower)
+//                .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND, email_Lower + "이 없습니다."));
+//
+//
+//        // 비밀번호 디코딩 후 틀림 여부 확인
+//        if (!encoder.matches(userLoginDto.getPassword(), selectedUser.getPassword())) {
+//            throw new AppException(ErrorCode.INVALID_PASSWORD, "비밀번호를 잘못 입력 했습니다");
+//        }
+//
+//        return JwtUtil.createJwt(String.valueOf(selectedUser.getUserId()), String.valueOf(selectedUser.getRole()), secretKey, expireTimeMs);
+//    }
 
     public Page<UserDto.UserProfile> getUserList(Pageable pageable) {
         return userRepository.findAll(pageable)

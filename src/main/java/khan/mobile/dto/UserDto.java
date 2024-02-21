@@ -8,11 +8,19 @@ import khan.mobile.entity.Users;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-public class UserDto{
+public class  UserDto{
 
+    @Getter @Setter
+    public static class OAuth2UserDto {
+        private String username;
+        private String name;
+        private String email;
+        private Role role;
+    }
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
