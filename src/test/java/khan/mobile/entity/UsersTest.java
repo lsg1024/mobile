@@ -23,7 +23,7 @@ class UsersTest {
     @Test
     void createUser() {
         Users newUser = Users.builder()
-                .password("테스트를 위한 비밀번호")
+                .userPassword("테스트를 위한 비밀번호")
                 .role(Role.USER)
                 .build();
 

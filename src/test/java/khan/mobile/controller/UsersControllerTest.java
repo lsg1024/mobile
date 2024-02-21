@@ -14,6 +14,7 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.when;
@@ -29,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(UsersController.class)
 @EnableJpaAuditing
 @MockBean(JpaMetamodelMappingContext.class)
+@MockBean(SecurityFilterChain.class)
 class UsersControllerTest {
 
     @Autowired
@@ -47,12 +49,13 @@ class UsersControllerTest {
     void createUser() throws Exception {
 
         String email = "sdf@naver.com";
-        String username = "js";
-        String password = "1234";
+        String password = "js52845284!";
+        String password_confirm = "js52845284!";
+        String name = "js";
 
         mockMvc.perform(post("/user/signup")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(new UserDto.signUp(email, username, password, password))))
+                .content(objectMapper.writeValueAsBytes(new UserDto.signUp(email, password, password_confirm, name))))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -61,30 +64,32 @@ class UsersControllerTest {
     @DisplayName("회원가입 실패 - 이메일 중복")
     void createUserFail() throws Exception {
 
-        String email = "sdf@naver.com";
-        String username = "js";
-        String password = "1234";
+        String email = "zks15@naver.com";
+        String password = "js52845284!";
+        String password_confirm = "js52845284!";
+        String name = "js";
 
         mockMvc.perform(post("/user/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(new UserDto.signUp(email, username, password, password))))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(new UserDto.signUp(email, password, password_confirm, name))))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
     @DisplayName("로그인 성공")
     @WithAnonymousUser
     void login_success() throws Exception{
-        String email = "123@naver.com";
-        String password = "1234";
+
+        String email = "sdf@nave.com";
+        String password = "js52845284!";
 
         UserDto.Login userLoginDto = new UserDto.Login(email, password);
 
         when(userService.login(userLoginDto))
                 .thenThrow(new AppException(ErrorCode.USERNAME_NOT_FOUND, ""));
 
-        mockMvc.perform(post("user/login")
+        mockMvc.perform(post("/user/login")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(new UserDto.Login(email, password))))
