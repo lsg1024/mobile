@@ -5,78 +5,89 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import khan.mobile.jwt.JwtUtil;
-import khan.mobile.service.UserService;
+import khan.mobile.oauth2.CustomOAuth2User;
+import khan.mobile.dto.UserDto;
+import khan.mobile.entity.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
 
-@RequiredArgsConstructor
+
 @Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final UserService userService;
-    @Value("${SECRET_KEY}")
-    private final String secretKey;
+    private final JwtUtil jwtUtil;
+
+    public JwtFilter(JwtUtil jwtUtil) {
+
+        this.jwtUtil = jwtUtil;
+    }
 
     // 인증 전 거름망
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        final String authorization = extractToken(request);
+        String authorization = null;
+        Cookie[] cookies = request.getCookies();
+        log.info("cookie data = {}", (Object) request.getCookies());
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+
+                System.out.println(cookie.getName());
+                if (cookie.getName().equals("Authorization")) {
+
+                    authorization = cookie.getValue();
+                }
+            }
+        }
+        else {
+            log.warn("cookie data null");
+        }
 
         log.info("authorization = {}", authorization);
 
-        log.info(request.getRequestURI());
-
-        if (isSkippAblePath(request.getRequestURI())) {
-            log.info("검증이 필요없는 페이지 입니다 = {}", request.getRequestURI());
-            filterChain.doFilter(request, response);
-            return;
-        }
-
         // 토큰 여부 확인
         if (authorization == null) {
-            log.error("authentication 잘못되었습니다");
+            log.error("authorization 잘못되었습니다");
             filterChain.doFilter(request, response);
             return;
         }
+
+        log.info(request.getRequestURI());
 
         // 토큰 꺼내기
         String token = authorization;
 
         // 토큰 만료 여부 확인
-        if (JwtUtil.isExpired(token, secretKey)) {
+        if (jwtUtil.isExpired(token)) {
             log.error("authentication 만료");
             filterChain.doFilter(request, response);
             return;
         }
 
         // user_id role 값 꺼내기
-        String user_id = JwtUtil.getUserId(token, secretKey);
-        String role = JwtUtil.getRole(token, secretKey);
-        log.info("user id = {} role = {}", user_id, role);
+        String username = jwtUtil.getUserId(token);
+        String role = jwtUtil.getRole(token);
+        log.info("username = {} role = {}", username, role);
+
+        UserDto.OAuth2UserDto oAuth2UserDto = new UserDto.OAuth2UserDto();
+        oAuth2UserDto.setName(username);
+        oAuth2UserDto.setRole(Role.valueOf(role));
+
+        //UserDetails에 회원 정보 객체 담기
+        CustomOAuth2User customOAuth2User = new CustomOAuth2User(oAuth2UserDto);
 
         // 스프링 시큐리티 인증 auth 토큰 생성
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(user_id, null, List.of(new SimpleGrantedAuthority(role)));
-
-        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        Authentication authentication =
+                new UsernamePasswordAuthenticationToken(customOAuth2User, null, customOAuth2User.getAuthorities());
 
         //세션에 사용자 등록
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         filterChain.doFilter(request, response);
 
@@ -93,15 +104,4 @@ public class JwtFilter extends OncePerRequestFilter {
                 || requestURI.startsWith("/images/");
     }
 
-    private String extractToken(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("Authorization".equals(cookie.getName())) {
-                    return cookie.getValue();
-                }
-            }
-        }
-        return null;
-    }
 }
