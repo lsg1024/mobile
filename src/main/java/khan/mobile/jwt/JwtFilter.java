@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import khan.mobile.oauth2.CustomOAuth2User;
 import khan.mobile.dto.UserDto;
 import khan.mobile.entity.Role;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -91,17 +90,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
 
-    }
-
-    private boolean isSkippAblePath(String requestURI) {
-        // 로그인, 회원가입, 정적 리소스 경로를 확인
-        return requestURI.startsWith("/user/login")
-                || requestURI.startsWith("/user/signup")
-                || requestURI.startsWith("/user/find_email")
-                || requestURI.startsWith("/user/find_password")
-                || requestURI.startsWith("/css/")
-                || requestURI.startsWith("/js/")
-                || requestURI.startsWith("/images/");
     }
 
 }

@@ -21,6 +21,7 @@ public class  UserDto{
         private String email;
         private Role role;
     }
+
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter

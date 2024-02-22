@@ -43,7 +43,7 @@ public class SecurityConfig   {
                         configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
                         configuration.setAllowedMethods(Collections.singletonList("*"));
                         configuration.setAllowCredentials(true);
-                        configuration.setAllowedHeaders(Collections.singletonList("Access-Control-Allow-Origin"));
+                        configuration.setAllowedHeaders(Collections.singletonList("*"));
                         configuration.setMaxAge(3600L);
 
                         configuration.setExposedHeaders(Collections.singletonList("Set-Cookie"));
@@ -80,7 +80,7 @@ public class SecurityConfig   {
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/api/**").permitAll()
+                        .requestMatchers("/", "/user/**").permitAll()
                         .anyRequest().authenticated());
 
         //세션 설정 : STATELESS
