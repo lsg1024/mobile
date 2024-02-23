@@ -3,7 +3,9 @@ package khan.mobile.oauth2;
 import khan.mobile.dto.UserDto;
 import khan.mobile.entity.Role;
 import khan.mobile.entity.Users;
+import khan.mobile.exception.EmailAlreadyExistsException;
 import khan.mobile.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -13,13 +15,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
-
-    public CustomOAuth2UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -39,13 +38,24 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
 
         String username = oAuth2Response.getProvider()+" "+oAuth2Response.getProviderId();
-        Users findUsername = userRepository.findByUsername(username);
 
-        if (findUsername == null) {
+        String email = oAuth2Response.getEmail();
+
+        Users findUsernameAndEmail = userRepository.findByUsernameOrEmail(username, email);
+
+        if (findUsernameAndEmail.getEmail() != null && findUsernameAndEmail.getUsername() == null) {
+            log.info("이미 존재하는 회원");
+
+            return null;
+        }
+
+        log.info("findUsernameAndEmail = {}", findUsernameAndEmail);
+
+        if (findUsernameAndEmail.getUsername() == null) {
 
             Users createUser = Users.builder()
                     .username(username)
-                    .userEmail(oAuth2Response.getEmail())
+                    .userEmail(email)
                     .name(oAuth2Response.getName())
                     .role(Role.USER)
                     .build();
@@ -55,20 +65,26 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             UserDto.OAuth2UserDto oAuth2UserDto = new UserDto.OAuth2UserDto();
             oAuth2UserDto.setUsername(username);
             oAuth2UserDto.setName(oAuth2Response.getName());
-            oAuth2UserDto.setEmail(oAuth2Response.getEmail());
+            oAuth2UserDto.setEmail(email);
             oAuth2UserDto.setRole(Role.USER);
 
             return new CustomOAuth2User(oAuth2UserDto);
+
+        }
+        else if (findUsernameAndEmail.getEmail() != null && findUsernameAndEmail.getUsername() == null) {
+            log.info("이미 존재하는 회원");
+
+            throw new EmailAlreadyExistsException("이미 존재하는 이메일입니다.");
         }
         else {
-            findUsername.updateOAuth2(oAuth2Response.getName(), oAuth2Response.getEmail());
+            findUsernameAndEmail.updateOAuth2(oAuth2Response.getName(), email);
 
-            userRepository.save(findUsername);
+            userRepository.save(findUsernameAndEmail);
 
             UserDto.OAuth2UserDto oAuth2UserDto = new UserDto.OAuth2UserDto();
             oAuth2UserDto.setUsername(username);
             oAuth2UserDto.setName(oAuth2Response.getName());
-            oAuth2UserDto.setRole(findUsername.getRole());
+            oAuth2UserDto.setRole(findUsernameAndEmail.getRole());
 
             return new CustomOAuth2User(oAuth2UserDto);
         }
