@@ -10,18 +10,10 @@ import java.util.Map;
 
 public class CustomOAuth2User implements OAuth2User {
 
-    private UserDto.OAuth2UserDto oAuth2UserDto;
-    // test code 실패시 삭제
-    private Map<String, Object> attributes;
+    private final UserDto.OAuth2UserDto oAuth2UserDto;
 
     public CustomOAuth2User(UserDto.OAuth2UserDto oAuth2UserDto) {
         this.oAuth2UserDto = oAuth2UserDto;
-    }
-
-    // test code 실패시 삭제
-    public CustomOAuth2User(UserDto.OAuth2UserDto oAuth2UserDto, Map<String, Object> attributes) {
-        this.oAuth2UserDto = oAuth2UserDto;
-        this.attributes = attributes;
     }
 
     @Override

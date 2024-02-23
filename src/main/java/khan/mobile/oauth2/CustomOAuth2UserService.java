@@ -3,13 +3,13 @@ package khan.mobile.oauth2;
 import khan.mobile.dto.UserDto;
 import khan.mobile.entity.Role;
 import khan.mobile.entity.Users;
-import khan.mobile.exception.EmailAlreadyExistsException;
 import khan.mobile.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
@@ -43,15 +43,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         Users findUsernameAndEmail = userRepository.findByUsernameOrEmail(username, email);
 
-        if (findUsernameAndEmail.getEmail() != null && findUsernameAndEmail.getUsername() == null) {
-            log.info("이미 존재하는 회원");
-
-            return null;
-        }
-
         log.info("findUsernameAndEmail = {}", findUsernameAndEmail);
 
-        if (findUsernameAndEmail.getUsername() == null) {
+        if (findUsernameAndEmail == null) {
 
             Users createUser = Users.builder()
                     .username(username)
@@ -72,9 +66,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         }
         else if (findUsernameAndEmail.getEmail() != null && findUsernameAndEmail.getUsername() == null) {
-            log.info("이미 존재하는 회원");
-
-            throw new EmailAlreadyExistsException("이미 존재하는 이메일입니다.");
+            OAuth2Error oAuth2Error = new OAuth2Error("error");
+            throw new OAuth2AuthenticationException(oAuth2Error, oAuth2Error.toString());
         }
         else {
             findUsernameAndEmail.updateOAuth2(oAuth2Response.getName(), email);
