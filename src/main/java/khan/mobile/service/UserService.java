@@ -1,6 +1,5 @@
 package khan.mobile.service;
 
-import jakarta.servlet.http.Cookie;
 import khan.mobile.dto.UserDto;
 import khan.mobile.entity.Role;
 import khan.mobile.entity.Users;
@@ -16,7 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,7 +36,7 @@ public class UserService {
     private String secretKey;
 
     @Transactional
-    public void createUser(UserDto.signUp userSignUpDto) {
+    public void createUser(UserDto.SignUp userSignUpDto) {
 
         String email_Lower = userSignUpDto.getEmail().toLowerCase();
 
@@ -62,16 +60,16 @@ public class UserService {
     }
 
     @Transactional
-    public String login(UserDto.Login userLoginDto) {
+    public String login(UserDto.SignIn userSignInDto) {
 
-        String email_Lower = userLoginDto.getEmail().toLowerCase();
+        String email_Lower = userSignInDto.getEmail().toLowerCase();
 
         Users selectedUser = userRepository.findByEmail(email_Lower)
                 .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND, email_Lower + "이 없습니다."));
 
 
         // 비밀번호 디코딩 후 틀림 여부 확인
-        if (!encoder.matches(userLoginDto.getPassword(), selectedUser.getPassword())) {
+        if (!encoder.matches(userSignInDto.getPassword(), selectedUser.getPassword())) {
             throw new AppException(ErrorCode.INVALID_PASSWORD, "비밀번호를 잘못 입력 했습니다");
         }
 

@@ -31,7 +31,7 @@ public class UsersController {
     }
 
     @PostMapping("/user/signup")
-    public ResponseEntity<CommonResponse> signup(@Valid @RequestBody UserDto.signUp signUpDto, BindingResult bindingResult) {
+    public ResponseEntity<CommonResponse> signup(@Valid @RequestBody UserDto.SignUp signUpDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
@@ -48,7 +48,7 @@ public class UsersController {
     }
 
     @PostMapping("/user/login")
-    public ResponseEntity<CommonResponse> login(@Valid @RequestBody UserDto.Login userLoginDto, BindingResult bindingResult, HttpServletResponse response) {
+    public ResponseEntity<CommonResponse> login(@Valid @RequestBody UserDto.SignIn userSignInDto, BindingResult bindingResult, HttpServletResponse response) {
 
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
@@ -59,7 +59,7 @@ public class UsersController {
             return ResponseEntity.badRequest().body(new CommonResponse("로그인 실패", errors));
         }
 
-        String token = userService.login(userLoginDto);
+        String token = userService.login(userSignInDto);
 
         // 쿠키 생성 및 응답에 추가
         Cookie jwtCookie = new Cookie("Authorization", token);

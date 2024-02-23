@@ -55,7 +55,7 @@ class UsersControllerTest {
 
         mockMvc.perform(post("/user/signup")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(new UserDto.signUp(email, password, password_confirm, name))))
+                .content(objectMapper.writeValueAsBytes(new UserDto.SignUp(email, password, password_confirm, name))))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -71,7 +71,7 @@ class UsersControllerTest {
 
         mockMvc.perform(post("/user/signup")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(new UserDto.signUp(email, password, password_confirm, name))))
+                .content(objectMapper.writeValueAsBytes(new UserDto.SignUp(email, password, password_confirm, name))))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -84,15 +84,15 @@ class UsersControllerTest {
         String email = "sdf@nave.com";
         String password = "js52845284!";
 
-        UserDto.Login userLoginDto = new UserDto.Login(email, password);
+        UserDto.SignIn userSignInDto = new UserDto.SignIn(email, password);
 
-        when(userService.login(userLoginDto))
+        when(userService.login(userSignInDto))
                 .thenThrow(new AppException(ErrorCode.USERNAME_NOT_FOUND, ""));
 
         mockMvc.perform(post("/user/login")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(new UserDto.Login(email, password))))
+                .content(objectMapper.writeValueAsBytes(new UserDto.SignIn(email, password))))
                 .andDo(print())
                 .andExpect(status().isOk());
 
