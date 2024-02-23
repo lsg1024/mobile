@@ -10,7 +10,7 @@ spring:
             client-secret: ${Kakao_Client_SECRET}
             authorization-grant-type: authorization_code
             provider: kakao
-            redirect-uri: ${Kakao_Redirect}
+            redirect-uri: ${Kakao_Redirect-URI}
             scope:
               - profile_nickname
               - account_email
