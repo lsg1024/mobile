@@ -2,9 +2,7 @@ package khan.mobile.controller;
 
 import jakarta.validation.Valid;
 import khan.mobile.dto.response.CommonResponse;
-import khan.mobile.dto.response.ErrorResponse;
 import khan.mobile.dto.ProductDto;
-import khan.mobile.dto.response.SuccessResponse;
 import khan.mobile.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +32,7 @@ public class ProductController {
     }
 
     @PostMapping("/product/update")
-    public ResponseEntity<?> updateProduct(@RequestHeader("userId") Long userId,
+    public ResponseEntity<CommonResponse> updateProduct(@RequestHeader("userId") Long userId,
                                            @RequestHeader("productId") Long productId,
                                            @Valid @RequestBody ProductDto productDto, BindingResult bindingResult) {
 
@@ -45,11 +42,11 @@ public class ProductController {
                 errors.put(error.getField(), error.getDefaultMessage());
             }
 
-            return ResponseEntity.badRequest().body(new ErrorResponse("상품 업데이트 실패", errors));
+            return ResponseEntity.badRequest().body(new CommonResponse("상품 업데이트 실패", errors));
         }
 
-        ProductDto result = productService.updateProduct(userId, productId, productDto);
-        return ResponseEntity.ok(result);
+        productService.updateProduct(userId, productId, productDto);
+        return ResponseEntity.ok().body(new CommonResponse("업데이트 완료"));
     }
 
     @GetMapping("/api/product")

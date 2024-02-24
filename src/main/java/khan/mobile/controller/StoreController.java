@@ -1,14 +1,12 @@
 package khan.mobile.controller;
 
 import khan.mobile.dto.response.CommonResponse;
-import khan.mobile.dto.response.SuccessResponse;
 import khan.mobile.dto.StoreDto;
 import khan.mobile.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

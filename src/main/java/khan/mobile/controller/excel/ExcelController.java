@@ -1,6 +1,5 @@
 package khan.mobile.controller.excel;
 
-import jakarta.servlet.http.HttpSession;
 import khan.mobile.dto.StoreDto;
 import khan.mobile.service.StoreService;
 import lombok.RequiredArgsConstructor;
@@ -12,12 +11,9 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,9 +21,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-public class StoreExcelController {
-
-    private final StoreService storeService;
+public class ExcelController {
 
     //엑셀 값 읽기
     @PostMapping("/api/excel/read")
