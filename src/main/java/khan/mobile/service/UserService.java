@@ -30,7 +30,7 @@ public class UserService {
 
     private final BCryptPasswordEncoder encoder;
     private final JwtUtil jwtUtil;
-    private Long expireTimeMs = 1000 * 60 * 60l;
+    private final Long expireTimeMs = 1000 * 60 * 60L;
 
     @Value("${SECRET_KEY}")
     private String secretKey;

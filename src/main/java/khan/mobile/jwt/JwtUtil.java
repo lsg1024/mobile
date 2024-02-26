@@ -1,6 +1,7 @@
 package khan.mobile.jwt;
 
 import io.jsonwebtoken.Jwts;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -11,9 +12,10 @@ import java.util.Date;
 
 
 @Component
+@Slf4j
 public class JwtUtil {
 
-    private SecretKey secretKey;
+    private final SecretKey secretKey;
 
     public JwtUtil(@Value("${SECRET_KEY}") String secret) {
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
@@ -34,7 +36,10 @@ public class JwtUtil {
     // jwt 토큰 생성
     public String createJwt(String username, String role, Long expireTime) {
 
+        log.info("만료 시간 = {}", expireTime);
+        log.info("현재 시간 = {}", new Date(System.currentTimeMillis()));
         return Jwts.builder()
+
                 .claim("username", username)
                 .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis())) // 현재 시간
