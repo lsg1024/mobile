@@ -1,5 +1,7 @@
 package khan.mobile.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import khan.mobile.dto.UserDto;
 import khan.mobile.entity.Role;
 import khan.mobile.entity.Users;
@@ -10,6 +12,7 @@ import khan.mobile.oauth2.CustomOAuth2User;
 import khan.mobile.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.DataFormat;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +22,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +67,7 @@ public class UserService {
     }
 
     @Transactional
-    public String login(UserDto.SignIn userSignInDto) {
+    public List<String> login(UserDto.SignIn userSignInDto) {
 
         String email_Lower = userSignInDto.getEmail().toLowerCase();
 
@@ -74,11 +81,12 @@ public class UserService {
         }
 
         // JWT 생성
-        String token = jwtUtil.createJwt(String.valueOf(selectedUser.getUserId()), String.valueOf(selectedUser.getRole()), expireTimeMs);
+        String token = jwtUtil.createJwt(String.valueOf(selectedUser.getUserId()), selectedUser.getName(), String.valueOf(selectedUser.getRole()), expireTimeMs);
 
         // 스프링 시큐리티 인증 처리
         UserDto.OAuth2UserDto oAuth2UserDto = new UserDto.OAuth2UserDto();
         oAuth2UserDto.setEmail(selectedUser.getEmail());
+        oAuth2UserDto.setName(selectedUser.getName());
         oAuth2UserDto.setRole(selectedUser.getRole());
 
         CustomOAuth2User customOAuth2User = new CustomOAuth2User(oAuth2UserDto);
@@ -86,7 +94,14 @@ public class UserService {
         Authentication authentication = new UsernamePasswordAuthenticationToken(customOAuth2User, null, customOAuth2User.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return token;
+        SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        List<String> result = new ArrayList<>();
+        result.add(token);
+        result.add(String.valueOf(selectedUser.getName()));
+        result.add(dataFormat.format(new Date(System.currentTimeMillis() + expireTimeMs)));
+
+        return result;
     }
 
     public Page<UserDto.UserProfile> getUserList(Pageable pageable) {

@@ -15,6 +15,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -59,16 +60,18 @@ public class UsersController {
             return ResponseEntity.badRequest().body(new CommonResponse("로그인 실패", errors));
         }
 
-        String token = userService.login(userSignInDto);
+        List<String> result = userService.login(userSignInDto);
 
         // 쿠키 생성 및 응답에 추가
-        Cookie jwtCookie = new Cookie("Authorization", token);
+        Cookie jwtCookie = new Cookie("Authorization", result.get(0));
 
         jwtCookie.setHttpOnly(true);
         jwtCookie.setPath("/");
-        jwtCookie.setMaxAge(60 * 60 * 60);
+        jwtCookie.setMaxAge(1000 * 60 * 60);
 
         response.addCookie(jwtCookie);
+        response.addHeader("name", result.get(1));
+        response.addHeader("time", result.get(2));
 
         return ResponseEntity.ok(new CommonResponse("로그인 성공"));
     }
