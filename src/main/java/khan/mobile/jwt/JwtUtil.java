@@ -22,7 +22,11 @@ public class JwtUtil {
     }
 
     public String getUserId(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("username", String.class);
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("id", String.class);
+    }
+
+    public String getName(String token) {
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("name", String.class);
     }
 
     public String getRole(String token) {
@@ -36,8 +40,6 @@ public class JwtUtil {
     // jwt 토큰 생성
     public String createJwt(String id, String name, String role, Long expireTime) {
 
-        log.info("만료 시간 = {}", expireTime);
-        log.info("현재 시간 = {}", new Date(System.currentTimeMillis()));
         return Jwts.builder()
                 .claim("id", id)
                 .claim("name", name)

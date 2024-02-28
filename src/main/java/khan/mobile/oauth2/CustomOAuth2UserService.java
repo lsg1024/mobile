@@ -57,7 +57,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             userRepository.save(createUser);
 
             UserDto.OAuth2UserDto oAuth2UserDto = new UserDto.OAuth2UserDto();
-            oAuth2UserDto.setId(createUser.getUserId());
+            oAuth2UserDto.setId(String.valueOf(createUser.getUserId()));
             oAuth2UserDto.setUsername(createUser.getUsername());
             oAuth2UserDto.setName(createUser.getName());
             oAuth2UserDto.setEmail(createUser.getEmail());
@@ -76,7 +76,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             userRepository.save(findUsernameAndEmail);
 
             UserDto.OAuth2UserDto oAuth2UserDto = new UserDto.OAuth2UserDto();
-            oAuth2UserDto.setId(findUsernameAndEmail.getUserId());
+            oAuth2UserDto.setId(String.valueOf(findUsernameAndEmail.getUserId()));
             oAuth2UserDto.setUsername(username);
             oAuth2UserDto.setName(oAuth2Response.getName());
             oAuth2UserDto.setEmail(findUsernameAndEmail.getEmail());

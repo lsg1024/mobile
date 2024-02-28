@@ -16,7 +16,7 @@ public class  UserDto{
 
     @Getter @Setter
     public static class OAuth2UserDto {
-        private Long id;
+        private String id;
         private String username;
         private String name;
         private String email;

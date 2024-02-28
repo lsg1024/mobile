@@ -68,13 +68,14 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        // user_id role 값 꺼내기
-        String username = jwtUtil.getUserId(token);
+        String id = jwtUtil.getUserId(token);
+        String name = jwtUtil.getName(token);
         String role = jwtUtil.getRole(token);
-        log.info("username = {} role = {}", username, role);
+        log.info("id = {} name = {} role = {}", id, name, role);
 
         UserDto.OAuth2UserDto oAuth2UserDto = new UserDto.OAuth2UserDto();
-        oAuth2UserDto.setName(username);
+        oAuth2UserDto.setId(id);
+        oAuth2UserDto.setName(name);
         oAuth2UserDto.setRole(Role.valueOf(role));
 
         //UserDetails에 회원 정보 객체 담기
