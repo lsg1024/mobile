@@ -3,6 +3,7 @@ package khan.mobile.controller;
 import jakarta.validation.Valid;
 import khan.mobile.dto.response.CommonResponse;
 import khan.mobile.dto.ProductDto;
+import khan.mobile.repository.ProductRepository;
 import khan.mobile.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,10 +24,11 @@ import java.util.Map;
 public class ProductController {
 
     private final ProductService productService;
+    private final ProductRepository productRepository;
 
     @PostMapping("/product/create")
     public ResponseEntity<CommonResponse> createProduct(@RequestHeader("userId") Long userId,
-                                                        @RequestBody ProductDto productDto) {
+                                                        @RequestBody ProductDto.Create productDto) {
         productService.createProduct(userId, productDto);
         return ResponseEntity.ok(new CommonResponse("생성 완료"));
     }
@@ -34,7 +36,7 @@ public class ProductController {
     @PostMapping("/product/update")
     public ResponseEntity<CommonResponse> updateProduct(@RequestHeader("userId") Long userId,
                                            @RequestHeader("productId") Long productId,
-                                           @Valid @RequestBody ProductDto productDto, BindingResult bindingResult) {
+                                           @Valid @RequestBody ProductDto.Create productDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
@@ -52,6 +54,11 @@ public class ProductController {
     @GetMapping("/api/product")
     public Page<ProductDto> getAPIProductList(@PageableDefault(size = 9) Pageable pageable) {
         return productService.getProductList(pageable);
+    }
+
+    @GetMapping("/api/products")
+    public Page<ProductDto.ProductDataSet> getProductList(ProductDto.ProductCondition condition, Pageable pageable) {
+        return productRepository.findProductPageable(condition, pageable);
     }
 
     @GetMapping("/api/product/search")

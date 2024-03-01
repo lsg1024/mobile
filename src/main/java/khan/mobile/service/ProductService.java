@@ -24,7 +24,7 @@ public class ProductService {
 
     //상품 생성
     @Transactional
-    public void createProduct(Long userId, ProductDto productDto) {
+    public void createProduct(Long userId, ProductDto.Create productDto) {
         //엔티티 조회
         validateUser(userId);
 
@@ -48,7 +48,7 @@ public class ProductService {
 
     //상품 수정
     @Transactional
-    public ProductDto updateProduct(Long userId, Long productId, ProductDto productDto) {
+    public void updateProduct(Long userId, Long productId, ProductDto.Create productDto) {
         //엔티티 조회
         validateUser(userId);
         Products findProduct = validateProduct(productId);
@@ -61,8 +61,6 @@ public class ProductService {
                 productDto.getWeight(),
                 productDto.getOther()
         );
-
-        return ProductDto.productDto(findProduct);
 
     }
 

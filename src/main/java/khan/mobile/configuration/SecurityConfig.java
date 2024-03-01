@@ -65,15 +65,15 @@ public class SecurityConfig   {
                 .formLogin(AbstractHttpConfigurer::disable);
 
         //로그아웃
-        http
-                .logout((logoutConfig -> {
-                    logoutConfig
-                            .logoutUrl("/logout")
-                            .logoutSuccessUrl("/logout?logout")
-                            .invalidateHttpSession(true)
-                            .deleteCookies("JSESSIONID")
-                            .permitAll();
-                }));
+//        http
+//                .logout((logoutConfig -> {
+//                    logoutConfig
+//                            .logoutUrl("/logout")
+//                            .logoutSuccessUrl("/logout?logout")
+//                            .invalidateHttpSession(true)
+//                            .deleteCookies("JSESSIONID")
+//                            .permitAll();
+//                }));
 
 
         //HTTP Basic 인증 방식 disable
