@@ -1,6 +1,5 @@
 package khan.mobile.oauth2;
 
-import khan.mobile.oauth2.OAuth2Response;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;

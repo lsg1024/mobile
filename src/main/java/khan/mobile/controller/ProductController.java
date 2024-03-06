@@ -57,7 +57,7 @@ public class ProductController {
     }
 
     @GetMapping("/api/products")
-    public Page<ProductDto.ProductDataSet> getProductList(ProductDto.ProductCondition condition, Pageable pageable) {
+    public Page<ProductDto.ProductDataSet> getProductList(ProductDto.ProductCondition condition, @PageableDefault(size = 9) Pageable pageable) {
         return productRepository.findProductPageable(condition, pageable);
     }
 

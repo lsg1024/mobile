@@ -61,21 +61,18 @@ public class ProductDto {
         private Float size;
         private Float weight;
         private String other;
-        private Long imageId;
-        private String imageUrl;
+        private String imagePath;
         private Long userId;
         private Long factoryId;
 
         @QueryProjection
-        public ProductDataSet(Long id, String name, String color, Float size, Float weight, String other, Long imageId, String imageUrl, Long userId, Long factoryId) {
+        public ProductDataSet(Long id, String name, String color, Float size, Float weight, String other, Long userId, Long factoryId) {
             this.id = id;
             this.name = name;
             this.color = color;
             this.size = size;
             this.weight = weight;
             this.other = other;
-            this.imageId = imageId;
-            this.imageUrl = imageUrl;
             this.userId = userId;
             this.factoryId = factoryId;
         }
