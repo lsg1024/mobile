@@ -7,12 +7,15 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import khan.mobile.dto.ProductDto;
 import khan.mobile.dto.ProductOrderItemDetailDto;
+import khan.mobile.dto.QProductDto;
 import khan.mobile.dto.QProductDto_ProductDataSet;
 import khan.mobile.entity.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -112,7 +115,6 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
         JPAQuery<Long> countQuery = queryFactory
                 .select(products.count())
                 .from(products)
-                .leftJoin(products.productImage, productImage)
                 .leftJoin(products.user, users)
                 .leftJoin(products.factory, factories)
                 .where(
@@ -122,9 +124,38 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
+    @Override
+    public ProductDto findProductDetail(Long productId) {
+
+        List<ProductImage> images = queryFactory
+                .selectFrom(productImage)
+                .leftJoin(productImage.products, products)
+                .where(products.productId.eq(productId))
+                .fetch();
+
+        Products productEntity = queryFactory
+                .selectFrom(products)
+                .where(products.productId.eq(productId))
+                .fetchOne();
+
+        return ProductDto.builder()
+                .id(productEntity.getProductId())
+                .name(productEntity.getProductName())
+                .color(productEntity.getProductColor())
+                .size(productEntity.getProductSize())
+                .weight(productEntity.getProductWeight())
+                .other(productEntity.getProductOther())
+                .images(images)
+                .userId(productEntity.getUser().getUserId())
+                .factoryId(productEntity.getFactory().getFactoryId())
+                .build();
+    }
+
 
     private BooleanExpression productNameEq(String productName) {
-        return !hasText(productName) ? null : products.productName.eq(productName);
+        return !hasText(productName) ? null : products.productName.like("%" + productName + "%");
     }
+
+
 
 }

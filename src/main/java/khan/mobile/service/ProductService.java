@@ -2,6 +2,7 @@ package khan.mobile.service;
 
 import khan.mobile.dto.ProductDto;
 import khan.mobile.entity.Factories;
+import khan.mobile.entity.ProductImage;
 import khan.mobile.entity.Products;
 import khan.mobile.entity.Users;
 import khan.mobile.repository.FactoryRepository;
@@ -13,25 +14,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final UserRepository userRepository;
     private final FactoryRepository factoryRepository;
 
     //상품 생성
     @Transactional
     public void createProduct(Long userId, ProductDto.Create productDto) {
-        //엔티티 조회
-        validateUser(userId);
 
-        //상품 생성
-        /*
-          TODO : 공장 값을 파라미터로 받아 저장하는 코드 필요
-         */
         Products product = Products.builder()
                 .productName(productDto.getName())
                 .productColor(productDto.getColor())
@@ -49,25 +45,25 @@ public class ProductService {
     //상품 수정
     @Transactional
     public void updateProduct(Long userId, Long productId, ProductDto.Create productDto) {
-        //엔티티 조회
-        validateUser(userId);
+
         Products findProduct = validateProduct(productId);
-
-        //상품 수정
-        findProduct.updateProduct(
-                productDto.getName(),
-                productDto.getColor(),
-                productDto.getSize(),
-                productDto.getWeight(),
-                productDto.getOther()
-        );
-
+        if (findProduct.getUser().getUserId().equals(userId)) {
+            //상품 수정
+            findProduct.updateProduct(
+                    productDto.getName(),
+                    productDto.getColor(),
+                    productDto.getSize(),
+                    productDto.getWeight(),
+                    productDto.getOther()
+            );
+        } else {
+            throw new IllegalArgumentException("일치하는 유저 정보가 없음");
+        }
     }
 
     //상품 출력
-    public Page<ProductDto> getProductList(Pageable pageable) {
-        return productRepository.findAll(pageable)
-                .map(ProductDto::productDto);
+    public Page<ProductDto.ProductDataSet> getProductList(ProductDto.ProductCondition condition, Pageable pageable) {
+        return productRepository.findProductPageable(condition, pageable);
     }
 
     //상품 삭제
@@ -75,17 +71,12 @@ public class ProductService {
 
     }
 
-    // 상품 검색
-    public Page<ProductDto> getSearchProductList(String productName, Pageable pageable) {
-
-        Page<Products> result = productRepository.findByProductNameContaining(productName, pageable);
-
-        return result.map(ProductDto::productDto);
-    }
-
     //상품 상세
+    /**
+     * 상품 N+1 문제 발생
+     */
     public ProductDto getProductDetail(Long product_id) {
-//        validateUser(user_id);
+
         Products findProduct = validateProduct(product_id);
 
         return ProductDto.builder()
@@ -106,10 +97,6 @@ public class ProductService {
 
     private Factories validateFactory(Long factory_id) {
         return factoryRepository.findById(factory_id).orElseThrow(() -> new IllegalArgumentException("일치하는 공장 정보가 없습니다"));
-    }
-
-    private Users validateUser(Long user_id) {
-        return userRepository.findById(user_id).orElseThrow(() -> new IllegalArgumentException("일치하는 유저 정보가 없습니다"));
     }
 
 }

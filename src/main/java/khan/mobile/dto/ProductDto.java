@@ -14,7 +14,6 @@ import java.util.List;
 
 @Getter @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class ProductDto {
 
@@ -25,8 +24,21 @@ public class ProductDto {
     private Float weight;
     private String other;
     private List<ProductImage> images;
-    private Users user;
-    private Factories factory;
+    private Long userId;
+    private Long factoryId;
+
+    @QueryProjection
+    public ProductDto(Long id, String name, String color, Float size, Float weight, String other, List<ProductImage> images, Long userId, Long factoryId) {
+        this.id = id;
+        this.name = name;
+        this.color = color;
+        this.size = size;
+        this.weight = weight;
+        this.other = other;
+        this.images = images;
+        this.userId = userId;
+        this.factoryId = factoryId;
+    }
 
     @Getter @Setter
     public static class Create {
@@ -48,7 +60,7 @@ public class ProductDto {
 
     }
 
-    @Data
+    @Getter @Setter
     public static class ProductCondition {
         private String productName;
     }
@@ -76,18 +88,5 @@ public class ProductDto {
             this.userId = userId;
             this.factoryId = factoryId;
         }
-    }
-
-    @Builder
-    public static ProductDto productDto(Products products) {
-        return ProductDto.builder()
-                .id(products.getProductId())
-                .name(products.getProductName())
-                .color(products.getProductColor())
-                .size(products.getProductSize())
-                .weight(products.getProductWeight())
-                .other(products.getProductOther())
-                .images(products.getProductImage())
-                .build();
     }
 }

@@ -3,6 +3,7 @@ package khan.mobile.controller;
 import jakarta.validation.Valid;
 import khan.mobile.dto.response.CommonResponse;
 import khan.mobile.dto.ProductDto;
+import khan.mobile.oauth2.CustomOAuth2User;
 import khan.mobile.repository.ProductRepository;
 import khan.mobile.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -24,19 +26,17 @@ import java.util.Map;
 public class ProductController {
 
     private final ProductService productService;
-    private final ProductRepository productRepository;
 
-    @PostMapping("/product/create")
-    public ResponseEntity<CommonResponse> createProduct(@RequestHeader("userId") Long userId,
-                                                        @RequestBody ProductDto.Create productDto) {
-        productService.createProduct(userId, productDto);
+    @PostMapping("/api/product/create")
+    public ResponseEntity<CommonResponse> createProduct(@RequestBody ProductDto.Create productDto, @AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
+        productService.createProduct(Long.valueOf(customOAuth2User.getId()), productDto);
         return ResponseEntity.ok(new CommonResponse("생성 완료"));
     }
 
-    @PostMapping("/product/update")
-    public ResponseEntity<CommonResponse> updateProduct(@RequestHeader("userId") Long userId,
-                                           @RequestHeader("productId") Long productId,
-                                           @Valid @RequestBody ProductDto.Create productDto, BindingResult bindingResult) {
+    @PostMapping("/api/product/update")
+    public ResponseEntity<CommonResponse> updateProduct(@RequestHeader("productId") Long productId,
+                                            @Valid @RequestBody ProductDto.Create productDto, BindingResult bindingResult,
+                                            @AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
 
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
@@ -47,23 +47,20 @@ public class ProductController {
             return ResponseEntity.badRequest().body(new CommonResponse("상품 업데이트 실패", errors));
         }
 
-        productService.updateProduct(userId, productId, productDto);
+        productService.updateProduct(Long.parseLong(customOAuth2User.getId()), productId, productDto);
         return ResponseEntity.ok().body(new CommonResponse("업데이트 완료"));
-    }
-
-    @GetMapping("/api/product")
-    public Page<ProductDto> getAPIProductList(@PageableDefault(size = 9) Pageable pageable) {
-        return productService.getProductList(pageable);
     }
 
     @GetMapping("/api/products")
     public Page<ProductDto.ProductDataSet> getProductList(ProductDto.ProductCondition condition, @PageableDefault(size = 9) Pageable pageable) {
-        return productRepository.findProductPageable(condition, pageable);
+        return productService.getProductList(condition, pageable);
     }
 
-    @GetMapping("/api/product/search")
-    public Page<ProductDto> getProductSearchList(@RequestParam("productSearch") String productName, @PageableDefault(size = 9) Pageable pageable) {
-        return productService.getSearchProductList(productName, pageable);
+    @GetMapping("/api/products/search")
+    public Page<ProductDto.ProductDataSet> getProductSearchList(@RequestParam("productSearch") String getProductName, @PageableDefault(size = 9) Pageable pageable) {
+        ProductDto.ProductCondition condition = new ProductDto.ProductCondition();
+        condition.setProductName(getProductName);
+        return productService.getProductList(condition, pageable);
     }
 
     @GetMapping("/api/product/detail/{id}")

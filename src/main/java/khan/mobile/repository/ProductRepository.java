@@ -9,5 +9,4 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 public interface ProductRepository extends JpaRepository<Products, Long>, ProductRepositoryCustom ,QuerydslPredicateExecutor<Products> {
     Page<Products> findByProductNameContaining(String name, Pageable pageable);
 
-
 }
