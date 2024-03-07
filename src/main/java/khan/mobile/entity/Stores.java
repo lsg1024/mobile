@@ -1,6 +1,7 @@
 package khan.mobile.entity;
 
 import jakarta.persistence.*;
+import khan.mobile.entity.auditing.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +12,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Stores {
+public class Stores extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "store_id")

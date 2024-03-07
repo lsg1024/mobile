@@ -2,6 +2,7 @@ package khan.mobile.entity;
 
 import jakarta.persistence.*;
 import khan.mobile.dto.FactoryDto;
+import khan.mobile.entity.auditing.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +13,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Factories {
+public class Factories extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "factoryId")
