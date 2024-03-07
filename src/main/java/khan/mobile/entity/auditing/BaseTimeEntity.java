@@ -1,14 +1,14 @@
 package khan.mobile.entity.auditing;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
@@ -17,9 +17,21 @@ public class BaseTimeEntity {
 
     @CreatedDate
     @Column(updatable = false)
-    private LocalDateTime createDate;
+    private String createDate;
 
     @LastModifiedDate
-    private LocalDateTime lastModifiedDate;
+    private String lastModifiedDate;
+
+    @PrePersist
+    public void onPrePersist(){
+        this.createDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        this.lastModifiedDate = this.createDate;
+    }
+
+    @PreUpdate
+    public void onPreUpdate(){
+        this.lastModifiedDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
 
 }
