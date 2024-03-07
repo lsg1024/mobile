@@ -84,18 +84,4 @@ public class UsersController {
         return ResponseEntity.ok(new CommonResponse("로그인 성공"));
     }
 
-    @GetMapping("/userInfo")
-    public ResponseEntity<CommonResponse> oauthLoginInfo(@AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
-
-        String id = customOAuth2User.getId();
-        String username = customOAuth2User.getName();
-        String role = customOAuth2User.getAuthorities().stream().map(GrantedAuthority::getAuthority).findFirst().orElse("No role");
-
-        log.info("id = {}", id);
-        log.info("username = {}", username);
-        log.info("role = {}", role);
-
-        return ResponseEntity.ok().body(new CommonResponse(username));
-    }
-
 }

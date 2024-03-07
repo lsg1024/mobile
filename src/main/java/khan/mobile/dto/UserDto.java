@@ -58,6 +58,7 @@ public class  UserDto{
     }
 
     @AllArgsConstructor
+    @NoArgsConstructor
     @Getter
     public static class UserProfile {
 
@@ -65,7 +66,7 @@ public class  UserDto{
         private String userEmail;
         private String userName;
         private Role role;
-        private LocalDateTime lastModifiedDate;
+        private String lastModifiedDate;
 
         public static UserProfile userProfile(Users users) {
             return new UserProfile(
