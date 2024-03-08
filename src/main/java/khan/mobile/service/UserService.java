@@ -41,9 +41,7 @@ public class UserService {
 
         String email_Lower = userSignUpDto.getEmail().toLowerCase();
 
-        userRepository.findByEmail(email_Lower).ifPresent(user -> {
-            throw new AppException(ErrorCode.USERNAME_DUPLICATED, email_Lower + "는 이미 존재하는 이메일 입니다");
-        });
+        userRepository.findByEmail(email_Lower);
 
         if (!userSignUpDto.getPassword().equals(userSignUpDto.getPassword_confirm())) {
             throw new AppException(ErrorCode.PASSWORD_CONFIRMATION_FAILED, "동일한 비밀번호로 작성해주세요");
@@ -65,8 +63,7 @@ public class UserService {
 
         String email_Lower = userSignInDto.getEmail().toLowerCase();
 
-        Users selectedUser = userRepository.findByEmail(email_Lower)
-                .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND, email_Lower + "이 없습니다."));
+        Users selectedUser = userRepository.findByEmail(email_Lower);
 
 
         // 비밀번호 디코딩 후 틀림 여부 확인
