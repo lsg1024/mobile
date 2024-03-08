@@ -10,6 +10,7 @@ public enum ErrorCode {
     USERNAME_DUPLICATED(HttpStatus.CONFLICT, ""),
     USERNAME_NOT_FOUND(HttpStatus.NOT_FOUND, ""),
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, ""),
+    EMAIL_DUPLICATE_FAILED(HttpStatus.BAD_REQUEST, ""),
     PASSWORD_CONFIRMATION_FAILED(HttpStatus.BAD_REQUEST, "");
 
     private final HttpStatus httpStatus;
