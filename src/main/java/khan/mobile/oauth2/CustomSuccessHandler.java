@@ -40,7 +40,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String role = auth.getAuthority();
 
         Long expireTimeMs = 1000 * 60 * 60L;
-        String token = jwtUtil.createJwt(id, name, role, expireTimeMs);
+        String token = jwtUtil.createJwt("access", id, name, role, expireTimeMs);
 
         response.addCookie(createCookie("Authorization", token));
         log.info("onAuthenticationSuccess Cookie {}", token);

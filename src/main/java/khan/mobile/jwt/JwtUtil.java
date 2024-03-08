@@ -21,6 +21,9 @@ public class JwtUtil {
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
     }
 
+    public String getCategory(String token) {
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("category", String.class);
+    }
     public String getUserId(String token) {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("id", String.class);
     }
@@ -38,9 +41,10 @@ public class JwtUtil {
     }
 
     // jwt 토큰 생성
-    public String createJwt(String id, String name, String role, Long expireTime) {
+    public String createJwt(String category, String id, String name, String role, Long expireTime) {
 
         return Jwts.builder()
+                .claim("category", category)
                 .claim("id", id)
                 .claim("name", name)
                 .claim("role", role)

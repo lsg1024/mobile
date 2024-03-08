@@ -73,7 +73,7 @@ public class UserService {
 
         // JWT 생성
         Long expireTimeMs = 1000 * 60 * 60L;
-        String token = jwtUtil.createJwt(String.valueOf(selectedUser.getUserId()), selectedUser.getName(), String.valueOf(selectedUser.getRole()), expireTimeMs);
+        String token = jwtUtil.createJwt("access", String.valueOf(selectedUser.getUserId()), selectedUser.getName(), String.valueOf(selectedUser.getRole()), expireTimeMs);
 
         // 스프링 시큐리티 인증 처리
         UserDto.OAuth2UserDto oAuth2UserDto = new UserDto.OAuth2UserDto();
