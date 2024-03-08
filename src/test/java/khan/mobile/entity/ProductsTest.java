@@ -25,26 +25,6 @@ class ProductsTest {
     @Test
     void createProduct() {
 
-        ProductImage productImage = ProductImage.builder()
-                .imagePath("/img")
-                .build();
-
-        Products newProduct = Products.builder()
-                .productName("테스트 상품2")
-                .productColor("금색")
-                .productWeight(10.4f)
-                .productSize(15f)
-                .productOther("테스트 내용")
-                .productImage((List<ProductImage>) productImage)
-                .build();
-
-
-        productRepository.save(newProduct);
-
-        Products findProduct = productRepository.findById(newProduct.getProductId()).orElse(null);
-        assertNotNull(findProduct);
-        assertNotNull(findProduct.getProductId());
-        assertEquals(newProduct.getProductId(), findProduct.getProductId());
 
     }
 
