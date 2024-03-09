@@ -1,5 +1,6 @@
 package khan.mobile.jwt;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -15,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 
 @Slf4j
@@ -31,46 +33,50 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        String authorization = null;
-        Cookie[] cookies = request.getCookies();
-        log.info("cookie data = {}", (Object) request.getCookies());
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
+        // 헤더에서 access키에 담긴 토큰을 꺼냄
+        String accessToken = request.getHeader("access");
 
-                if (cookie.getName().equals("Authorization")) {
+        // 토큰이 없다면 다음 필터로 넘김
+        if (accessToken == null) {
 
-                    authorization = cookie.getValue();
-                }
-            }
-        }
-        else {
-            log.warn("cookie data null");
-        }
-
-        log.info("authorization = {}", authorization);
-
-        // 토큰 여부 확인
-        if (authorization == null) {
-            log.error("authorization 잘못되었습니다");
             filterChain.doFilter(request, response);
+
             return;
         }
 
-        log.info(request.getRequestURI());
+        log.info("header = {}", accessToken);
 
-        // 토큰 꺼내기
-        String token = authorization;
+        // 토큰 만료 여부 확인, 만료시 다음 필터로 넘기지 않음
+        try {
+            jwtUtil.isExpired(accessToken);
+        } catch (ExpiredJwtException e) {
 
-        // 토큰 만료 여부 확인
-        if (jwtUtil.isExpired(token)) {
-            log.error("authentication 만료");
-            filterChain.doFilter(request, response);
+            //response body
+            PrintWriter writer = response.getWriter();
+            writer.print("access token expired");
+
+            //response status code
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
-        String id = jwtUtil.getUserId(token);
-        String name = jwtUtil.getName(token);
-        String role = jwtUtil.getRole(token);
+        // 토큰이 access인지 확인 (발급시 페이로드에 명시)
+        String category = jwtUtil.getCategory(accessToken);
+
+        if (!category.equals("access")) {
+
+            //response body
+            PrintWriter writer = response.getWriter();
+            writer.print("invalid access token");
+
+            //response status code
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+
+        String id = jwtUtil.getUserId(accessToken);
+        String name = jwtUtil.getName(accessToken);
+        String role = jwtUtil.getRole(accessToken);
         log.info("id = {} name = {} role = {}", id, name, role);
 
         UserDto.OAuth2UserDto oAuth2UserDto = new UserDto.OAuth2UserDto();
