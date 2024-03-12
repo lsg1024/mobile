@@ -40,13 +40,9 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String role = auth.getAuthority();
 
         // 토큰 생성
-        String access = jwtUtil.createJwt("access", id, name, role, 60 * 1000 * 10L);
         String refresh = jwtUtil.createJwt("refresh", id, name, role, 60 * 1000 * 60 * 24L);
 
-        response.addCookie(createCookie("access", access, false));
         response.addCookie(createCookie("refresh", refresh, true));
-
-        log.info("onAuthenticationSuccess Cookie {}", access);
 
         response.sendRedirect("http://localhost:3000/home");
     }

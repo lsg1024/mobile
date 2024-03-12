@@ -85,6 +85,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         log.info("LoginFilter access = {}", access);
         log.info("LoginFilter refresh = {}", refresh);
+
         response.setHeader("access", access);
         response.addCookie(createCookie("refresh", refresh));
         response.setStatus(HttpStatus.OK.value());
