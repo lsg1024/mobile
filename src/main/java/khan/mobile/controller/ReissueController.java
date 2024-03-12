@@ -51,9 +51,9 @@ public class ReissueController {
         String name = jwtUtil.getName(refresh);
         String role = jwtUtil.getRole(refresh);
 
-        String newAccess = jwtUtil.createJwt(category, id, name, role, 600000L);
+//        String newAccess = jwtUtil.createJwt(category, id, name, role, 600000L);
 
-        response.setHeader("access", newAccess);
+//        response.setHeader("access", newAccess);
 
         log.info("new accessToken 발급 완료");
 

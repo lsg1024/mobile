@@ -41,7 +41,7 @@ public class UsersController {
 
     }
 
-    @PostMapping("/user/signup")
+    @PostMapping("/signup")
     public ResponseEntity<CommonResponse> signUp(@Valid @RequestBody UserDto.SignUp signUpDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
@@ -58,30 +58,13 @@ public class UsersController {
         return ResponseEntity.ok(new CommonResponse("회원가입 완료"));
     }
 
-    @PostMapping("/user/login")
-    public ResponseEntity<CommonResponse> signIn(@Valid @RequestBody UserDto.SignIn userSignInDto, BindingResult bindingResult, HttpServletResponse response) {
+    @GetMapping("/userInfo")
+    public ResponseEntity<CommonResponse> oauthLoginInfo(@AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
 
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                errors.put(error.getField(), error.getDefaultMessage());
-            }
+        String username = customOAuth2User.getName();
 
-            return ResponseEntity.badRequest().body(new CommonResponse("로그인 실패", errors));
-        }
+        log.info("userInfo Controller");
 
-        String result = userService.login(userSignInDto);
-
-        // 쿠키 생성 및 응답에 추가
-        Cookie jwtCookie = new Cookie("Authorization", result);
-
-        jwtCookie.setHttpOnly(true);
-        jwtCookie.setPath("/");
-        jwtCookie.setMaxAge(1000 * 60 * 60);
-
-        response.addCookie(jwtCookie);
-
-        return ResponseEntity.ok(new CommonResponse("로그인 성공"));
+        return ResponseEntity.ok().body(new CommonResponse(username));
     }
-
 }

@@ -16,7 +16,7 @@ public class CustomFailHandler implements AuthenticationFailureHandler {
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
 
         // 인증 실패 시 클라이언트 측의 URL로 리다이렉트
-        log.info("onAuthenticationFailure 실패");
+        log.info("onAuthenticationFailure : 실패");
         String redirectUrl = "http://localhost:3000/";
         response.sendRedirect(redirectUrl);
 

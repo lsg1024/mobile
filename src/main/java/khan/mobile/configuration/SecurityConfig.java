@@ -59,7 +59,8 @@ public class SecurityConfig   {
                         configuration.setMaxAge(3600L);
 
                         configuration.setExposedHeaders(Collections.singletonList("Set-Cookie"));
-                        configuration.setExposedHeaders(Collections.singletonList("Authorization"));
+                        configuration.setExposedHeaders(Collections.singletonList("access"));
+//                        configuration.setExposedHeaders(Collections.singletonList("Authorization"));
 
                         return configuration;
                     }
@@ -99,14 +100,14 @@ public class SecurityConfig   {
                 .oauth2Login((oauth2) -> oauth2
                         .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
                                 .userService(customOAuth2UserService))
-                        .successHandler(customSuccessHandler)
-                        .failureHandler(customFailHandler)
+                        .successHandler(customSuccessHandler) // oauth2 성공 핸들러
+                        .failureHandler(customFailHandler) // oauth2 실패 핸들러
                 );
 
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/user/**", "/login", "/reissue").permitAll()
+                        .requestMatchers("/signup", "/login", "/reissue").permitAll()
                         .anyRequest().authenticated());
 
         //세션 설정 : STATELESS
