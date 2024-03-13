@@ -1,6 +1,9 @@
 package khan.mobile.configuration;
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import khan.mobile.entity.Role;
 import khan.mobile.jwt.JwtFilter;
 import khan.mobile.jwt.JwtUtil;
 import khan.mobile.jwt.LoginFilter;
@@ -10,6 +13,7 @@ import khan.mobile.oauth2.CustomSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,11 +22,12 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-import java.util.Arrays;
+
 import java.util.Collections;
 
 
@@ -92,7 +97,7 @@ public class SecurityConfig   {
 
         //JWTFilter 추가
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(new JwtFilter(jwtUtil), OAuth2LoginAuthenticationFilter.class);
 
         //oauth2
@@ -108,7 +113,17 @@ public class SecurityConfig   {
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/signup", "/login", "/reissue").permitAll()
+//                        .requestMatchers("/users").hasAnyRole("ADMIN")
                         .anyRequest().authenticated());
+
+//        http
+//                .exceptionHandling((e) -> e
+//                        .accessDeniedHandler(new AccessDeniedHandler() {
+//                            @Override
+//                            public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
+//                                response.sendError(HttpServletResponse.SC_FORBIDDEN);
+//                            }
+//                        }));
 
         //세션 설정 : STATELESS
         http

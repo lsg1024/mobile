@@ -34,7 +34,7 @@ public class UsersController {
 
     private final UserService userService;
 
-    @GetMapping("/api/users")
+    @GetMapping("/users")
     public Page<UserDto.UserProfile> getUserList(Pageable pageable) {
 
         return userService.getUserList(pageable);

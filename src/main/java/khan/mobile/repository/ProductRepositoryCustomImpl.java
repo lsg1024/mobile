@@ -5,21 +5,17 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import khan.mobile.dto.ProductDto;
-import khan.mobile.dto.ProductOrderItemDetailDto;
-import khan.mobile.dto.QProductDto;
-import khan.mobile.dto.QProductDto_ProductDataSet;
+import khan.mobile.dto.*;
 import khan.mobile.entity.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
-
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static khan.mobile.entity.QProductOrderItem.productOrderItem;
 import static khan.mobile.entity.QProducts.products;
 import static khan.mobile.entity.QUsers.users;
 import static khan.mobile.entity.QFactories.factories;
@@ -37,7 +33,7 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
 
     @Override
     public List<ProductOrderItemDetailDto> findOrderItemDetail(List<Long> order_id) {
-        QProductOrderItem poi = QProductOrderItem.productOrderItem;
+        QProductOrderItem poi = productOrderItem;
         QProducts p = products;
 
         return queryFactory
@@ -127,8 +123,12 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
     @Override
     public ProductDto findProductDetail(Long productId) {
 
-        List<ProductImage> images = queryFactory
-                .selectFrom(productImage)
+        List<ImagesDto> images = queryFactory
+                .select(new QImagesDto(
+                        productImage.imageId,
+                        productImage.imageName,
+                        productImage.imagePath))
+                .from(productImage)
                 .leftJoin(productImage.products, products)
                 .where(products.productId.eq(productId))
                 .fetch();

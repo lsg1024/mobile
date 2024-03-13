@@ -27,13 +27,13 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @PostMapping("/api/product/create")
+    @PostMapping("/product/create")
     public ResponseEntity<CommonResponse> createProduct(@RequestBody ProductDto.Create productDto, @AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
         productService.createProduct(Long.valueOf(customOAuth2User.getId()), productDto);
         return ResponseEntity.ok(new CommonResponse("생성 완료"));
     }
 
-    @PostMapping("/api/product/update")
+    @PostMapping("/product/update")
     public ResponseEntity<CommonResponse> updateProduct(@RequestHeader("productId") Long productId,
                                             @Valid @RequestBody ProductDto.Create productDto, BindingResult bindingResult,
                                             @AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
@@ -51,19 +51,19 @@ public class ProductController {
         return ResponseEntity.ok().body(new CommonResponse("업데이트 완료"));
     }
 
-    @GetMapping("/api/products")
+    @GetMapping("/products")
     public Page<ProductDto.ProductDataSet> getProductList(ProductDto.ProductCondition condition, @PageableDefault(size = 9) Pageable pageable) {
         return productService.getProductList(condition, pageable);
     }
 
-    @GetMapping("/api/products/search")
+    @GetMapping("/products/search")
     public Page<ProductDto.ProductDataSet> getProductSearchList(@RequestParam("productSearch") String getProductName, @PageableDefault(size = 9) Pageable pageable) {
         ProductDto.ProductCondition condition = new ProductDto.ProductCondition();
         condition.setProductName(getProductName);
         return productService.getProductList(condition, pageable);
     }
 
-    @GetMapping("/api/product/detail/{id}")
+    @GetMapping("/product/detail/{id}")
     public ProductDto getProductDetail(@PathVariable("id") Long id) {
         return productService.getProductDetail(id);
     }

@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import khan.mobile.entity.Factories;
 import khan.mobile.entity.ProductImage;
-import khan.mobile.entity.Products;
 import khan.mobile.entity.Users;
 import lombok.*;
 
@@ -23,12 +22,12 @@ public class ProductDto {
     private Float size;
     private Float weight;
     private String other;
-    private List<ProductImage> images;
+    private List<ImagesDto> images;
     private Long userId;
     private Long factoryId;
 
     @QueryProjection
-    public ProductDto(Long id, String name, String color, Float size, Float weight, String other, List<ProductImage> images, Long userId, Long factoryId) {
+    public ProductDto(Long id, String name, String color, Float size, Float weight, String other, List<ImagesDto> images, Long userId, Long factoryId) {
         this.id = id;
         this.name = name;
         this.color = color;

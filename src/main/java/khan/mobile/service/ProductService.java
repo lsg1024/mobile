@@ -9,6 +9,7 @@ import khan.mobile.repository.FactoryRepository;
 import khan.mobile.repository.ProductRepository;
 import khan.mobile.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class ProductService {
 
     private final ProductRepository productRepository;
@@ -79,15 +81,11 @@ public class ProductService {
 
         Products findProduct = validateProduct(product_id);
 
-        return ProductDto.builder()
-                .id(findProduct.getProductId())
-                .name(findProduct.getProductName())
-                .color(findProduct.getProductColor())
-                .size(findProduct.getProductSize())
-                .weight(findProduct.getProductWeight())
-                .other(findProduct.getProductOther())
-                .images(findProduct.getProductImage())
-                .build();
+        ProductDto productDto =  productRepository.findProductDetail(product_id);
+
+        log.info("productDto = {}", productDto);
+
+        return productDto;
 
     }
 
