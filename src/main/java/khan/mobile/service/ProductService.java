@@ -48,8 +48,10 @@ public class ProductService {
     @Transactional
     public void updateProduct(Long userId, Long productId, ProductDto.Create productDto) {
 
+        log.info("userId = {}", userId);
+        log.info("productId = {}", productId);
         Products findProduct = validateProduct(productId);
-        if (findProduct.getUser().getUserId().equals(userId)) {
+        if (findProduct != null) {
             //상품 수정
             findProduct.updateProduct(
                     productDto.getName(),
@@ -59,7 +61,7 @@ public class ProductService {
                     productDto.getOther()
             );
         } else {
-            throw new IllegalArgumentException("일치하는 유저 정보가 없음");
+            throw new IllegalArgumentException("일치하는 상품 정보가 없음");
         }
     }
 
