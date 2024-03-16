@@ -13,7 +13,6 @@ import java.util.List;
 
 @Getter @Setter
 @NoArgsConstructor
-@Builder
 public class ProductDto {
 
     private Long id;
@@ -26,17 +25,34 @@ public class ProductDto {
     private Long userId;
     private Long factoryId;
 
-    @QueryProjection
-    public ProductDto(Long id, String name, String color, Float size, Float weight, String other, List<ImagesDto> images, Long userId, Long factoryId) {
-        this.id = id;
-        this.name = name;
-        this.color = color;
-        this.size = size;
-        this.weight = weight;
-        this.other = other;
-        this.images = images;
-        this.userId = userId;
-        this.factoryId = factoryId;
+    @NoArgsConstructor
+    @Builder
+    @Getter
+    public static class Detail {
+        private Long id;
+        private String name;
+        private String color;
+        private Float size;
+        private Float weight;
+        private String other;
+        private List<ImagesDto> images;
+        private Long userId;
+        private Long factoryId;
+        private String factoryName;
+
+        @QueryProjection
+        public Detail(Long id, String name, String color, Float size, Float weight, String other, List<ImagesDto> images, Long userId, Long factoryId, String factoryName) {
+            this.id = id;
+            this.name = name;
+            this.color = color;
+            this.size = size;
+            this.weight = weight;
+            this.other = other;
+            this.images = images;
+            this.userId = userId;
+            this.factoryId = factoryId;
+            this.factoryName = factoryName;
+        }
     }
 
     @Getter @Setter

@@ -13,5 +13,5 @@ public interface ProductRepositoryCustom {
 
     Page<ProductDto.ProductDataSet> findProductPageable(ProductDto.ProductCondition condition, Pageable pageable);
 
-    ProductDto findProductDetail(Long productId);
+    ProductDto.Detail findProductDetail(Long productId);
 }

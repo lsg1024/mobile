@@ -1,5 +1,6 @@
 package khan.mobile.repository;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -121,7 +122,7 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
     }
 
     @Override
-    public ProductDto findProductDetail(Long productId) {
+    public ProductDto.Detail findProductDetail(Long productId) {
 
         List<ImagesDto> images = queryFactory
                 .select(new QImagesDto(
@@ -133,12 +134,17 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
                 .where(products.productId.eq(productId))
                 .fetch();
 
-        Products productEntity = queryFactory
-                .selectFrom(products)
+        Tuple result = queryFactory
+                .select(products, factories.factoryName)
+                .from(products)
+                .leftJoin(products.factory, factories)
                 .where(products.productId.eq(productId))
                 .fetchOne();
 
-        return ProductDto.builder()
+        Products productEntity = result.get(products);
+        String factoryName = result.get(factories.factoryName);
+
+        return ProductDto.Detail.builder()
                 .id(productEntity.getProductId())
                 .name(productEntity.getProductName())
                 .color(productEntity.getProductColor())
@@ -148,6 +154,7 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
                 .images(images)
                 .userId(productEntity.getUser().getUserId())
                 .factoryId(productEntity.getFactory().getFactoryId())
+                .factoryName(factoryName)
                 .build();
     }
 

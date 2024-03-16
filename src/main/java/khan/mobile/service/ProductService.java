@@ -76,14 +76,9 @@ public class ProductService {
     }
 
     //상품 상세
-    /**
-     * 상품 N+1 문제 발생
-     */
-    public ProductDto getProductDetail(Long product_id) {
+    public ProductDto.Detail getProductDetail(Long product_id) {
 
-        Products findProduct = validateProduct(product_id);
-
-        ProductDto productDto =  productRepository.findProductDetail(product_id);
+        ProductDto.Detail productDto =  productRepository.findProductDetail(product_id);
 
         log.info("productDto = {}", productDto);
 
