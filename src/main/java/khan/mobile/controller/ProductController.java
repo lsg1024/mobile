@@ -1,5 +1,7 @@
 package khan.mobile.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import khan.mobile.dto.response.CommonResponse;
 import khan.mobile.dto.ProductDto;
@@ -16,8 +18,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -28,28 +33,36 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/product/create")
-    public ResponseEntity<CommonResponse> createProduct(@RequestBody ProductDto.Create productDto, @AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
-        productService.createProduct(Long.valueOf(customOAuth2User.getId()), productDto);
+    public ResponseEntity<CommonResponse> createProduct(
+            @RequestParam("product") String productStr,
+            @RequestParam("images") List<MultipartFile> images,
+            @AuthenticationPrincipal CustomOAuth2User customOAuth2User) throws JsonProcessingException {
+
+        ProductDto.Create productDto = new ObjectMapper().readValue(productStr, ProductDto.Create.class);
+
+        productService.createProduct(Long.valueOf(customOAuth2User.getId()), productDto, images);
         return ResponseEntity.ok(new CommonResponse("생성 완료"));
     }
 
     @PostMapping("/product/update")
-    public ResponseEntity<CommonResponse> updateProduct(@RequestHeader("productId") Long productId,
-                                            @Valid @RequestBody ProductDto.Create productDto, BindingResult bindingResult,
-                                            @AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
+    public ResponseEntity<CommonResponse> updateProduct(
+            @RequestHeader("productId") Long productId,
+            @RequestParam("product") String productStr,
+            @RequestParam("images") List<MultipartFile> images,
+            @AuthenticationPrincipal CustomOAuth2User customOAuth2User) throws IOException {
 
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                errors.put(error.getField(), error.getDefaultMessage());
-            }
+        ProductDto.Create productDto;
 
-            return ResponseEntity.badRequest().body(new CommonResponse("상품 업데이트 실패", errors));
+        try {
+            productDto = new ObjectMapper().readValue(productStr, ProductDto.Create.class);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.badRequest().body(new CommonResponse("상품 정보 파싱 실패"));
         }
 
-        productService.updateProduct(Long.parseLong(customOAuth2User.getId()), productId, productDto);
+        productService.updateProduct(Long.valueOf(customOAuth2User.getId()), productId, productDto, images);
         return ResponseEntity.ok().body(new CommonResponse("업데이트 완료"));
     }
+
 
     @GetMapping("/products")
     public Page<ProductDto.ProductDataSet> getProductList(ProductDto.ProductCondition condition, @PageableDefault(size = 9) Pageable pageable) {

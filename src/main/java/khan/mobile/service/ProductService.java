@@ -6,6 +6,7 @@ import khan.mobile.entity.ProductImage;
 import khan.mobile.entity.Products;
 import khan.mobile.entity.Users;
 import khan.mobile.repository.FactoryRepository;
+import khan.mobile.repository.ProductImageRepository;
 import khan.mobile.repository.ProductRepository;
 import khan.mobile.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -25,10 +29,14 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final FactoryRepository factoryRepository;
+    private final ProductImageRepository productImageRepository;
+    private final ProductImageFileHandler productImageFileHandler;
 
     //상품 생성
     @Transactional
-    public void createProduct(Long userId, ProductDto.Create productDto) {
+    public void createProduct(Long userId, ProductDto.Create productDto, List<MultipartFile> images) {
+
+        Long factoryId = productDto.getFactory().getFactoryId();
 
         Products product = Products.builder()
                 .productName(productDto.getName())
@@ -36,9 +44,21 @@ public class ProductService {
                 .productWeight(productDto.getWeight())
                 .productSize(productDto.getSize())
                 .productOther(productDto.getOther())
-                .productImage(productDto.getImages())
                 .user(Users.builder().userId(userId).build())
+                .factory(Factories.builder().factoryId(factoryId).build())
                 .build();
+
+        Products savedProduct = productRepository.save(product);
+
+        try {
+            List<ProductImage> productImages = productImageFileHandler.parseFileInfo(savedProduct.getProductId(), images);
+            for (ProductImage productImage : productImages) {
+                productImage.setProduct(savedProduct);
+                productImageRepository.save(productImage);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("이미지 업로드 실패 : " + e.getMessage());
+        }
 
         //상품 저장
         productRepository.save(product);
@@ -46,22 +66,31 @@ public class ProductService {
 
     //상품 수정
     @Transactional
-    public void updateProduct(Long userId, Long productId, ProductDto.Create productDto) {
+    public void updateProduct(Long userId, Long productId, ProductDto.Create productDto, List<MultipartFile> images) throws IOException {
 
-        log.info("userId = {}", userId);
-        log.info("productId = {}", productId);
         Products findProduct = validateProduct(productId);
-        if (findProduct != null) {
-            //상품 수정
-            findProduct.updateProduct(
-                    productDto.getName(),
-                    productDto.getColor(),
-                    productDto.getSize(),
-                    productDto.getWeight(),
-                    productDto.getOther()
-            );
-        } else {
+        Factories factoryId = validateFactory(productDto.getFactory().getFactoryId());
+
+        if (findProduct == null) {
             throw new IllegalArgumentException("일치하는 상품 정보가 없음");
+        }
+
+        // 상품 정보 수정
+        findProduct.updateProduct(
+                productDto.getName(),
+                productDto.getColor(),
+                productDto.getSize(),
+                productDto.getWeight(),
+                productDto.getOther()
+        );
+
+        // 이미지 파일 처리
+        if (!images.isEmpty()) {
+            List<ProductImage> productImages = productImageFileHandler.parseFileInfo(productId, images);
+            for (ProductImage productImage : productImages) {
+                productImage.setProduct(findProduct); // ProductImage 엔티티에 상품 연결
+                productImageRepository.save(productImage); // 상품 이미지 정보 저장
+            }
         }
     }
 
