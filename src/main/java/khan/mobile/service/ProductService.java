@@ -66,10 +66,9 @@ public class ProductService {
 
     //상품 수정
     @Transactional
-    public void updateProduct(Long userId, Long productId, ProductDto.Create productDto, List<MultipartFile> images) throws IOException {
+    public void updateProduct(Long userId, Long productId, ProductDto.Update productDto, List<MultipartFile> images) throws IOException {
 
         Products findProduct = validateProduct(productId);
-        Factories factoryId = validateFactory(productDto.getFactory().getFactoryId());
 
         if (findProduct == null) {
             throw new IllegalArgumentException("일치하는 상품 정보가 없음");
@@ -81,7 +80,9 @@ public class ProductService {
                 productDto.getColor(),
                 productDto.getSize(),
                 productDto.getWeight(),
-                productDto.getOther()
+                productDto.getOther(),
+                productDto.getUser(),
+                productDto.getFactory()
         );
 
         // 이미지 파일 처리

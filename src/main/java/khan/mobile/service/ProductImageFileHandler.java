@@ -1,6 +1,7 @@
 package khan.mobile.service;
 
 import khan.mobile.entity.ProductImage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
+@Slf4j
 public class ProductImageFileHandler {
 
     public List<ProductImage> parseFileInfo(Long productId, List<MultipartFile> images) throws IOException {
@@ -21,6 +23,7 @@ public class ProductImageFileHandler {
         List<ProductImage> imageList = new ArrayList<>();
 
         if (images.isEmpty()) {
+            log.info("images 빈값");
             return imageList;
         }
 
@@ -29,9 +32,11 @@ public class ProductImageFileHandler {
         String current_date = simpleDateFormat.format(new Date());
 
         // 프로젝트 디렉토리 내부의 상대 경로 설정
-        String absolutePath = new File("").getAbsolutePath() + "/";
-        String path = "images/" + productId + "/" + current_date;
-        File file = new File(absolutePath + path);
+
+        String savePath = "C:/Users/zks14/Desktop/프로젝트/java/mobile";
+//        String absolutePath = String.valueOf(new File(savePath));
+        String path = savePath + "/images/" + productId + "/" + current_date;
+        File file = new File(path);
 
         if (!file.exists()) {
             file.mkdirs();
@@ -69,7 +74,7 @@ public class ProductImageFileHandler {
 
                 imageList.add(productImage);
 
-                file = new File(absolutePath + path + "/" + newFileName);
+                file = new File(path + "/" + newFileName);
                 multipartFile.transferTo(file);
             }
         }

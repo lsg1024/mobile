@@ -47,14 +47,15 @@ public class ProductController {
     @PostMapping("/product/update")
     public ResponseEntity<CommonResponse> updateProduct(
             @RequestHeader("productId") Long productId,
-            @RequestParam("product") String productStr,
-            @RequestParam("images") List<MultipartFile> images,
+            @RequestParam(value = "product", required = false) String productStr,
+            @RequestParam(value = "images", required = false) List<MultipartFile> images,
             @AuthenticationPrincipal CustomOAuth2User customOAuth2User) throws IOException {
 
         ProductDto.Create productDto;
 
         try {
             productDto = new ObjectMapper().readValue(productStr, ProductDto.Create.class);
+            log.info("updateProduct productDto = {}",productDto);
         } catch (JsonProcessingException e) {
             return ResponseEntity.badRequest().body(new CommonResponse("상품 정보 파싱 실패"));
         }

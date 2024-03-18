@@ -1,6 +1,7 @@
 package khan.mobile.entity;
 
 import jakarta.persistence.*;
+import khan.mobile.dto.ProductDto;
 import khan.mobile.entity.auditing.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -55,11 +56,17 @@ public class Products extends BaseTimeEntity {
         this.factory = factory;
     }
 
-    public void updateProduct(String product_name, String product_color, Float product_size, Float product_weight, String product_other) {
+    public void updateProduct(ProductDto.Update productDto) {
+
+        if (productDto.getName() != null) {
+            this.productName = productDto
+        }
         this.productName = product_name;
         this.productColor = product_color;
         this.productSize = product_size;
         this.productWeight = product_weight;
         this.productOther = product_other;
+        this.user = user;
+        this.factory = factory;
     }
 }
