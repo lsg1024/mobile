@@ -77,22 +77,26 @@ public class ProductDto {
 
     @Getter @Setter
     public static class Update {
-        private Long id;
+
         @NotBlank(message = "상품명이 비어 있습니다")
         private String name;
+
         @NotBlank(message = "색상 값이 비어 있습니다")
         private String color;
+
         @NotNull(message = "크기 값이 비어 있습니다")
         @Min(value = 0, message = "크기는 0 이상이어야 합니다")
         private Float size;
+
         @NotNull(message = "무게값이 비어 있습니다")
         @Min(value = 0, message = "무게는 0 이상이어야 합니다")
         private Float weight;
-        private String other;
-        private List<ProductImage> images;
-        private Long user;
-        private Long factory;
 
+        private String other;
+
+        private List<ProductImage> images;
+        @NotNull(message = "공장 선택을 해주세요")
+        private Long factoryId;
     }
 
     @Getter @Setter

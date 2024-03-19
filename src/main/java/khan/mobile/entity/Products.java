@@ -59,14 +59,27 @@ public class Products extends BaseTimeEntity {
     public void updateProduct(ProductDto.Update productDto) {
 
         if (productDto.getName() != null) {
-            this.productName = productDto
+            this.productName = productDto.getName();
         }
-        this.productName = product_name;
-        this.productColor = product_color;
-        this.productSize = product_size;
-        this.productWeight = product_weight;
-        this.productOther = product_other;
-        this.user = user;
+        if (productDto.getColor() != null) {
+            this.productColor = productDto.getColor();
+        }
+        if (productDto.getSize() != null) {
+            this.productSize = productDto.getSize();
+        }
+        if (productDto.getWeight() != null) {
+            this.productWeight = productDto.getWeight();
+        }
+        if (productDto.getOther() != null) {
+            this.productOther = productDto.getOther();
+        }
+    }
+
+    public void setFactory(Factories factory) {
         this.factory = factory;
+    }
+
+    public void setUser(Users user) {
+        this.user = user;
     }
 }

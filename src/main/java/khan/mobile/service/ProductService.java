@@ -29,6 +29,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final FactoryRepository factoryRepository;
+    private final UserRepository userRepository;
     private final ProductImageRepository productImageRepository;
     private final ProductImageFileHandler productImageFileHandler;
 
@@ -69,21 +70,17 @@ public class ProductService {
     public void updateProduct(Long userId, Long productId, ProductDto.Update productDto, List<MultipartFile> images) throws IOException {
 
         Products findProduct = validateProduct(productId);
+        Factories findFactory = validateFactory(productDto.getFactoryId());
+        Users findUser = validateUser(userId);
 
         if (findProduct == null) {
             throw new IllegalArgumentException("일치하는 상품 정보가 없음");
         }
 
         // 상품 정보 수정
-        findProduct.updateProduct(
-                productDto.getName(),
-                productDto.getColor(),
-                productDto.getSize(),
-                productDto.getWeight(),
-                productDto.getOther(),
-                productDto.getUser(),
-                productDto.getFactory()
-        );
+        findProduct.updateProduct(productDto);
+        findProduct.setFactory(findFactory);
+        findProduct.setUser(findUser);
 
         // 이미지 파일 처리
         if (!images.isEmpty()) {
@@ -91,8 +88,17 @@ public class ProductService {
             for (ProductImage productImage : productImages) {
                 productImage.setProduct(findProduct); // ProductImage 엔티티에 상품 연결
                 productImageRepository.save(productImage); // 상품 이미지 정보 저장
+                log.info("updateProduct 이미지 저장 성공");
             }
+        } else {
+            log.info("updateProduct 이미지 저장 실패");
+            throw new IllegalArgumentException("상품 이미지 저장 실패");
+
         }
+
+        productRepository.save(findProduct);
+        log.info("updateProduct 저장 성공");
+
     }
 
     //상품 출력
@@ -120,8 +126,12 @@ public class ProductService {
         return productRepository.findById(product_id).orElseThrow(() -> new IllegalArgumentException("일치하는 상품 정보가 없습니다"));
     }
 
-    private Factories validateFactory(Long factory_id) {
-        return factoryRepository.findById(factory_id).orElseThrow(() -> new IllegalArgumentException("일치하는 공장 정보가 없습니다"));
+    private Factories validateFactory(Long factoryId) {
+        return factoryRepository.findById(factoryId).orElseThrow(() -> new IllegalArgumentException("일치하는 공장 정보가 없습니다"));
+    }
+
+    private Users validateUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("일치하는 유저 정보가 없습니다"));
     }
 
 }

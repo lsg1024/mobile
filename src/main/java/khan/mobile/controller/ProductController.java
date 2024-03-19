@@ -51,10 +51,10 @@ public class ProductController {
             @RequestParam(value = "images", required = false) List<MultipartFile> images,
             @AuthenticationPrincipal CustomOAuth2User customOAuth2User) throws IOException {
 
-        ProductDto.Create productDto;
+        ProductDto.Update productDto;
 
         try {
-            productDto = new ObjectMapper().readValue(productStr, ProductDto.Create.class);
+            productDto = new ObjectMapper().readValue(productStr, ProductDto.Update.class);
             log.info("updateProduct productDto = {}",productDto);
         } catch (JsonProcessingException e) {
             return ResponseEntity.badRequest().body(new CommonResponse("상품 정보 파싱 실패"));
