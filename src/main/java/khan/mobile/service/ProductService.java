@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -71,6 +72,7 @@ public class ProductService {
 
         Products findProduct = validateProduct(productId);
         Factories findFactory = validateFactory(productDto.getFactoryId());
+        log.info("updateUserId = {}",userId);
         Users findUser = validateUser(userId);
 
         if (findProduct == null) {
@@ -82,8 +84,9 @@ public class ProductService {
         findProduct.setFactory(findFactory);
         findProduct.setUser(findUser);
 
+        log.info("유효성 검사 완료");
         // 이미지 파일 처리
-        if (!images.isEmpty()) {
+        if (images != null && !images.isEmpty()) {
             List<ProductImage> productImages = productImageFileHandler.parseFileInfo(productId, images);
             for (ProductImage productImage : productImages) {
                 productImage.setProduct(findProduct); // ProductImage 엔티티에 상품 연결
@@ -91,9 +94,7 @@ public class ProductService {
                 log.info("updateProduct 이미지 저장 성공");
             }
         } else {
-            log.info("updateProduct 이미지 저장 실패");
-            throw new IllegalArgumentException("상품 이미지 저장 실패");
-
+            log.info("이미지 없음");
         }
 
         productRepository.save(findProduct);

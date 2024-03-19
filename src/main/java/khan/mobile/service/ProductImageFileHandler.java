@@ -20,10 +20,11 @@ public class ProductImageFileHandler {
 
     public List<ProductImage> parseFileInfo(Long productId, List<MultipartFile> images) throws IOException {
 
+        log.info("imageHandler");
         List<ProductImage> imageList = new ArrayList<>();
 
-        if (images.isEmpty()) {
-            log.info("images 빈값");
+        if (images == null || images.isEmpty()) {
+            log.info("images 빈값 혹은 null");
             return imageList;
         }
 

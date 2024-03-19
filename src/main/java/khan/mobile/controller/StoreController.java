@@ -18,17 +18,17 @@ public class StoreController {
 
     private final StoreService storeService;
 
-    @GetMapping("/api/stores")
+    @GetMapping("/stores")
     public Page<StoreDto> StoreList(Pageable pageable) {
         return storeService.getStoreList(pageable);
     }
 
-    @GetMapping("/api/stores/search")
+    @GetMapping("/stores/search")
     public Page<StoreDto> getSearchStoresList(@RequestParam("storeSearch") String storeName, Pageable pageable) {
         return storeService.getSearchResult(storeName, pageable);
     }
 
-    @PostMapping("/api/stores/save")
+    @PostMapping("/stores/save")
     public ResponseEntity<CommonResponse> saveStores(@RequestBody List<StoreDto> dataList) {
 
         for (StoreDto data : dataList) {
@@ -42,7 +42,7 @@ public class StoreController {
 
     }
 
-    @PostMapping("api/stores/update")
+    @PostMapping("/stores/update")
     public ResponseEntity<CommonResponse> StoreUpdate(@RequestParam("storeId") String storeId, @Validated @RequestBody StoreDto storeDto) {
         storeService.updateStores(storeId, storeDto);
         return ResponseEntity.ok(new CommonResponse("수정 완료"));
