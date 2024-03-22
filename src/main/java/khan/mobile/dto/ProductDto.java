@@ -57,22 +57,29 @@ public class ProductDto {
 
     @Getter @Setter
     public static class Create {
-        private Long id;
+
         @NotBlank(message = "상품명이 비어 있습니다")
         private String name;
+
+        @NotBlank(message = "시리얼번호가 비어 있습니다")
+        protected Long serialNumber;
+
         @NotBlank(message = "색상 값이 비어 있습니다")
         private String color;
+
         @NotNull(message = "크기 값이 비어 있습니다")
         @Min(value = 0, message = "크기는 0 이상이어야 합니다")
         private Float size;
+
         @NotNull(message = "무게값이 비어 있습니다")
         @Min(value = 0, message = "무게는 0 이상이어야 합니다")
         private Float weight;
-        private String other;
-        private List<ProductImage> images;
-        private Users user;
-        private Factories factory;
 
+        private String other;
+
+        private List<ProductImage> images;
+
+        private Long factoryId;
     }
 
     @Getter @Setter

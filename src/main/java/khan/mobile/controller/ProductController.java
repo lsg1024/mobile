@@ -34,9 +34,9 @@ public class ProductController {
 
     @PostMapping("/product/create")
     public ResponseEntity<CommonResponse> createProduct(
-            @RequestParam("product") String productStr,
-            @RequestParam("images") List<MultipartFile> images,
-            @AuthenticationPrincipal CustomOAuth2User customOAuth2User) throws JsonProcessingException {
+            @RequestParam(value = "product") String productStr,
+            @RequestParam(value = "images", required = false) List<MultipartFile> images,
+            @AuthenticationPrincipal CustomOAuth2User customOAuth2User) throws IOException {
 
         ProductDto.Create productDto = new ObjectMapper().readValue(productStr, ProductDto.Create.class);
 
@@ -51,14 +51,7 @@ public class ProductController {
             @RequestParam(value = "images", required = false) List<MultipartFile> images,
             @AuthenticationPrincipal CustomOAuth2User customOAuth2User) throws IOException {
 
-        ProductDto.Update productDto;
-
-        try {
-            productDto = new ObjectMapper().readValue(productStr, ProductDto.Update.class);
-            log.info("updateProduct productDto = {}",productDto);
-        } catch (JsonProcessingException e) {
-            return ResponseEntity.badRequest().body(new CommonResponse("상품 정보 파싱 실패"));
-        }
+        ProductDto.Update productDto = new ObjectMapper().readValue(productStr, ProductDto.Update.class);
 
         productService.updateProduct(Long.valueOf(customOAuth2User.getId()), productId, productDto, images);
         return ResponseEntity.ok().body(new CommonResponse("업데이트 완료"));

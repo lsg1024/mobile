@@ -11,6 +11,7 @@ import khan.mobile.repository.ProductRepository;
 import khan.mobile.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.math3.stat.descriptive.summary.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -36,34 +37,40 @@ public class ProductService {
 
     //상품 생성
     @Transactional
-    public void createProduct(Long userId, ProductDto.Create productDto, List<MultipartFile> images) {
+    public void createProduct(Long userId, ProductDto.Create productDto, List<MultipartFile> images) throws IOException {
 
-        Long factoryId = productDto.getFactory().getFactoryId();
+        Factories findFactoryId = validateFactory(productDto.getFactoryId());
+        Users findUser = validateUser(userId);
+
+        log.info("SerialNumber = {}",productDto.getSerialNumber());
 
         Products product = Products.builder()
                 .productName(productDto.getName())
+                .productSerialNumber(productDto.getSerialNumber())
                 .productColor(productDto.getColor())
                 .productWeight(productDto.getWeight())
                 .productSize(productDto.getSize())
                 .productOther(productDto.getOther())
-                .user(Users.builder().userId(userId).build())
-                .factory(Factories.builder().factoryId(factoryId).build())
+                .productImage(new ArrayList<>())
+                .user(findUser)
+                .factory(findFactoryId)
                 .build();
 
         Products savedProduct = productRepository.save(product);
 
-        try {
+        log.info("saveProduct Id = {}", savedProduct.getProductId());
+
+        log.info("유효성 검사 완료");
+        // 이미지 파일 처리
+        if (images != null && !images.isEmpty()) {
             List<ProductImage> productImages = productImageFileHandler.parseFileInfo(savedProduct.getProductId(), images);
             for (ProductImage productImage : productImages) {
-                productImage.setProduct(savedProduct);
-                productImageRepository.save(productImage);
+                productImage.setProduct(savedProduct); // 이미지 엔티티에 상품 연결
+                productImageRepository.save(productImage); // 상품 이미지 정보 저장
             }
-        } catch (IOException e) {
-            throw new RuntimeException("이미지 업로드 실패 : " + e.getMessage());
+        } else {
+            log.info("이미지 없음");
         }
-
-        //상품 저장
-        productRepository.save(product);
     }
 
     //상품 수정
@@ -72,7 +79,6 @@ public class ProductService {
 
         Products findProduct = validateProduct(productId);
         Factories findFactory = validateFactory(productDto.getFactoryId());
-        log.info("updateUserId = {}",userId);
         Users findUser = validateUser(userId);
 
         if (findProduct == null) {

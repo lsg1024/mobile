@@ -20,7 +20,8 @@ public class ProductImageFileHandler {
 
     public List<ProductImage> parseFileInfo(Long productId, List<MultipartFile> images) throws IOException {
 
-        log.info("imageHandler");
+        log.info("ProductImageFileHandler");
+        log.info("imageValue = {}", images.isEmpty());
         List<ProductImage> imageList = new ArrayList<>();
 
         if (images == null || images.isEmpty()) {
@@ -40,14 +41,16 @@ public class ProductImageFileHandler {
         File file = new File(path);
 
         if (!file.exists()) {
+            log.info("ProductImageFileHandler : 이미지 폴더 생성");
             file.mkdirs();
         }
 
         for (MultipartFile multipartFile : images) {
             if (!multipartFile.isEmpty()) {
+                log.info("ProductImageFileHandler : 이미지 null 아님");
                 String contentType = multipartFile.getContentType();
                 String originalFileExtension;
-
+                log.info("ProductImageFileHandler contentType = {}", contentType);
                 if (ObjectUtils.isEmpty(contentType)) {
                     continue;
                 }
@@ -74,7 +77,8 @@ public class ProductImageFileHandler {
                         .build();
 
                 imageList.add(productImage);
-
+                log.info("productImage = {}", productImage.getImageName());
+                log.info("imageList = {}", imageList);
                 file = new File(path + "/" + newFileName);
                 multipartFile.transferTo(file);
             }

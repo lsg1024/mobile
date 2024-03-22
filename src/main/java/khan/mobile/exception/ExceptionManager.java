@@ -1,5 +1,6 @@
 package khan.mobile.exception;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import khan.mobile.dto.response.CommonResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,5 +26,13 @@ public class ExceptionManager {
                 .body(new CommonResponse("실패 ", errors));
     }
 
+    @ExceptionHandler(InvalidFormatException.class)
+    public ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex) {
+        Map<String, String> errors = new HashMap<>();
+        String fieldName = ex.getPath().get(0).getFieldName();
+        errors.put(fieldName, "유효하지 않은 값입니다: " + ex.getValue());
+
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
 
 }

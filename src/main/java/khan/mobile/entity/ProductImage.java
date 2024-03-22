@@ -36,10 +36,9 @@ public class ProductImage {
 
     public void setProduct(Products product) {
         this.products = product;
-        if (!product.getProductImage().contains(this)) {
+        if (!product.getProductImage()
+                .contains(this)) {
             product.getProductImage().add(this);
         }
     }
-
-
 }

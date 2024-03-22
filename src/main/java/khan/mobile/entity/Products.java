@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,6 +28,7 @@ public class Products extends BaseTimeEntity {
     private Float productSize;
     private Float productWeight;
     private String productOther;
+    private Long productSerialNumber;
     private boolean deleted = Boolean.FALSE;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -44,8 +46,8 @@ public class Products extends BaseTimeEntity {
     private List<ProductImage> productImage;
 
     @Builder
-    public Products(Long productId, String productName, String productColor, Float productSize, Float productWeight, String productOther, List<ProductImage> productImage, Users user, Factories factory) {
-        this.productId = productId;
+    public Products(String productName, Long productSerialNumber , String productColor, Float productSize, Float productWeight, String productOther, List<ProductImage> productImage, Users user, Factories factory) {
+        this.productSerialNumber = productSerialNumber;
         this.productName = productName;
         this.productColor = productColor;
         this.productSize = productSize;
@@ -82,4 +84,5 @@ public class Products extends BaseTimeEntity {
     public void setUser(Users user) {
         this.user = user;
     }
+
 }
