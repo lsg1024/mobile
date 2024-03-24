@@ -63,7 +63,11 @@ public class FactoryService {
         return result.map(FactoryDto::factoryDto);
     }
 
-    private void validateUser(Long user_id) {
-        userRepository.findById(user_id).orElseThrow(() -> new IllegalArgumentException("일치하는 유저 정보가 없습니다"));
+    public Factories validateFactory(String factoryName) {
+        return factoryRepository.findByFactoryName(factoryName).orElseThrow(() -> new IllegalArgumentException("일치하는 공장 정보가 없습니다"));
+    }
+
+    private void validateUser(Long userId) {
+        userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("일치하는 유저 정보가 없습니다"));
     }
 }

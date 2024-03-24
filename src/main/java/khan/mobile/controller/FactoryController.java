@@ -3,6 +3,7 @@ package khan.mobile.controller;
 import jakarta.validation.Valid;
 import khan.mobile.dto.response.CommonResponse;
 import khan.mobile.dto.FactoryDto;
+import khan.mobile.entity.Factories;
 import khan.mobile.service.FactoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,7 +22,7 @@ public class FactoryController {
 
     private final FactoryService factoryService;
 
-    @GetMapping("api/factory")
+    @GetMapping("api/factories")
     public Page<FactoryDto> getFactoryList(Pageable pageable) {
         return factoryService.getFactoryList(pageable);
     }
@@ -65,4 +66,11 @@ public class FactoryController {
         return factoryService.getSearchFactoryList(factoryName, pageable);
     }
 
+    @GetMapping("/api/factory")
+    public ResponseEntity<CommonResponse> getFactory(@RequestParam("factoryName") String factoryName) {
+        factoryService.validateFactory(factoryName);
+
+        return ResponseEntity.ok(new CommonResponse("성공"));
+
+    }
 }
