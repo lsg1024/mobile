@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import khan.mobile.dto.PrincipalDetails;
 import khan.mobile.dto.response.CommonResponse;
 import khan.mobile.jwt.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +30,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
-        CustomOAuth2User customUserDetails = (CustomOAuth2User) authentication.getPrincipal();
+        PrincipalDetails customUserDetails = (PrincipalDetails) authentication.getPrincipal();
 
         String id = customUserDetails.getId();
         String name = customUserDetails.getName();

@@ -6,11 +6,8 @@ import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import khan.mobile.dto.CustomUserDetail;
+import khan.mobile.dto.PrincipalDetails;
 import khan.mobile.dto.UserDto;
-import khan.mobile.dto.response.CommonResponse;
-import khan.mobile.exception.AppException;
-import khan.mobile.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
 import org.springframework.http.HttpStatus;
@@ -69,7 +66,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         log.info("인증 성공 : successfulAuthentication");
         // 유저 정보
-        CustomUserDetail customUserDetails = (CustomUserDetail) authentication.getPrincipal();
+        PrincipalDetails customUserDetails = (PrincipalDetails) authentication.getPrincipal();
 
         String id = customUserDetails.getId();
         String name = customUserDetails.getUsername();

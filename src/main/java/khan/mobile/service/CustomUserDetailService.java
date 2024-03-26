@@ -1,7 +1,6 @@
 package khan.mobile.service;
 
-import khan.mobile.dto.CustomUserDetail;
-import khan.mobile.dto.UserDto;
+import khan.mobile.dto.PrincipalDetails;
 import khan.mobile.entity.Users;
 import khan.mobile.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,7 @@ public class CustomUserDetailService implements UserDetailsService {
         log.info("CustomUserDetailService userData = {}", userData.getEmail());
 
         if (userData != null) {
-            return new CustomUserDetail(userData);
+            return new PrincipalDetails(userData);
         }
 
         return null;

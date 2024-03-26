@@ -1,19 +1,39 @@
 package khan.mobile.dto;
 
 import khan.mobile.entity.Users;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
+import java.util.Map;
 
-@RequiredArgsConstructor
-public class CustomUserDetail implements UserDetails {
+public class PrincipalDetails implements UserDetails, OAuth2User {
 
-    private final Users users;
+    private Users user;
+    private Map<String, Object> attributes;
+
+    public PrincipalDetails(Users user) {
+        this.user = user;
+    }
+
+    public PrincipalDetails(Users user, Map<String, Object> attributes) {
+        this.user = user;
+        this.attributes = attributes;
+    }
+
+    /** OAuth2 **/
+    @Override
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
+
+    @Override
+    public String getName() {
+        return user.getName();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
@@ -22,7 +42,7 @@ public class CustomUserDetail implements UserDetails {
         collection.add(new GrantedAuthority() {
             @Override
             public String getAuthority() {
-                return users.getRole().toString();
+                return user.getRole().toString();
             }
         });
 
@@ -31,16 +51,16 @@ public class CustomUserDetail implements UserDetails {
 
     @Override
     public String getPassword() {
-        return users.getPassword();
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return users.getName();
+        return user.getName();
     }
 
     public String getId() {
-        return users.getUserId().toString();
+        return user.getUserId().toString();
     }
 
     @Override
@@ -62,4 +82,5 @@ public class CustomUserDetail implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }

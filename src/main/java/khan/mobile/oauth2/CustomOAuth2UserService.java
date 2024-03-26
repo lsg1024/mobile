@@ -1,5 +1,6 @@
 package khan.mobile.oauth2;
 
+import khan.mobile.dto.PrincipalDetails;
 import khan.mobile.dto.UserDto;
 import khan.mobile.entity.Role;
 import khan.mobile.entity.Users;
@@ -47,23 +48,16 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         if (findUsernameAndEmail == null) {
 
-            Users createUser = Users.builder()
+            findUsernameAndEmail = Users.builder()
                     .username(username)
                     .userEmail(email)
                     .name(oAuth2Response.getName())
                     .role(Role.USER)
                     .build();
 
-            userRepository.save(createUser);
+            userRepository.save(findUsernameAndEmail);
 
-            UserDto.OAuth2UserDto oAuth2UserDto = new UserDto.OAuth2UserDto();
-            oAuth2UserDto.setId(String.valueOf(createUser.getUserId()));
-            oAuth2UserDto.setUsername(createUser.getUsername());
-            oAuth2UserDto.setName(createUser.getName());
-            oAuth2UserDto.setEmail(createUser.getEmail());
-            oAuth2UserDto.setRole(createUser.getRole());
-
-            return new CustomOAuth2User(oAuth2UserDto);
+            return new PrincipalDetails(findUsernameAndEmail, oAuth2User.getAttributes());
 
         }
         else if (findUsernameAndEmail.getEmail() != null && findUsernameAndEmail.getUsername() == null) {
@@ -75,14 +69,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
             userRepository.save(findUsernameAndEmail);
 
-            UserDto.OAuth2UserDto oAuth2UserDto = new UserDto.OAuth2UserDto();
-            oAuth2UserDto.setId(String.valueOf(findUsernameAndEmail.getUserId()));
-            oAuth2UserDto.setUsername(username);
-            oAuth2UserDto.setName(oAuth2Response.getName());
-            oAuth2UserDto.setEmail(findUsernameAndEmail.getEmail());
-            oAuth2UserDto.setRole(findUsernameAndEmail.getRole());
-
-            return new CustomOAuth2User(oAuth2UserDto);
+            return new PrincipalDetails(findUsernameAndEmail, oAuth2User.getAttributes());
         }
 
     }

@@ -6,8 +6,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import khan.mobile.oauth2.CustomOAuth2User;
-import khan.mobile.dto.UserDto;
+import khan.mobile.dto.PrincipalDetails;
+import khan.mobile.entity.Users;
 import khan.mobile.entity.Role;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -80,13 +80,14 @@ public class JwtFilter extends OncePerRequestFilter {
         String role = jwtUtil.getRole(accessToken);
         log.info("id = {} name = {} role = {}", id, name, role);
 
-        UserDto.OAuth2UserDto oAuth2UserDto = new UserDto.OAuth2UserDto();
-        oAuth2UserDto.setId(id);
-        oAuth2UserDto.setName(name);
-        oAuth2UserDto.setRole(Role.valueOf(role));
+        Users oAuth2UserDto = Users.builder()
+                .userId(Long.parseLong(id))
+                .name(name)
+                .role(Role.valueOf(role))
+                .build();
 
         //UserDetails에 회원 정보 객체 담기
-        CustomOAuth2User customOAuth2User = new CustomOAuth2User(oAuth2UserDto);
+        PrincipalDetails customOAuth2User = new PrincipalDetails(oAuth2UserDto);
 
         // 스프링 시큐리티 인증 auth 토큰 생성
         Authentication authentication =
