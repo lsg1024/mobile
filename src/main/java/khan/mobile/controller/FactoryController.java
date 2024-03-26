@@ -1,19 +1,21 @@
 package khan.mobile.controller;
 
 import jakarta.validation.Valid;
+import khan.mobile.dto.PrincipalDetails;
 import khan.mobile.dto.response.CommonResponse;
 import khan.mobile.dto.FactoryDto;
-import khan.mobile.entity.Factories;
 import khan.mobile.service.FactoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -22,14 +24,20 @@ public class FactoryController {
 
     private final FactoryService factoryService;
 
-    @GetMapping("api/factories")
+    @GetMapping("/factory")
+    public ResponseEntity<CommonResponse> getFactory(@RequestParam("factoryName") String factoryName) {
+        factoryService.validateFactory(factoryName);
+
+        return ResponseEntity.ok(new CommonResponse("성공"));
+
+    }
+    @GetMapping("/factories")
     public Page<FactoryDto> getFactoryList(Pageable pageable) {
         return factoryService.getFactoryList(pageable);
     }
 
-    @PostMapping("api/factory")
-    public ResponseEntity<CommonResponse> createFactory(@RequestHeader("userId") Long userId,
-                                                        @Valid @RequestBody FactoryDto.Create createDto,
+    @PostMapping("/factory")
+    public ResponseEntity<CommonResponse> createFactory(@Valid @RequestBody FactoryDto.Create createDto,
                                                         BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
@@ -41,11 +49,25 @@ public class FactoryController {
             return ResponseEntity.badRequest().body(new CommonResponse("공장 생성 실패", errors));
         }
 
-        factoryService.createFactory(userId, createDto);
+        factoryService.createFactory(createDto);
         return ResponseEntity.ok(new CommonResponse("생성 완료"));
     }
 
-    @PostMapping("/api/factory/update")
+    @PostMapping("/factories")
+    public ResponseEntity<CommonResponse> saveFactories(@RequestBody List<FactoryDto.Create> dataList) {
+
+        for (FactoryDto.Create data : dataList) {
+            FactoryDto.Create factorise = FactoryDto.Create.builder()
+                    .factoryName(data.getFactoryName())
+                    .build();
+
+            factoryService.saveFactories(factorise);
+        }
+
+        return ResponseEntity.ok(new CommonResponse("데이터 저장 성공"));
+    }
+
+    @PostMapping("/factory/update")
     public ResponseEntity<CommonResponse> updateFactory(@Valid @RequestBody FactoryDto.Update updateDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
@@ -61,16 +83,8 @@ public class FactoryController {
         return ResponseEntity.ok(new CommonResponse("수정 완료"));
     }
 
-    @GetMapping("/api/factory/search")
+    @GetMapping("/factory/search")
     public Page<FactoryDto> getSearchFactoryList(@RequestParam("factorySearch") String factoryName, Pageable pageable) {
         return factoryService.getSearchFactoryList(factoryName, pageable);
-    }
-
-    @GetMapping("/api/factory")
-    public ResponseEntity<CommonResponse> getFactory(@RequestParam("factoryName") String factoryName) {
-        factoryService.validateFactory(factoryName);
-
-        return ResponseEntity.ok(new CommonResponse("성공"));
-
     }
 }

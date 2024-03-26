@@ -1,29 +1,19 @@
 package khan.mobile.controller;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import khan.mobile.dto.*;
 import khan.mobile.dto.response.CommonResponse;
-import khan.mobile.oauth2.CustomOAuth2User;
 import khan.mobile.service.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,9 +49,9 @@ public class UsersController {
     }
 
     @GetMapping("/userInfo")
-    public ResponseEntity<CommonResponse> oauthLoginInfo(@AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
+    public ResponseEntity<CommonResponse> oauthLoginInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        String username = customOAuth2User.getName();
+        String username = principalDetails.getName();
 
         log.info("userInfo Controller");
 

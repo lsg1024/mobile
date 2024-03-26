@@ -22,9 +22,7 @@ public class FactoryService {
 
     //공장 생성
     @Transactional
-    public void createFactory(Long userId, FactoryDto.Create createDto) {
-
-        validateUser(userId);
+    public void createFactory(FactoryDto.Create createDto) {
 
         Factories factory = Factories.builder()
                 .factoryName(createDto.getFactoryName())
@@ -52,6 +50,17 @@ public class FactoryService {
 
         factoryRepository.save(findFactory);
 
+    }
+
+    //공장 저장
+    @Transactional
+    public void saveFactories(FactoryDto.Create createDto) {
+
+        Factories factories = Factories.builder()
+                .factoryName(createDto.getFactoryName())
+                .build();
+
+        factoryRepository.save(factories);
     }
 
     //공장 삭제

@@ -1,23 +1,15 @@
 package khan.mobile.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.HttpServletResponse;
 import khan.mobile.dto.UserDto;
 import khan.mobile.entity.Role;
 import khan.mobile.entity.Users;
 import khan.mobile.exception.AppException;
 import khan.mobile.exception.ErrorCode;
-import khan.mobile.jwt.JwtUtil;
-import khan.mobile.oauth2.CustomOAuth2User;
 import khan.mobile.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

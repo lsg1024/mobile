@@ -12,6 +12,9 @@ public class FactoryDto {
     private String factoryName;
 
     @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
     public static class Create {
         @NotBlank(message = "공장 이름 값이 비어 있습니다")
         private String factoryName;
@@ -24,7 +27,6 @@ public class FactoryDto {
         private String factoryName;
 
     }
-
     public static FactoryDto factoryDto(Factories factories) {
         return new FactoryDto(
                 factories.getFactoryId(),

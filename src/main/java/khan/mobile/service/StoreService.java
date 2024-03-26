@@ -8,10 +8,12 @@ import khan.mobile.repository.StoreRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class StoreService {
     private final StoreRepository storeRepository;
     private final JPAQueryFactory queryFactory;
@@ -22,7 +24,19 @@ public class StoreService {
     }
 
     // 상점 저장
-    public void saveStores(StoreDto storeDto) {
+    @Transactional
+    public void createStore(StoreDto.Create createDto) {
+
+        Stores store = Stores.builder()
+                .storeName(createDto.getStoreName())
+                .build();
+
+        storeRepository.save(store);
+
+    }
+
+    @Transactional
+    public void saveStores(StoreDto.Create storeDto) {
 
         Stores stores = Stores.builder()
                 .storeName(storeDto.getStoreName())
@@ -39,6 +53,7 @@ public class StoreService {
     }
 
     // 상점 수정
+    @Transactional
     public void updateStores(String store_id, StoreDto storeDto) {
 
         Optional<Stores> store = storeRepository.findById(Long.parseLong(store_id));
