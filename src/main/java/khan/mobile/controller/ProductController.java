@@ -1,12 +1,9 @@
 package khan.mobile.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.validation.Valid;
+import khan.mobile.dto.PrincipalDetails;
 import khan.mobile.dto.response.CommonResponse;
 import khan.mobile.dto.ProductDto;
-import khan.mobile.oauth2.CustomOAuth2User;
-import khan.mobile.repository.ProductRepository;
 import khan.mobile.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,15 +12,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,11 +29,11 @@ public class ProductController {
     public ResponseEntity<CommonResponse> createProduct(
             @RequestParam(value = "product") String productStr,
             @RequestParam(value = "images", required = false) List<MultipartFile> images,
-            @AuthenticationPrincipal CustomOAuth2User customOAuth2User) throws IOException {
+            @AuthenticationPrincipal PrincipalDetails principalDetails) throws IOException {
 
         ProductDto.Create productDto = new ObjectMapper().readValue(productStr, ProductDto.Create.class);
 
-        productService.createProduct(Long.valueOf(customOAuth2User.getId()), productDto, images);
+        productService.createProduct(Long.valueOf(principalDetails.getId()), productDto, images);
         return ResponseEntity.ok(new CommonResponse("생성 완료"));
     }
 
@@ -49,11 +42,11 @@ public class ProductController {
             @RequestHeader("productId") Long productId,
             @RequestParam(value = "product", required = false) String productStr,
             @RequestParam(value = "images", required = false) List<MultipartFile> images,
-            @AuthenticationPrincipal CustomOAuth2User customOAuth2User) throws IOException {
+            @AuthenticationPrincipal PrincipalDetails principalDetails) throws IOException {
 
         ProductDto.Update productDto = new ObjectMapper().readValue(productStr, ProductDto.Update.class);
 
-        productService.updateProduct(Long.valueOf(customOAuth2User.getId()), productId, productDto, images);
+        productService.updateProduct(Long.valueOf(principalDetails.getId()), productId, productDto, images);
         return ResponseEntity.ok().body(new CommonResponse("업데이트 완료"));
     }
 
