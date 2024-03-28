@@ -58,13 +58,13 @@ public class ProductDto {
     @Getter @Setter
     public static class Create {
 
-        @NotBlank(message = "상품명이 비어 있습니다")
+        @NotNull(message = "상품명이 비어 있습니다")
         private String name;
 
-        @NotBlank(message = "시리얼번호가 비어 있습니다")
+        @NotNull(message = "시리얼번호가 비어 있습니다")
         protected Long serialNumber;
 
-        @NotBlank(message = "색상 값이 비어 있습니다")
+        @NotNull(message = "색상 값이 비어 있습니다")
         private String color;
 
         @NotNull(message = "크기 값이 비어 있습니다")

@@ -1,6 +1,9 @@
 package khan.mobile.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 import khan.mobile.dto.PrincipalDetails;
 import khan.mobile.dto.response.CommonResponse;
 import khan.mobile.dto.ProductDto;
@@ -17,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,17 +28,29 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     @PostMapping("/product/create")
-    public ResponseEntity<CommonResponse> createProduct(
+    public ResponseEntity<String> createProduct(
             @RequestParam(value = "product") String productStr,
             @RequestParam(value = "images", required = false) List<MultipartFile> images,
             @AuthenticationPrincipal PrincipalDetails principalDetails) throws IOException {
 
         ProductDto.Create productDto = new ObjectMapper().readValue(productStr, ProductDto.Create.class);
 
+        Set<ConstraintViolation<ProductDto.Create>> violations = validator.validate(productDto);
+
+        if (!violations.isEmpty()) {
+            // 유효성 검사 실패 시, 에러 메시지 생성 및 반환
+            StringBuilder errorMessage = new StringBuilder();
+            for (ConstraintViolation<ProductDto.Create> violation : violations) {
+                errorMessage.append(violation.getMessage()).append("\n");
+            }
+            return ResponseEntity.badRequest().body(errorMessage.toString());
+        }
+
         productService.createProduct(Long.valueOf(principalDetails.getId()), productDto, images);
-        return ResponseEntity.ok(new CommonResponse("생성 완료"));
+        return ResponseEntity.ok("생성 완료");
     }
 
     @PostMapping("/product/update")
@@ -67,6 +83,5 @@ public class ProductController {
     public ProductDto.Detail getProductDetail(@PathVariable("id") Long id) {
         return productService.getProductDetail(id);
     }
-
 
 }

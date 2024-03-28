@@ -34,7 +34,6 @@ public class ProductImageFileHandler {
         String current_date = simpleDateFormat.format(new Date());
 
         // 프로젝트 디렉토리 내부의 상대 경로 설정
-
         String savePath = "C:/Users/zks14/Desktop/프로젝트/java/mobile";
 //        String absolutePath = String.valueOf(new File(savePath));
         String path = savePath + "/images/" + productId + "/" + current_date;
