@@ -2,6 +2,7 @@ package khan.mobile.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Valid;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import khan.mobile.dto.PrincipalDetails;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -45,6 +47,7 @@ public class ProductController {
             StringBuilder errorMessage = new StringBuilder();
             for (ConstraintViolation<ProductDto.Create> violation : violations) {
                 errorMessage.append(violation.getMessage()).append("\n");
+                log.error("productDto 공백 = {}", violation.getMessage());
             }
             return ResponseEntity.badRequest().body(errorMessage.toString());
         }
@@ -54,7 +57,7 @@ public class ProductController {
     }
 
     @PostMapping("/product/update")
-    public ResponseEntity<CommonResponse> updateProduct(
+    public ResponseEntity<String> updateProduct(
             @RequestHeader("productId") Long productId,
             @RequestParam(value = "product", required = false) String productStr,
             @RequestParam(value = "images", required = false) List<MultipartFile> images,
@@ -62,8 +65,20 @@ public class ProductController {
 
         ProductDto.Update productDto = new ObjectMapper().readValue(productStr, ProductDto.Update.class);
 
+        Set<ConstraintViolation<ProductDto.Update>> violations = validator.validate(productDto);
+
+        if (!violations.isEmpty()) {
+            // 유효성 검사 실패 시, 에러 메시지 생성 및 반환
+            StringBuilder errorMessage = new StringBuilder();
+            for (ConstraintViolation<ProductDto.Update> violation : violations) {
+                errorMessage.append(violation.getMessage()).append("\n");
+                log.error("productDto 공백 = {}", violation.getMessage());
+            }
+            return ResponseEntity.badRequest().body(errorMessage.toString());
+        }
+
         productService.updateProduct(Long.valueOf(principalDetails.getId()), productId, productDto, images);
-        return ResponseEntity.ok().body(new CommonResponse("업데이트 완료"));
+        return ResponseEntity.ok().body("업데이트 완료");
     }
 
 
