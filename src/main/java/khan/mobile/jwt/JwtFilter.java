@@ -7,8 +7,10 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import khan.mobile.dto.PrincipalDetails;
+import khan.mobile.entity.RefreshEntity;
 import khan.mobile.entity.Users;
 import khan.mobile.entity.Role;
+import khan.mobile.repository.RefreshRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,6 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 
 
 @Slf4j
@@ -25,7 +28,6 @@ public class JwtFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
 
     public JwtFilter(JwtUtil jwtUtil) {
-
         this.jwtUtil = jwtUtil;
     }
 

@@ -22,16 +22,16 @@ public class BaseTimeEntity {
     @LastModifiedDate
     private String lastModifiedDate;
 
-    @PrePersist
-    public void onPrePersist(){
-        this.createDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        this.lastModifiedDate = this.createDate;
-    }
-
-    @PreUpdate
-    public void onPreUpdate(){
-        this.lastModifiedDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-    }
+//    @PrePersist
+//    public void onPrePersist(){
+//        this.createDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+//        this.lastModifiedDate = this.createDate;
+//    }
+//
+//    @PreUpdate
+//    public void onPreUpdate(){
+//        this.lastModifiedDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+//    }
 
 
 }

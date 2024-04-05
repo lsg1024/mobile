@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import khan.mobile.dto.PrincipalDetails;
 import khan.mobile.dto.UserDto;
+import khan.mobile.entity.RefreshEntity;
+import khan.mobile.repository.RefreshRepository;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,7 @@ import org.springframework.util.StreamUtils;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 
 @Slf4j
@@ -30,10 +33,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
+    private final RefreshRepository refreshRepository;
 
-    public LoginFilter(AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
+    public LoginFilter(AuthenticationManager authenticationManager, JwtUtil jwtUtil, RefreshRepository refreshRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
+        this.refreshRepository = refreshRepository;
     }
 
     @Override
@@ -83,6 +88,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         log.info("LoginFilter access = {}", access);
         log.info("LoginFilter refresh = {}", refresh);
 
+        // 리프레시 토큰 DB 저장
+        addRefreshEntity(name, refresh, 60 * 1000 * 60 * 24L);
+
         response.setHeader("access", access);
         response.addCookie(createCookie("refresh", refresh));
         response.setStatus(HttpStatus.OK.value());
@@ -106,6 +114,19 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         }
 
         response.getWriter().print(jsonObject);
+
+    }
+
+    private void addRefreshEntity(String name, String refreshToken, Long expiredMs) {
+        Date date = new Date(System.currentTimeMillis() + expiredMs);
+
+        RefreshEntity refreshEntity = RefreshEntity.builder()
+                .name(name)
+                .refreshToken(refreshToken)
+                .expiration(date.toString())
+                .build();
+
+        refreshRepository.save(refreshEntity);
 
     }
 

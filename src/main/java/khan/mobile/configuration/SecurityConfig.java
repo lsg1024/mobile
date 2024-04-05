@@ -1,32 +1,33 @@
 package khan.mobile.configuration;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import khan.mobile.entity.Role;
 import khan.mobile.jwt.JwtFilter;
 import khan.mobile.jwt.JwtUtil;
 import khan.mobile.jwt.LoginFilter;
+import khan.mobile.jwt.CustomLogoutFilter;
 import khan.mobile.oauth2.CustomFailHandler;
 import khan.mobile.oauth2.CustomOAuth2UserService;
 import khan.mobile.oauth2.CustomSuccessHandler;
+import khan.mobile.repository.RefreshRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
-
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 import java.util.Collections;
 
@@ -41,6 +42,7 @@ public class SecurityConfig   {
     private final JwtUtil jwtUtil;
     private final CustomSuccessHandler customSuccessHandler;
     private final CustomFailHandler customFailHandler;
+    private final RefreshRepository refreshRepository;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -48,7 +50,7 @@ public class SecurityConfig   {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChains(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChains(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
 
         http
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
@@ -90,6 +92,12 @@ public class SecurityConfig   {
 //                            .permitAll();
 //                }));
 
+        //경로별 인가 작업
+        http
+                .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("/signup", "/login", "/reissue", "/images/**").permitAll()
+//                        .requestMatchers("/users").hasAnyRole("ADMIN")
+                        .anyRequest().authenticated());
 
         //HTTP Basic 인증 방식 disable
         http
@@ -97,8 +105,12 @@ public class SecurityConfig   {
 
         //JWTFilter 추가
         http
-                .addFilterAfter(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(new JwtFilter(jwtUtil), OAuth2LoginAuthenticationFilter.class);
+                .addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class);
+        http
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(new JwtFilter(jwtUtil), OAuth2LoginAuthenticationFilter.class);
+        http
+                .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class);
 
         //oauth2
         http
@@ -109,12 +121,6 @@ public class SecurityConfig   {
                         .failureHandler(customFailHandler) // oauth2 실패 핸들러
                 );
 
-        //경로별 인가 작업
-        http
-                .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/signup", "/login", "/reissue", "/images/**").permitAll()
-//                        .requestMatchers("/users").hasAnyRole("ADMIN")
-                        .anyRequest().authenticated());
 
 //        http
 //                .exceptionHandling((e) -> e

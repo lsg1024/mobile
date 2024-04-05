@@ -7,7 +7,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import khan.mobile.dto.PrincipalDetails;
 import khan.mobile.dto.response.CommonResponse;
+import khan.mobile.entity.RefreshEntity;
 import khan.mobile.jwt.JwtUtil;
+import khan.mobile.repository.RefreshRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,9 +24,11 @@ import java.util.*;
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JwtUtil jwtUtil;
+    private final RefreshRepository refreshRepository;
 
-    public CustomSuccessHandler(JwtUtil jwtUtil) {
+    public CustomSuccessHandler(JwtUtil jwtUtil, RefreshRepository refreshRepository) {
         this.jwtUtil = jwtUtil;
+        this.refreshRepository = refreshRepository;
     }
 
     @Override
@@ -43,9 +47,25 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         // 토큰 생성
         String refresh = jwtUtil.createJwt("refresh", id, name, role, 60 * 1000 * 60 * 24L);
 
+        // 리프레시 토큰 DB 저장
+        addRefreshEntity(name, refresh, 60 * 1000 * 60 * 24L);
+
         response.addCookie(createCookie("refresh", refresh, true));
 
         response.sendRedirect("http://localhost:3000/home");
+    }
+
+    private void addRefreshEntity(String name, String refreshToken, Long expiredMs) {
+        Date date = new Date(System.currentTimeMillis() + expiredMs);
+
+        RefreshEntity refreshEntity = RefreshEntity.builder()
+                .name(name)
+                .refreshToken(refreshToken)
+                .expiration(date.toString())
+                .build();
+
+        refreshRepository.save(refreshEntity);
+
     }
 
     private Cookie createCookie(String key, String value, boolean httpOnly) {
