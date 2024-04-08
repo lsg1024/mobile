@@ -50,7 +50,7 @@ public class SecurityConfig   {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChains(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
+    public SecurityFilterChain securityFilterChains(HttpSecurity http) throws Exception {
 
         http
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {

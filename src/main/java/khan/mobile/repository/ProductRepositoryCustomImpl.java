@@ -147,6 +147,7 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
         return ProductDto.Detail.builder()
                 .id(productEntity.getProductId())
                 .name(productEntity.getProductName())
+                .serialNumber(productEntity.getProductSerialNumber())
                 .color(productEntity.getProductColor())
                 .size(productEntity.getProductSize())
                 .weight(productEntity.getProductWeight())
