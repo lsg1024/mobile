@@ -48,8 +48,10 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String refresh = jwtUtil.createJwt("refresh", id, name, role, 60 * 1000 * 60 * 24L);
 
         // 리프레시 토큰 DB 저장
+        log.info("onAuthenticationSuccess addRefreshEntity");
         addRefreshEntity(name, refresh, 60 * 1000 * 60 * 24L);
 
+        log.info("onAuthenticationSuccess refresh = {}", refresh);
         response.addCookie(createCookie("refresh", refresh, true));
 
         response.sendRedirect("http://localhost:3000/home");

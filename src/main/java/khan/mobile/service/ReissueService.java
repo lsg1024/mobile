@@ -27,6 +27,8 @@ public class ReissueService {
 
         String refresh = null;
 
+        log.info("ReissueService 진입");
+
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("refresh")) {
@@ -41,37 +43,37 @@ public class ReissueService {
         try {
             jwtUtil.isExpired(refresh);
         } catch (ExpiredJwtException e) {
-            return new ResponseEntity<>("Access 토큰 만료", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Refresh 토큰 만료", HttpStatus.BAD_REQUEST);
         }
 
         String category = jwtUtil.getCategory(refresh);
 
         if (!category.equals("refresh")) {
-            return new ResponseEntity<>("유효하지 않은 Refresh 토큰", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Cookie : 유효하지 않은 Refresh 토큰", HttpStatus.BAD_REQUEST);
         }
 
         // DB 저장 확인
         Boolean isExist = refreshRepository.existsByRefreshToken(refresh);
         if (!isExist) {
-            return new ResponseEntity<>("유효하지 않은 Refresh 토큰", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("DB : 유효하지 않은 Refresh 토큰", HttpStatus.BAD_REQUEST);
         }
 
         String id = jwtUtil.getUserId(refresh);
         String name = jwtUtil.getName(refresh);
         String role = jwtUtil.getRole(refresh);
 
-        String newAccess = jwtUtil.createJwt("access", id, name, role, 60 * 1000 * 10L);
+        String newAccess = jwtUtil.createJwt("access", id, name, role, 60 * 1000 * 2L);
         String newRefresh = jwtUtil.createJwt("refresh", id, name, role, 60 * 1000 * 60 * 24L);
 
         // DB refreshToken 갱신
-        refreshRepository.deleteByRefreshToken(refresh);
-        addRefreshEntity(name, refresh, 60 * 1000 * 60 * 24L);
+        refreshRepository.deleteByRefreshToken(newRefresh);
+        addRefreshEntity(name, newRefresh, 60 * 1000 * 60 * 24L);
 
         response.setHeader("access", newAccess);
         response.addCookie(createCookie("refresh", newRefresh));
 
-        log.info("ReissueService : new accessToken 발급 완료");
-        log.info("ReissueService : new refreshToken 발급 완료");
+        log.info("ReissueService : new accessToken 발급 완료 = {}", newAccess);
+        log.info("ReissueService : new refreshToken 발급 완료 = {}", newRefresh);
 
         return new ResponseEntity<>(HttpStatus.OK);
 

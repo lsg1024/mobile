@@ -7,10 +7,8 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import khan.mobile.dto.PrincipalDetails;
-import khan.mobile.entity.RefreshEntity;
 import khan.mobile.entity.Users;
 import khan.mobile.entity.Role;
-import khan.mobile.repository.RefreshRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -47,7 +45,7 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        log.info("header = {}", accessToken);
+        log.info("JwtFilter header = {}", accessToken);
 
         // 토큰 만료 여부 확인, 만료시 다음 필터로 넘기지 않음
         try {
@@ -80,7 +78,6 @@ public class JwtFilter extends OncePerRequestFilter {
         String id = jwtUtil.getUserId(accessToken);
         String name = jwtUtil.getName(accessToken);
         String role = jwtUtil.getRole(accessToken);
-        log.info("id = {} name = {} role = {}", id, name, role);
 
         Users oAuth2UserDto = Users.builder()
                 .userId(Long.parseLong(id))
