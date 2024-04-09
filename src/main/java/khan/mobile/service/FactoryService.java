@@ -3,7 +3,6 @@ package khan.mobile.service;
 import khan.mobile.dto.FactoryDto;
 import khan.mobile.entity.Factories;
 import khan.mobile.repository.FactoryRepository;
-import khan.mobile.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -18,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class FactoryService {
 
     private final FactoryRepository factoryRepository;
-    private final UserRepository userRepository;
 
     //공장 생성
     @Transactional
@@ -37,21 +35,6 @@ public class FactoryService {
                 .map(FactoryDto::factoryDto);
     }
 
-    //공장 수정
-    @Transactional
-    public void updateFactories(FactoryDto.Update updateDto) {
-
-
-//        validateUser(userId);
-
-        Factories findFactory = factoryRepository.findById(updateDto.getFactoryId()).orElseThrow(() ->  new IllegalStateException("존재하지 않은 공장 정보 입니다."));
-
-        findFactory.updateFactoryName(updateDto);
-
-        factoryRepository.save(findFactory);
-
-    }
-
     //공장 저장
     @Transactional
     public void saveFactories(FactoryDto.Create createDto) {
@@ -63,7 +46,25 @@ public class FactoryService {
         factoryRepository.save(factories);
     }
 
+    //공장 수정
+    @Transactional
+    public void updateFactories(FactoryDto.Update updateDto) {
+
+        Factories findFactory = getFactories(updateDto.getFactoryId());
+
+        findFactory.updateFactoryName(updateDto);
+
+        factoryRepository.save(findFactory);
+
+    }
+
     //공장 삭제
+    @Transactional
+    public void deleteFactory(FactoryDto.Delete dto) {
+        Factories findFactory = getFactories(dto.getFactoryId());
+
+        factoryRepository.delete(findFactory);
+    }
 
     //공장 검색
     public Page<FactoryDto> getSearchFactoryList(String factoryName, Pageable pageable) {
@@ -76,7 +77,8 @@ public class FactoryService {
         return factoryRepository.findByFactoryName(factoryName).orElseThrow(() -> new IllegalArgumentException("일치하는 공장 정보가 없습니다"));
     }
 
-    private void validateUser(Long userId) {
-        userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("일치하는 유저 정보가 없습니다"));
+    private Factories getFactories(Long factoryId) {
+        return factoryRepository.findById(factoryId).orElseThrow(() ->  new IllegalStateException("존재하지 않은 공장 정보 입니다."));
     }
+
 }

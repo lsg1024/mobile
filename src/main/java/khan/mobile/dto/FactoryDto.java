@@ -27,6 +27,12 @@ public class FactoryDto {
         private String factoryName;
 
     }
+
+    @Getter @Setter
+    public static class Delete {
+        private Long factoryId;
+    }
+
     public static FactoryDto factoryDto(Factories factories) {
         return new FactoryDto(
                 factories.getFactoryId(),
