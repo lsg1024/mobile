@@ -83,6 +83,22 @@ public class FactoryController {
         return ResponseEntity.ok(new CommonResponse("수정 완료"));
     }
 
+    @PostMapping("factory/delete")
+    public ResponseEntity<CommonResponse> deleteFactory(@Valid @RequestBody FactoryDto.Delete dto, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errors.put(error.getField(), error.getDefaultMessage());
+            }
+
+            return ResponseEntity.badRequest().body(new CommonResponse("공장 삭제 실패", errors));
+        }
+
+        factoryService.deleteFactory(dto);
+        return ResponseEntity.ok(new CommonResponse("삭제 완료"));
+    }
+
     @GetMapping("/factory/search")
     public Page<FactoryDto> getSearchFactoryList(@RequestParam("factorySearch") String factoryName, Pageable pageable) {
         return factoryService.getSearchFactoryList(factoryName, pageable);
