@@ -1,7 +1,6 @@
 package khan.mobile.oauth2;
 
 import khan.mobile.dto.PrincipalDetails;
-import khan.mobile.dto.UserDto;
 import khan.mobile.entity.Role;
 import khan.mobile.entity.Users;
 import khan.mobile.repository.UserRepository;

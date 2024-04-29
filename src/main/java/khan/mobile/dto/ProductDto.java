@@ -4,10 +4,11 @@ import com.querydsl.core.annotations.QueryProjection;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import khan.mobile.entity.Factories;
 import khan.mobile.entity.ProductImage;
-import khan.mobile.entity.Users;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 

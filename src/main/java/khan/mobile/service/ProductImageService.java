@@ -3,11 +3,8 @@ package khan.mobile.service;
 import khan.mobile.entity.ProductImage;
 import khan.mobile.repository.ProductImageRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;

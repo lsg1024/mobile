@@ -1,12 +1,10 @@
 package khan.mobile.oauth2;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import khan.mobile.dto.PrincipalDetails;
-import khan.mobile.dto.response.CommonResponse;
 import khan.mobile.entity.RefreshEntity;
 import khan.mobile.jwt.JwtUtil;
 import khan.mobile.repository.RefreshRepository;
@@ -17,7 +15,9 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
 
 @Component
 @Slf4j

@@ -1,7 +1,8 @@
 package khan.mobile.controller;
 
 import jakarta.validation.Valid;
-import khan.mobile.dto.*;
+import khan.mobile.dto.PrincipalDetails;
+import khan.mobile.dto.UserDto;
 import khan.mobile.dto.response.CommonResponse;
 import khan.mobile.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;

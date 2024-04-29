@@ -1,15 +1,13 @@
 package khan.mobile.controller;
 
 import jakarta.validation.Valid;
-import khan.mobile.dto.PrincipalDetails;
-import khan.mobile.dto.response.CommonResponse;
 import khan.mobile.dto.FactoryDto;
+import khan.mobile.dto.response.CommonResponse;
 import khan.mobile.service.FactoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;

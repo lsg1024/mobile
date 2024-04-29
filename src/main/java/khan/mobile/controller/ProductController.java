@@ -2,11 +2,9 @@ package khan.mobile.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Valid;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import khan.mobile.dto.PrincipalDetails;
-import khan.mobile.dto.response.CommonResponse;
 import khan.mobile.dto.ProductDto;
 import khan.mobile.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

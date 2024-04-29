@@ -1,10 +1,10 @@
 package khan.mobile.configuration;
 
 import jakarta.servlet.http.HttpServletRequest;
+import khan.mobile.jwt.CustomLogoutFilter;
 import khan.mobile.jwt.JwtFilter;
 import khan.mobile.jwt.JwtUtil;
 import khan.mobile.jwt.LoginFilter;
-import khan.mobile.jwt.CustomLogoutFilter;
 import khan.mobile.oauth2.CustomFailHandler;
 import khan.mobile.oauth2.CustomOAuth2UserService;
 import khan.mobile.oauth2.CustomSuccessHandler;
@@ -16,18 +16,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
-import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 import java.util.Collections;
 

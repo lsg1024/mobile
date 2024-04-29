@@ -7,20 +7,23 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import khan.mobile.dto.*;
-import khan.mobile.entity.*;
+import khan.mobile.entity.Products;
+import khan.mobile.entity.QProductOrderItem;
+import khan.mobile.entity.QProducts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
+
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static khan.mobile.entity.QFactories.factories;
+import static khan.mobile.entity.QProductImage.productImage;
 import static khan.mobile.entity.QProductOrderItem.productOrderItem;
 import static khan.mobile.entity.QProducts.products;
 import static khan.mobile.entity.QUsers.users;
-import static khan.mobile.entity.QFactories.factories;
-import static khan.mobile.entity.QProductImage.productImage;
 import static org.springframework.util.StringUtils.hasText;
 
 @Slf4j

@@ -2,7 +2,10 @@ package khan.mobile.entity;
 
 import jakarta.persistence.*;
 import khan.mobile.entity.auditing.BaseTimeEntity;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
